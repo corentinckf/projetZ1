@@ -5,6 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-SDL_Window * initWindow(int , int , char *);
+SDL_Window * initWindow(int , int, int, int, char *);
 
 #endif
