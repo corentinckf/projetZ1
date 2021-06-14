@@ -4,9 +4,9 @@
 int main()
 {
     SDL_Window *window = NULL;
+    SDL_Window *sauv = NULL;
     int largeur=0, hauteur=0;
     int i=0,j=0;
-    int aux;
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -32,8 +32,7 @@ int main()
         hauteur+=200;
         SDL_Delay(1000);
     }
-    aux=largeur;
-    sauv=hauteur-2*200;
+    sauv=window;
     largeur-=400;
     for (j=0;j<2;j++)
     {
@@ -53,8 +52,9 @@ int main()
         SDL_Delay(1000);
     }
     
-    largeur=aux;
-    hauteur=sauv;
+    SDL_GetWindowPosition(sauv,&largeur,&hauteur);
+    hauteur-=200;
+    largeur+=400;
     for (i=0;i<2;i++)
     {
         window = SDL_CreateWindow(
