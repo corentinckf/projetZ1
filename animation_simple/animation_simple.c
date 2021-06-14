@@ -1,11 +1,59 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "animation_simple.h"
 
-#define LARGEUR_FENETRE 1000
-#define HAUTEUR_FENETRE 800
+int main(int argc, char **argv)
+{
 
-//gcc  animation_simple.c -o animation_simple -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
+    int i;
+    int x_perso = 0;
+    int y_perso = 2 * HAUTEUR_FENETRE / 3;
+
+    SDL_DisplayMode screen;
+    SDL_Window *fenetre = NULL;
+    SDL_Renderer *renderer = NULL;
+
+    /* Initialisation de la SDL  + gestion de l'échec possible */
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
+        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError()); // l'initialisation de la SDL a échoué
+        exit(EXIT_FAILURE);
+    }
+
+    SDL_GetCurrentDisplayMode(0, &screen);
+    printf("Résolution écran\n\tw : %d\n\th : %d\n", screen.w, screen.h);
+
+    /************** creation fenetre ****************/
+    fenetre = SDL_CreateWindow(
+        "Animation Simple",
+        (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
+        LARGEUR_FENETRE, HAUTEUR_FENETRE,
+        SDL_WINDOW_RESIZABLE);
+
+    if (fenetre == NULL)
+        end_sdl(0, "ERROR WINDOW CREATION", fenetre, renderer);
+
+    /************** creation renderer ****************/
+    renderer = SDL_CreateRenderer(
+        fenetre, -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL)
+        end_sdl(0, "ERROR RENDERER CREATION", fenetre, renderer);
+
+    for (i = 0; i < LARGEUR_FENETRE / 4; ++i)
+    {
+        /**************On dessine dans le renderer *************/
+        draw(renderer, x_perso, y_perso); // appel de la fonction qui crée l'image
+        SDL_RenderPresent(renderer);      // affichage
+        SDL_RenderClear(renderer);
+        x_perso += 5;
+        SDL_Delay(50);
+        /******************************************************/
+    }
+
+    SDL_Delay(2000);
+
+    end_sdl(0, "Fin normal", fenetre, renderer);
+    return EXIT_SUCCESS;
+}
 
 void end_sdl(char ok,            // fin normale : ok = 0 ; anormale ok = 1
              char const *msg,    // message à afficher
@@ -37,63 +85,60 @@ void end_sdl(char ok,            // fin normale : ok = 0 ; anormale ok = 1
     }
 }
 
-
-void draw(SDL_Renderer * renderer)
+void draw(SDL_Renderer *renderer, int x_pos, int y_pos)
 {
-
+    affichage_perso(renderer, x_pos, y_pos);
 }
 
-
-
-
-
-
-
-
-int main(int argc, char **argv)
+void affichage_perso(SDL_Renderer *renderer, int x_pos, int y_pos)
 {
 
-    SDL_DisplayMode screen;
+    SDL_Rect jambe;
+    SDL_Rect bras;
+    SDL_Rect tshirt;
+    SDL_Rect tete;
 
-    SDL_Window *fenetre = NULL;
-    SDL_Renderer *renderer = NULL;
+    /****** jambe *********/
+    jambe.x = x_pos;
+    jambe.y = y_pos;
+    jambe.w = LARGEUR_FENETRE / 40;
+    jambe.h = HAUTEUR_FENETRE / 20;
+    SDL_SetRenderDrawColor(renderer,
+                           255, 0, 0, // mode Red, Green, Blue (tous dans 0..255)
+                           255);      // 0 = transparent ; 255 = opaque
+    SDL_RenderFillRect(renderer, &jambe);
 
-    /* Initialisation de la SDL  + gestion de l'échec possible */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError()); // l'initialisation de la SDL a échoué
-        exit(EXIT_FAILURE);
-    }
+    /****** bras *********/
+    bras.w = LARGEUR_FENETRE / 20;
+    bras.h = HAUTEUR_FENETRE / 20;
+    bras.x = (x_pos + jambe.w / 2) - bras.w / 2;
+    bras.y = y_pos - bras.h;
+    SDL_SetRenderDrawColor(renderer,
+                           255, 255, 255, // mode Red, Green, Blue (tous dans 0..255)
+                           255);          // 0 = transparent ; 255 = opaque
+    SDL_RenderFillRect(renderer, &bras);
 
-    SDL_GetCurrentDisplayMode(0, &screen);
-    printf("Résolution écran\n\tw : %d\n\th : %d\n", screen.w, screen.h);
+    /****** tshirt *********/
+    tshirt.w = LARGEUR_FENETRE / 40;
+    tshirt.h = bras.h;
+    tshirt.x = x_pos;
+    tshirt.y = y_pos - tshirt.h;
+    SDL_SetRenderDrawColor(renderer,
+                           0, 0, 255, // mode Red, Green, Blue (tous dans 0..255)
+                           255);      // 0 = transparent ; 255 = opaque
+    SDL_RenderFillRect(renderer, &tshirt);
 
-    /************** creation fenetre ****************/
-    fenetre = SDL_CreateWindow(
-        "Animation Simple",
-        (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
-        LARGEUR_FENETRE, HAUTEUR_FENETRE,
-        SDL_WINDOW_RESIZABLE);
+    /****** tete *********/
+    tete.w = jambe.w;
+    tete.h = jambe.w;
+    tete.x = x_pos;
+    tete.y = y_pos - tshirt.h - tete.h;
+    SDL_SetRenderDrawColor(renderer,
+                           255, 255, 255, // mode Red, Green, Blue (tous dans 0..255)
+                           255);          // 0 = transparent ; 255 = opaque
+    SDL_RenderFillRect(renderer, &tete);
 
-    if (fenetre == NULL)
-        end_sdl(0, "ERROR WINDOW CREATION", fenetre, renderer);
-
-    /************** creation renderer ****************/
-    renderer = SDL_CreateRenderer(
-        fenetre, -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == NULL)
-        end_sdl(0, "ERROR RENDERER CREATION", fenetre, renderer);
-
-    /**************On dessine dans le renderer *************/
-
-    draw(renderer);              // appel de la fonction qui crée l'image
-    SDL_RenderPresent(renderer); // affichage
-    SDL_Delay(1000);             // Pause exprimée en ms
-    /******************************************************/
-
-
-
-    end_sdl(0, "Fin normal", fenetre, renderer);
-    return EXIT_SUCCESS;
+    SDL_SetRenderDrawColor(renderer,
+                           0, 0, 0, // mode Red, Green, Blue (tous dans 0..255)
+                           255);    // 0 = transparent ; 255 = opaque
 }
