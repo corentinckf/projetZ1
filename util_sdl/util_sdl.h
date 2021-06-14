@@ -6,5 +6,6 @@
 #include <stdlib.h>
 
 SDL_Window * initWindow(int , int, int, int, char *);
+void end_sdl(char, SDL_Window*, SDL_Renderer*, int *);
 
 #endif
