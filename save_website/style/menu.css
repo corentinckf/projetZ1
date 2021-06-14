@@ -1,0 +1,32 @@
+.date-menu{
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.date-menu button{
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 20px 22px;
+    transition: 0.3s;
+    font-size: 15px;
+}
+
+.date-menu  button:hover{
+    background-color: rgb(94, 62, 116);
+}
+
+.date-menu button:active{
+    background-color: rgb(48, 32, 59);
+
+}
+
+.content{
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
