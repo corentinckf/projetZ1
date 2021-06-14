@@ -1,7 +1,4 @@
 #include "window.h"
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 SDL_Window * initWindow(int width, int height,int x_pos, int y_pos, char * window_name)
 {
@@ -17,8 +14,8 @@ SDL_Window * initWindow(int width, int height,int x_pos, int y_pos, char * windo
         window_name,                       // window title
         x_pos,                             // initial x position
         y_pos,                             // initial y position
-        640,                               // width, in pixels
-        480,                               // height, in pixels
+        width,                               // width, in pixels
+        height,                               // height, in pixels
         SDL_WINDOW_OPENGL
     );
 
