@@ -10,6 +10,16 @@
 /***************************************/
 /*  Z_fenetre affiche des fenetre en Z */
 /***************************************/
+void test_fenetre(SDL_Window *fenetre)
+{
+    if (fenetre == NULL)
+    {
+        SDL_Log("Error : SDL Window creation - %s\n", SDL_GetError()); // échec de la création de la fenêtre
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+    }
+}
+
 int main(int argc, char **argv)
 {
 
@@ -39,7 +49,7 @@ int main(int argc, char **argv)
     tab_p_fenetre = (SDL_Window **)malloc(sizeof(SDL_Window *) * 3 * nb_fenetre_largeur);
 
     for (i = 0; i < nb_fenetre_largeur; i++)
-    { 
+    {
         //Fenetre ligne du haut
         tab_p_fenetre[i] = SDL_CreateWindow(
             "Window",                         // codage en utf8, donc accents possibles
@@ -47,27 +57,33 @@ int main(int argc, char **argv)
             LARGEUR_FENETRE, HAUTEUR_FENETRE, // largeur, hauteur
             0);
 
+        test_fenetre(tab_p_fenetre[i]);
+
         //fenetre ligne de bas
         tab_p_fenetre[nb_fenetre_largeur + i] = tab_p_fenetre[i] = SDL_CreateWindow(
-            "Window",                                                                   // codage en utf8, donc accents possibles
+            "Window",                                                         // codage en utf8, donc accents possibles
             screen.w - (i + 1) * LARGEUR_FENETRE, screen.h - HAUTEUR_FENETRE, // position
-            LARGEUR_FENETRE, HAUTEUR_FENETRE,                                           // largeur, hauteur
+            LARGEUR_FENETRE, HAUTEUR_FENETRE,                                 // largeur, hauteur
             0);
 
+        test_fenetre(tab_p_fenetre[nb_fenetre_largeur + i]);
+ 
         //Fenetre diagonale
         tab_p_fenetre[2 * nb_fenetre_largeur + i] = SDL_CreateWindow(
-            "Window",                                                      // codage en utf8, donc accents possibles
-            screen.w - (i+1) * LARGEUR_FENETRE , HAUTEUR_FENETRE * i, // position
-            LARGEUR_FENETRE, HAUTEUR_FENETRE,                              // largeur, hauteur
+            "Window",                                                  // codage en utf8, donc accents possibles
+            screen.w - (i + 1) * LARGEUR_FENETRE, HAUTEUR_FENETRE * i, // position
+            LARGEUR_FENETRE, HAUTEUR_FENETRE,                          // largeur, hauteur
             0);
 
+        test_fenetre(tab_p_fenetre[2 * nb_fenetre_largeur + i]);
+   
         SDL_Delay(500);
     }
 
-    SDL_Delay(3000);
+    SDL_Delay(1000);
 
     //Liberation de toutes les fenetres
-    for (i = 0; i < 3*nb_fenetre_largeur; i++)
+    for (i = 0; i < 3 * nb_fenetre_largeur; i++)
     {
         SDL_DestroyWindow(tab_p_fenetre[i]);
     }
