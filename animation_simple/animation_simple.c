@@ -1,11 +1,20 @@
 #include "animation_simple.h"
 
-int main(int argc, char **argv)
+int main()
 {
+    int x_perso = 50;
+    int y_perso = 80;
+    int map[HAUTEUR_MATRICE][LARGEUR_MATRICE];
+    int couleurs[6][3] = {{135, 206, 235},
+                          {255, 0, 0},
+                          {0, 0, 255},
+                          {245, 245, 220},
+                          {0, 0, 0},
+                          {250, 250, 210}};
 
-    int i;
-    int x_perso = 0;
-    int y_perso = 2 * HAUTEUR_FENETRE / 3;
+    //ciel 0    //tete 3
+    //jambe 1   //cheveux 4
+    //tshirt 2  //ceinture 5
 
     SDL_DisplayMode screen;
     SDL_Window *fenetre = NULL;
@@ -26,7 +35,7 @@ int main(int argc, char **argv)
         "Animation Simple",
         (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
         LARGEUR_FENETRE, HAUTEUR_FENETRE,
-        SDL_WINDOW_RESIZABLE);
+        0);
 
     if (fenetre == NULL)
         end_sdl(0, "ERROR WINDOW CREATION", fenetre, renderer);
@@ -34,22 +43,21 @@ int main(int argc, char **argv)
     /************** creation renderer ****************/
     renderer = SDL_CreateRenderer(
         fenetre, -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        0);
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", fenetre, renderer);
 
-    for (i = 0; i < LARGEUR_FENETRE / 4; ++i)
-    {
-        /**************On dessine dans le renderer *************/
-        draw(renderer, x_perso, y_perso); // appel de la fonction qui crée l'image
-        SDL_RenderPresent(renderer);      // affichage
-        SDL_RenderClear(renderer);
-        x_perso += 5;
-        SDL_Delay(50);
-        /******************************************************/
-    }
+    init_map(map);
 
-    SDL_Delay(2000);
+    placement_perso(map, x_perso, y_perso);
+
+    /**************On dessine dans le renderer *************/
+    draw(renderer, map, couleurs); // appel de la fonction qui crée l'image
+    SDL_RenderPresent(renderer);   // affichage
+    /*SDL_RenderClear(renderer);*/
+    /******************************************************/
+    printf("fin affichage\n");
+    SDL_Delay(5000);
 
     end_sdl(0, "Fin normal", fenetre, renderer);
     return EXIT_SUCCESS;
@@ -85,60 +93,100 @@ void end_sdl(char ok,            // fin anormale : ok = 0 ; normale ok = 1
     }
 }
 
-void draw(SDL_Renderer *renderer, int x_pos, int y_pos)
+void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3])
 {
-    affichage_perso(renderer, x_pos, y_pos);
+    SDL_Rect rect;
+    int k, i, c;
+    for (k = 0; k < HAUTEUR_MATRICE; k++)
+    {
+        for (i = 0; i < LARGEUR_MATRICE; i++)
+        {
+            c = map[k][i];
+            printf("c=%d\n", c);
+            if (c >= 0 && c < 6)
+            {
+                SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], 255);
+                rect.x = LARGEUR_PIXEL * k;
+                rect.y = HAUTEUR_PIXEL * i;
+                rect.w = LARGEUR_PIXEL;
+                rect.h = HAUTEUR_PIXEL;
+                if (rect.y >= 0 && rect.y < HAUTEUR_FENETRE)
+                    if (rect.x >= 0 && rect.x < LARGEUR_FENETRE)
+                        SDL_RenderFillRect(renderer, &rect);
+            }
+        }
+    }
 }
 
-void affichage_perso(SDL_Renderer *renderer, int x_pos, int y_pos)
+void init_map(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE])
 {
+    int i, j;
 
-    SDL_Rect jambe;
-    SDL_Rect bras;
-    SDL_Rect tshirt;
-    SDL_Rect tete;
+    for (i = 0; i < HAUTEUR_MATRICE; i++)
+    {
+        for (j = 0; j < LARGEUR_MATRICE; j++)
+        {
+            map[i][j] = 0;
+        }
+    }
+}
 
-    /****** jambe *********/
-    jambe.x = x_pos;
-    jambe.y = y_pos;
-    jambe.w = LARGEUR_FENETRE / 40;
-    jambe.h = HAUTEUR_FENETRE / 20;
-    SDL_SetRenderDrawColor(renderer,
-                           255, 0, 0, // mode Red, Green, Blue (tous dans 0..255)
-                           255);      // 0 = transparent ; 255 = opaque
-    SDL_RenderFillRect(renderer, &jambe);
 
-    /****** bras *********/
-    bras.w = LARGEUR_FENETRE / 20;
-    bras.h = HAUTEUR_FENETRE / 20;
-    bras.x = (x_pos + jambe.w / 2) - bras.w / 2;
-    bras.y = y_pos - bras.h;
-    SDL_SetRenderDrawColor(renderer,
-                           255, 255, 255, // mode Red, Green, Blue (tous dans 0..255)
-                           255);          // 0 = transparent ; 255 = opaque
-    SDL_RenderFillRect(renderer, &bras);
 
-    /****** tshirt *********/
-    tshirt.w = LARGEUR_FENETRE / 40;
-    tshirt.h = bras.h;
-    tshirt.x = x_pos;
-    tshirt.y = y_pos - tshirt.h;
-    SDL_SetRenderDrawColor(renderer,
-                           0, 0, 255, // mode Red, Green, Blue (tous dans 0..255)
-                           255);      // 0 = transparent ; 255 = opaque
-    SDL_RenderFillRect(renderer, &tshirt);
+void placement_perso(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int x_pos, int y_pos)
+{
+    int i, j;
+    for (i = 0; i < 10; i++)
+    {
+        for (j = 0; j < 4; j++)
+        {
+            y_pos = y_pos - i;
+            x_pos = x_pos + j;
+            if (y_pos >= 0 && y_pos < HAUTEUR_MATRICE)
+                if (x_pos >= 0 && x_pos < LARGEUR_MATRICE)
+                    map[x_pos][y_pos] = 5;
+        }
+    }
+}
 
-    /****** tete *********/
-    tete.w = jambe.w;
-    tete.h = jambe.w;
-    tete.x = x_pos;
-    tete.y = y_pos - tshirt.h - tete.h;
-    SDL_SetRenderDrawColor(renderer,
-                           255, 255, 255, // mode Red, Green, Blue (tous dans 0..255)
-                           255);          // 0 = transparent ; 255 = opaque
-    SDL_RenderFillRect(renderer, &tete);
-
-    SDL_SetRenderDrawColor(renderer,
-                           0, 0, 0, // mode Red, Green, Blue (tous dans 0..255)
-                           255);    // 0 = transparent ; 255 = opaque
+int dessine_perso(int i, int j)
+{
+    int partie_perso;
+    if (j >= 1 && j <= 2)
+    {
+        if (i >= 0 && i <= 2)
+        {
+            partie_perso = 1; //jambes
+        }
+        else if (i >= 4 && i <= 7)
+        {
+            partie_perso = 2; //t-shirt
+        }
+        else if (i == 8)
+        {
+            partie_perso = 3; //tete
+        }
+        else if (i == 9)
+        {
+            partie_perso = 4; //cheveux
+        }
+        else if (i == 3)
+        {
+            partie_perso = 5; //ceinture
+        }
+    }
+    else if (j == 3 || j == 0)
+    {
+        if (i >= 4 && i <= 7)
+        {
+            partie_perso = 1; //bras
+        }
+    }
+    else
+    {
+        partie_perso = 0; //ciel
+    }
+    if (j == 0 && i == 9)
+        partie_perso = 4; //casquette
+    return partie_perso;
 }
