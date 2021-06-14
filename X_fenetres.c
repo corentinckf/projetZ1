@@ -6,7 +6,7 @@ int main()
     SDL_Window *window = NULL;
     int i=0;
 
-    if (SDL_Init(SDL_Init_Video) != 0)
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         printf(stderr,"erreur lors de l'ouverture de SDL");
         exit(EXIT_FAILURE);
