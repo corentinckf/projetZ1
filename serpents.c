@@ -30,22 +30,28 @@ void end_sdl(char ok,                                                 // fin nor
 
 void draw(SDL_Renderer* renderer)                                   // Je pense que vous allez faire moins laid :)
 {
-  SDL_Rect rectangle;                                             
+  SDL_Rect rectangle;
+  SDL_Rect carre;                                             
 
   SDL_SetRenderDrawColor(renderer,                                
                               0, 0, 75,                               // mode Red, Green, Blue (tous dans 0..255)
                               255);                                   // 0 = transparent ; 255 = opaque
   rectangle.x = 0;                                                    // x haut gauche du rectangle
   rectangle.y = 0;                                                    // y haut gauche du rectangle
-  rectangle.w = 400;                                                  // sa largeur (w = width)
-  rectangle.h = 400;                                                  // sa hauteur (h = height)
-
+  rectangle.w = 500;                                                  // sa largeur (w = width)
+  rectangle.h = 600;                                                  // sa hauteur (h = height)
+  
+  carre.x=600/4;
+  carre.y=600/4;
+  carre.w=200;
+  carre.h=200;
   SDL_RenderFillRect(renderer, &rectangle);
+  SDL_RenderFillRect(renderer,&carre);
 
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderDrawLine(renderer,
                           0, 0,                                       // x,y du point de la première extrémité
-                          400, 400);                                  // x,y seconde extrémité
+                          600, 600);                                  // x,y seconde extrémité
 
 
   /* tracer un cercle n'est en fait pas trivial, voilà le résultat sans algo intelligent ... */
@@ -77,10 +83,10 @@ int main()
     renderer = SDL_CreateRenderer(
            window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
-    
+
     draw(renderer);
     SDL_RenderPresent(renderer);
-    SDL_Delay(2000); 
+    SDL_Delay(3000); 
     
     end_sdl(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
