@@ -50,7 +50,7 @@ void end_sdl(char ok,                                                 // fin nor
   SDL_Quit();                                                     
 
   if (!ok) {
-      *code_retour = -1;  //exit(EXIT_FAILURE)  après                                                                                             
+      *code_retour = -1;                                                                                           
   }                                                               
 }  
 
