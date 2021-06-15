@@ -2,7 +2,13 @@
 
 int main()
 {
-
+    int map[HAUTEUR_MATRICE][LARGEUR_MATRICE];
+    int couleurs[6][3] = {{135, 206, 235},
+                          {255, 0, 0},
+                          {0, 0, 255},
+                          {245, 245, 220},
+                          {0, 0, 0},
+                          {250, 250, 0}};
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -17,7 +23,6 @@ int main()
     SDL_GetCurrentDisplayMode(0, &screen);
     printf("Résolution écran\n\tw : %d\n\th : %d\n", screen.w, screen.h);
 
-    /************** initialisation window ****************/
     window = SDL_CreateWindow("Jeu de la Vie",
                               (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
                               LARGEUR_FENETRE, HAUTEUR_FENETRE,
@@ -56,6 +61,11 @@ int main()
     if (sun == NULL)
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
 
+    init_map(map);
+
+    //animation
+    animation(window, renderer, background, trou_noir, sprite, shadow, map, couleurs);
+    /*
     play_texture_full_window(background, window, renderer);
     play_texture_xy(trou_noir, window, renderer);
     SDL_RenderPresent(renderer); // affichage
@@ -63,7 +73,7 @@ int main()
     play_texture_anime(sun, window, renderer);
     play_texture_sprite_courir(sprite, window, renderer);
     play_texture_sprite_avec_bg(background, shadow, window, renderer);
-
+*/
     SDL_Delay(2000);
     SDL_RenderClear(renderer);
 
@@ -84,7 +94,10 @@ void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int
             c = map[i][j];
             if (c == 0)
                 opacite = 0;
-            SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], opacite);
+            else
+                opacite == 255;
+
+            SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], 0);
             rect.x = j * TAILLE_PIXEL;
             rect.y = i * TAILLE_PIXEL;
             rect.w = 1 * TAILLE_PIXEL;
@@ -113,7 +126,7 @@ void placement_perso(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int x_perso, int
         {
             y = y_perso - i;
             x = x_perso + j;
-            printf("x=%d; y=%d\n", x, y);
+            //printf("x=%d; y=%d\n", x, y);
             map[y][x] = dessine_perso(i, j);
         }
     }
@@ -342,12 +355,75 @@ void play_texture_sprite_avec_bg(SDL_Texture *bg_texture, SDL_Texture *my_textur
     SDL_RenderClear(renderer); // Effacer la fenêtre avant de rendre la main
 }
 
-void animation(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *bg_texture, SDL_Texture *trou_noir, SDL_Texture *sprite, SDL_Texture *shadow, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE])
+void play_texture_xy_taille(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer, float taille)
 {
-    int x_perso = 70;
-    int y_perso = 10;
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone de la texture à récupérer
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0};       // Rectangle définissant où la zone_source doit être déposée dans le renderer
 
-    
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
 
+    destination.h = source.h * taille;
+    destination.w = source.w * taille;
 
+    destination.x = (window_dimensions.w - 0.7 * destination.w - taille) / 2;
+    destination.y = (window_dimensions.h - 1.6 * destination.h - taille) / 2;
+    SDL_RenderCopy(renderer, my_texture, &source, &destination);
+}
+
+void animation(SDL_Window *window, SDL_Renderer *renderer,
+               SDL_Texture *bg_texture, SDL_Texture *trou_noir, SDL_Texture *sprite, SDL_Texture *shadow,
+               int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3])
+{
+    int x_perso = 10;
+    int y_perso = 70;
+    float taille = 0.01;
+
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};             // Rectangle de la vignette en cours dans la planche
+
+    SDL_GetWindowSize(window, // Récupération des dimensions de la fenêtre
+                      &window_dimensions.w,
+                      &window_dimensions.h);
+    SDL_QueryTexture(sprite, // Récupération des dimensions de l'image
+                     NULL, NULL,
+                     &source.w, &source.h);
+    /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
+
+    int nb_images = 8;                   // Il y a 8 vignette dans la ligne de l'image qui nous intéresse
+    float zoom = 2;                      // zoom, car ces images sont un peu petites
+    int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
+        offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
+
+    state.x = 0;            // La première vignette est en début de ligne
+    state.y = 3 * offset_y; // On s'intéresse à la 4ème ligne, le bonhomme qui court
+    state.w = offset_x;     // Largeur de la vignette
+    state.h = offset_y;     // Hauteur de la vignette
+
+    destination.w = offset_x * zoom; // Largeur du sprite à l'écran
+    destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
+
+    destination.y = 0.7 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
+
+    for (int t = 0; t < 50; t++)
+    {
+        play_texture_full_window(bg_texture, window, renderer);
+        play_texture_xy_taille(trou_noir, window, renderer, t * taille);
+
+        destination.x = 0.8 * window_dimensions.w - 7 * t; // Position en x pour l'affichage du sprite
+        state.x += offset_x;                               // On passe à la vignette suivante dans l'image
+        state.x %= source.w;                               // La vignette qui suit celle de fin de ligne est
+
+        SDL_RenderCopy(renderer, sprite, &state, &destination);
+        placement_perso(map, x_perso, y_perso);
+        //draw(renderer, map, couleurs);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(60);
+        effacement_perso(map, x_perso, y_perso);
+    }
 }

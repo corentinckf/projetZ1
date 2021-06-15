@@ -28,5 +28,7 @@ void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *
 void play_texture_anime(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer);
 void play_texture_sprite_courir(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer);
 void play_texture_sprite_avec_bg(SDL_Texture *bg_texture, SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer);
-void animation(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *bg_texture, SDL_Texture *trou_noir, SDL_Texture *sprite, SDL_Texture *shadow, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE]);
+void play_texture_xy_taille(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer, float taille);
+
+void animation(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *bg_texture, SDL_Texture *trou_noir, SDL_Texture *sprite, SDL_Texture *shadow, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleur[10][3]);
 #endif
