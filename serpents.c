@@ -33,6 +33,7 @@ void draw(SDL_Renderer* renderer, int *x, int *nb)                              
        SDL_Rect rectangle;
        SDL_Rect carre;
        int i;
+       int y=600/2-100*(*nb%2);
        
        if (*nb %2 == 0)
        {
@@ -48,15 +49,14 @@ void draw(SDL_Renderer* renderer, int *x, int *nb)                              
        }
        
        rectangle.x=*x;
-       rectangle.y=600/2-100*(*nb%2);
+       rectangle.y=y;
        rectangle.w=100;
        rectangle.h=100;
        SDL_RenderFillRect(renderer,&rectangle);
 
-       /*SDL_RenderDrawLine(renderer,
-                            0, 300+200,                                       // x,y du point de la première extrémité
-                            200, 300);                                        // x,y seconde extrémité
-       SDL_RenderDrawLine(renderer,0,300,200,300+100);*/
+       SDL_RenderDrawLine(renderer,
+                            *x, y,                                       // x,y du point de la première extrémité
+                            *x+100, y+100);                              // x,y seconde extrémité
 
 
        /* tracer un cercle n'est en fait pas trivial, voilà le résultat sans algo intelligent ... */
