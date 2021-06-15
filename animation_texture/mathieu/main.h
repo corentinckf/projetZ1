@@ -22,6 +22,6 @@ void effacement_perso(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int x_perso, in
 int dessine_perso(int i, int j);
 
 void play_texture_full_window(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer);
-void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer);
+void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer, int x, int y);
 
 #endif

@@ -49,6 +49,8 @@ int main()
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
 
     play_texture_full_window(background, window, renderer);
+    play_texture_xy(trou_noir, window, renderer, screen.w / 2, screen.h / 2);
+
     SDL_RenderPresent(renderer); // affichage
 
     SDL_Delay(2000);
@@ -157,13 +159,24 @@ void play_texture_full_window(SDL_Texture *my_texture, SDL_Window *window, SDL_R
     destination = window_dimensions; //On fixe les dimension de l'affiche == a la taille de la window
 
     SDL_RenderCopy(renderer, my_texture, &source, &destination);
-
-
 }
 
-/*
-void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer)
+void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer, int x, int y)
 {
-}
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone de la texture à récupérer
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0};       // Rectangle définissant où la zone_source doit être déposée dans le renderer
 
-*/
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
+
+    float zoom = 0.5;
+
+    destination.h = source.h * zoom;
+    destination.w = source.w * zoom;
+
+    destination.x = (window_dimensions.w - 0.7*destination.w) /2 ;
+    destination.y = (window_dimensions.h - 1.6*destination.h) / 2;
+    SDL_RenderCopy(renderer, my_texture, &source, &destination);
+}
