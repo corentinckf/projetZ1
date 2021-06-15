@@ -28,11 +28,12 @@ void end_sdl(char ok,                                                 // fin nor
   }                                                               
 }
 
-void draw(SDL_Renderer* renderer){                                   // Je pense que vous allez faire moins laid :)
+void draw(SDL_Renderer* renderer)                                   // Je pense que vous allez faire moins laid :)
+{
   SDL_Rect rectangle;                                             
 
   SDL_SetRenderDrawColor(renderer,                                
-                              50, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
+                              0, 0, 75,                               // mode Red, Green, Blue (tous dans 0..255)
                               255);                                   // 0 = transparent ; 255 = opaque
   rectangle.x = 0;                                                    // x haut gauche du rectangle
   rectangle.y = 0;                                                    // y haut gauche du rectangle
@@ -48,16 +49,17 @@ void draw(SDL_Renderer* renderer){                                   // Je pense
 
 
   /* tracer un cercle n'est en fait pas trivial, voilà le résultat sans algo intelligent ... */
-  for (float angle = 0; angle < 2 * M_PI; angle += M_PI / 4000) {      
-         SDL_SetRenderDrawColor(renderer,
-                                (cos(angle * 2) + 1) * 255 / 2,       // quantité de Rouge      
-                                (cos(angle * 5) + 1) * 255 / 2,       //          de vert 
-                                (cos(angle) + 1) * 255 / 2,           //          de bleu
-                                255);                                 // opaque
-         SDL_RenderDrawPoint(renderer, 
-                             200 + 100 * cos(angle),                  // coordonnée en x
-                             200 + 150 * sin(angle));                 //            en y   
-  }
+/*  for (float angle = 0; angle < 2 * M_PI; angle += M_PI / 4000)
+  {      
+       SDL_SetRenderDrawColor(renderer,
+                            (cos(angle * 2) + 1) * 255 / 2,       // quantité de Rouge      
+                            (cos(angle * 5) + 1) * 255 / 2,       //          de vert 
+                            (cos(angle) + 1) * 255 / 2,           //          de bleu
+                            255);                                 // opaque
+       SDL_RenderDrawPoint(renderer, 
+                            200 + 100 * cos(angle),                  // coordonnée en x
+                            200 + 150 * sin(angle));                 //            en y   
+  }*/
 }
 
 int main()
@@ -65,15 +67,10 @@ int main()
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
     SDL_DisplayMode screen;
-
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-        end_sdl(0,"erreur",window,renderer);
-    }
     window = SDL_CreateWindow("Premier dessin",
                             SDL_WINDOWPOS_CENTERED,
-                            SDL_WINDOWPOS_CENTERED, screen.w * 0.66,
-                            screen.h * 0.66,
+                            SDL_WINDOWPOS_CENTERED, 600,
+                            600,
                             SDL_WINDOW_OPENGL);
     if (window == NULL) end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
     
@@ -83,7 +80,7 @@ int main()
     
     draw(renderer);
     SDL_RenderPresent(renderer);
-    SDL_Delay(1000); 
+    SDL_Delay(2000); 
     
     end_sdl(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
