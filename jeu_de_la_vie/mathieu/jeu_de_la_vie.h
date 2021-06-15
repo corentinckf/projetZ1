@@ -19,14 +19,14 @@
 #define TRUE 1
 #define FALSE 0
 
-#define N 100
+#define N 5
 
 int couleurs[NB_COULEURS][3] = {{255, 255, 255}, //0 mort blanc : 255 255 255
                                 {0, 0, 0}};      //1 vivant : 0 0 0
 
 //B0123478/S01234678
-int naissance[9] = {'1', '1', '1', '1', '1', '0', '0', '1', '1'};
-int survie[9] = {'1', '1', '1', '1', '1', '0', '1', '1','1'};
+int naissance[9] = {0, 0, 0, 1, 0, 0, 0, 0, 0};
+int survie[9] = {0, 0, 1, 1, 0, 0, 0, 0,0};
 
 
 void placement_config_depart(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
