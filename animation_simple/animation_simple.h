@@ -19,6 +19,7 @@ void init_map(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE]);
 
 void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3]);
 void placement_perso(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int x, int y);
+void effacement_perso(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int x, int y);
 int dessine_perso(int i, int j);
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer);
