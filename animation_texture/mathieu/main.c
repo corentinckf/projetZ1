@@ -1,6 +1,6 @@
 #include "main.h"
 
-int main(int argc, char **argv)
+int main()
 {
 
     SDL_DisplayMode screen;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     SDL_Delay(2000);
     SDL_RenderClear(renderer);
 
-    IMG_Quit(); 
+    IMG_Quit();
     end_sdl(1, "Fermeture SDL normale", window, renderer);
     return 0;
 }
@@ -151,14 +151,19 @@ void play_texture_full_window(SDL_Texture *my_texture, SDL_Window *window, SDL_R
         window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
         destination = {0};       // Rectangle définissant où la zone_source doit être déposée dans le renderer
 
-    SDL_GetWindowSize(window, window_dimensions.w, window_dimensions.h);
-    SDL_QueryTexture(my_texture, NULL, NULL, source.w, source.h);
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
 
     destination = window_dimensions; //On fixe les dimension de l'affiche == a la taille de la window
 
     SDL_RenderCopy(renderer, my_texture, &source, &destination);
+
+
 }
 
+/*
 void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer)
 {
 }
+
+*/

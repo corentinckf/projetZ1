@@ -13,7 +13,7 @@
 #define LARGEUR_MATRICE 100
 #define HAUTEUR_MATRICE 100
 
-#define TAILLE_PIXEL 5
+#define TAILLE_PIXEL 10
 
 void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3]);
 void init_map(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE]);
