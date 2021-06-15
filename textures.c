@@ -5,7 +5,7 @@
 #include <math.h>
 
 //Affichage d'une texture sur la totalité de la fenêtre
-void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
+void affiche_texture(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
 {
     SDL_Rect 
             source = {0},                         // Rectangle définissant la zone de la texture à récupérer
@@ -31,56 +31,84 @@ void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Rendere
     SDL_RenderClear(renderer);                    // Effacer la fenêtre
 }
 
+void affiche_texture_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
+{
+    SDL_Rect 
+            source = {0},                         // Rectangle définissant la zone de la texture à récupérer
+            window_dimensions = {0},              // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+            destination = {0};                    // Rectangle définissant où la zone_source doit être déposée dans le renderer
+
+    SDL_GetWindowSize(
+        window, &window_dimensions.w,
+        &window_dimensions.h);                    // Récupération des dimensions de la fenêtre
+    SDL_QueryTexture(my_texture, NULL, NULL,
+                    &source.w, &source.h);       // Récupération des dimensions de l'image
+
+    destination = window_dimensions;              // On fixe les dimensions de l'affichage à  celles de la fenêtre
+    SDL_RenderCopy(renderer, my_texture,&source,&destination); 
+}
+
+
 void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *renderer)
 {
     SDL_Rect 
         source = {0},                             // Rectangle définissant la zone de la texture à récupérer
         window_dimensions = {0},                  // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
         destination = {0};                        // Rectangle définissant où la zone_source doit être déposée dans le renderer
-
+    
     SDL_GetWindowSize(                                
-      window, &window_dimensions.w,                 
-      &window_dimensions.h);                      // Récupération des dimensions de la fenêtre
-    SDL_QueryTexture(my_texture, NULL, NULL,         
-                   &source.w,&source.h);
+        window, &window_dimensions.w,                 
+        &window_dimensions.h);                      // Récupération des dimensions de la fenêtre
+    SDL_QueryTexture(my_texture, NULL, NULL,&source.w,&source.h);
 
     int colonnes=9,lignes=3;
-    float zoom=2;
+    int nb_images=colonnes*lignes-3;
+    //float zoom=4;
     int offset_x = source.w/colonnes;
     int offset_y = source.h/lignes;
 
-    state.x = 0 ;                          // La première vignette est en début de ligne
-    state.y = 0;                            // On s'intéresse à la 4ème ligne, le bonhomme qui court
-    state.w = offset_x;                    // Largeur de la vignette
-    state.h = offset_y;                    // Hauteur de la vignette
+    int i=0,x=0,y=0;
+    SDL_Rect state[24];
 
-    destination.w = offset_x * zoom;       // Largeur du sprite à l'écran
-    destination.h = offset_y * zoom;       // Hauteur du sprite à l'écran
-    destination.y = (window_dimensions.h - destination.h) /2;
-    destination.x = (window_dimensions.w - destination.w) /2;
-
-    int x=0,y=0;
-
-    for (y=0;y<source.h;y+=offset_y)
+    for (y = 0; y < source.h - 1; y += offset_y)
     {
-        state.y=y;
-        for (x=0;x<source.w:x+=offset_x)
+        for (x = 0; x < source.w; x += offset_x)
         {
-            state.x=x;
+            state[i].x = x;
+            state[i].y = y;
+            state[i].w = offset_x;
+            state[i].h = offset_y;
+            i++;
         }
-        SDL_RenderClear(renderer);
-        SDL_SetTextureAlphaMod(my_texture,(1.0-1.0*i/nb_it)*255);      // L'opacité va passer de 255 à 0 au fil de l'animation
-        SDL_RenderCopy(renderer, my_texture, &source, &destination);   // Préparation de l'affichage
-        SDL_RenderPresent(renderer);                  // Affichage de la nouvelle image
-        SDL_Delay(30);                                // Pause en ms
-    }                                                 
-    SDL_RenderClear(renderer);
     }
+    //la derniere ligne est incomplete
+    for (x = 0; x < source.w - 2*offset_x; x += offset_x)
+    {
+        state[i].x = x;
+        state[i].y = y;
+        state[i].w = offset_x;
+        state[i].h = offset_y;
+        i++;
+    }
+
+    int cpt=0;
+    i=0;
+
+    for (cpt = 0; cpt < nb_images; cpt++)
+    {
+        affiche_texture_1(my_texture, window, renderer); 
+        SDL_RenderCopy(renderer,my_texture, &state[i], &destination);
+        i ++;                  // Passage à l'image suivante
+        SDL_RenderPresent(renderer);              // Affichage
+        SDL_Delay(100);                           // Pause en ms
+    }
+    SDL_RenderClear(renderer);
 }
 
 int main()
 {
     SDL_Texture *my_texture;
+    SDL_Texture *my_image;
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
@@ -97,15 +125,22 @@ int main()
 
     SDL_SetRenderDrawColor(renderer,0,0,0,255);  
 
-    my_texture = IMG_LoadTexture(renderer,"./secsample.png");
+    my_texture = IMG_LoadTexture(renderer,"./supports/maps/secsample.png");
     if (my_texture == NULL) 
     {
         //end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
         fprintf(stderr,"erreur lors de l'ouverture de la texture\n");
     }
 
-    //play_with_texture_1(my_texture,window,renderer);
-    move_texture(my_texture,window,renderer);
+    my_image = IMG_LoadTexture(renderer,"./supports/PNG/Player/player_tilesheet.png");
+    if (my_image == NULL) 
+    {
+        //end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+        fprintf(stderr,"erreur lors de l'ouverture de l'image\n");
+    }
+
+    //affiche_texture(my_texture,window,renderer);
+    move_texture(my_image,window,renderer);
 
     SDL_DestroyTexture(my_texture);
     IMG_Quit(); 
