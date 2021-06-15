@@ -31,8 +31,6 @@ void end_sdl(char ok,                                                 // fin nor
 void draw(SDL_Renderer* renderer, int *x, int *nb)                                   // Je pense que vous allez faire moins laid :)
 {
        SDL_Rect rectangle;
-       SDL_Rect carre;
-       int i;
        int y=600/2-100*(*nb%2);
        
        if (*nb %2 == 0)
@@ -77,7 +75,6 @@ int main()
 {
        SDL_Window* window = NULL;
        SDL_Renderer* renderer = NULL;
-       SDL_DisplayMode screen;
        int i;
        int x=0;
        int nb;
