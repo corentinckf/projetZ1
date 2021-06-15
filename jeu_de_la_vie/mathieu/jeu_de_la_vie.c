@@ -1,7 +1,5 @@
 #include "jeu_de_la_vie.h"
 
-
-
 int main()
 {
     int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE];
@@ -49,14 +47,14 @@ int main()
     for (n = 1; n < N; n++)
     {
 
-        SDL_Delay(500);
+        SDL_Delay(VITESSE);
         etape(super_grille, grille_etat_n);
         draw(renderer, super_grille[grille_etat_n], couleurs);
-        grille_etat_n = n  % 2;
+        grille_etat_n = n % 2;
         SDL_RenderPresent(renderer);
-  
     }
 
+    SDL_Delay(2000);
     end_sdl(0, "Fin normal", fenetre, renderer);
     return EXIT_SUCCESS;
 }
@@ -74,13 +72,11 @@ void etape(int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE], int grille_etat_
             etat_n = super_grille[grille_etat_n][i][j];
 
             nb_voisins = cb_nb_voisins(super_grille[grille_etat_n], j, i);
-            //printf("ICI voisin=%d\n", nb_voisins);
 
             if (etat_n) //cellule vivante
                 etat_n_plus_1 = survie[nb_voisins];
             else //cellule morte
                 etat_n_plus_1 = naissance[nb_voisins];
-            printf("ICI\n");
 
             super_grille[(grille_etat_n + 1) % 2][i][j] = etat_n_plus_1;
         }
@@ -102,7 +98,6 @@ int cb_nb_voisins(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], int x, int y)
 
     nb_voisins -= grille[y][x];
 
-    printf("nb voisin=%d\n", nb_voisins);
 
     return nb_voisins;
 }
@@ -128,9 +123,11 @@ void draw(SDL_Renderer *renderer, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], in
 
 void placement_config_depart(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
 {
-    grille[0][1] = 1;
-    grille[1][1] = 1;
-    grille[1][3] = 1;
+    srand(time(NULL));
+    int i, j;
+    for (i = 0; i < HAUTEUR_GRILLE; i++)
+        for (j = 0; j < LARGEUR_GRILLE; j++)
+            grille[i][j] = rand() % 2;
 }
 
 void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])

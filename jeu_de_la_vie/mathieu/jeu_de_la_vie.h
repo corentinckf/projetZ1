@@ -3,14 +3,16 @@
 
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define HAUTEUR_FENETRE 300
-#define LARGEUR_FENETRE 500
+#define HAUTEUR_FENETRE 600
+#define LARGEUR_FENETRE 1000
 
 #define HAUTEUR_GRILLE 30
 #define LARGEUR_GRILLE 50
 
-#define TAILLE_PIXEL 5
+#define TAILLE_PIXEL 20
 
 #define HAUTEUR_PIXEL LARGEUR_FENETRE / HAUTEUR_GRILLE
 #define LARGEUR_PIXEL LARGEUR_FENETRE / LARGEUR_GRILLE
@@ -19,7 +21,8 @@
 #define TRUE 1
 #define FALSE 0
 
-#define N 5
+#define N 500
+#define VITESSE 10
 
 int couleurs[NB_COULEURS][3] = {{255, 255, 255}, //0 mort blanc : 255 255 255
                                 {0, 0, 0}};      //1 vivant : 0 0 0
