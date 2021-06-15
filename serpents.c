@@ -28,7 +28,7 @@ void end_sdl(char ok,                                                 // fin nor
        }                                                               
 }
 
-void draw(SDL_Renderer* renderer, int *x, int *y, int *nb)                                   // Je pense que vous allez faire moins laid :)
+void draw(SDL_Renderer* renderer, int *x, int *nb)                                   // Je pense que vous allez faire moins laid :)
 {
        SDL_Rect rectangle;
        SDL_Rect carre;
@@ -47,8 +47,8 @@ void draw(SDL_Renderer* renderer, int *x, int *y, int *nb)                      
                                    255);                                   // 0 = transparent ; 255 = opaque
        }
        
-       rectangle.x=*x+0;
-       rectangle.y=*y+600/2;
+       rectangle.x=*x;
+       rectangle.y=600/2-100*(*nb%2);
        rectangle.w=100;
        rectangle.h=100;
        SDL_RenderFillRect(renderer,&rectangle);
@@ -79,7 +79,7 @@ int main()
        SDL_Renderer* renderer = NULL;
        SDL_DisplayMode screen;
        int i;
-       int x=0,y=0;
+       int x=0;
        int nb;
        window = SDL_CreateWindow("Premier dessin",
                             SDL_WINDOWPOS_CENTERED,
@@ -98,7 +98,7 @@ int main()
        
        for (i=0;i<6;i++)
        {
-              draw(renderer,&x,&y,&nb);
+              draw(renderer,&x,&nb);
               SDL_RenderPresent(renderer);
               SDL_Delay(1000);
               SDL_SetRenderDrawColor(renderer,                                
