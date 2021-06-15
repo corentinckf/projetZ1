@@ -1,9 +1,9 @@
 #include "jeu_de_la_vie.h"
 
-
-
 int main()
 {
+    int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE];
+
     int n;
     int grille_etat_n = 0;
     SDL_DisplayMode screen;
@@ -32,14 +32,15 @@ int main()
 
     init_map(super_grille[0]);
     init_map(super_grille[1]);
+    placement_config_depart(super_grille[0]);
 
     for (n = 0; n < N; n++)
     {
-
+        printf("n=%d, grille_etat_n=%d\n", n, grille_etat_n);
         draw(renderer, super_grille[grille_etat_n], couleurs); // appel de la fonction qui crée l'image
         SDL_RenderPresent(renderer);                           // affichage
         SDL_Delay(500);
-        grille_etat_n = n % 2;
+        grille_etat_n = (n + 1) % 2;
         etape(super_grille, n);
         SDL_RenderClear(renderer);
     }
@@ -52,7 +53,7 @@ void etape(int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE], int grille_etat_
 {
     int i, j;
     int etat_n;
-    int etat_n_plus_1 ;
+    int etat_n_plus_1;
     int nb_voisins;
     for (i = 0; i < HAUTEUR_GRILLE; i++)
     {
@@ -65,7 +66,7 @@ void etape(int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE], int grille_etat_
             else //cellule morte
                 etat_n_plus_1 = naissance[nb_voisins];
 
-            super_grille[(grille_etat_n + 1)%2][i][j] = etat_n_plus_1;
+            super_grille[(grille_etat_n + 1) % 2][i][j] = etat_n_plus_1;
         }
     }
 }
@@ -90,6 +91,7 @@ void draw(SDL_Renderer *renderer, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], in
         for (j = 0; j < LARGEUR_GRILLE; j++)
         {
             c = grille[i][j];
+            printf("c=%d\n", c);
             SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], 255);
             rect.x = j * TAILLE_PIXEL;
             rect.y = i * TAILLE_PIXEL;

@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
+#define HAUTEUR_FENETRE 300
 #define LARGEUR_FENETRE 500
-#define HAUTEUR_FENETRE 500
 
 #define HAUTEUR_GRILLE 30
 #define LARGEUR_GRILLE 50
@@ -28,7 +28,6 @@ int couleurs[NB_COULEURS][3] = {{255, 255, 255}, //0 mort blanc : 255 255 255
 int naissance[9] = {'1', '1', '1', '1', '1', '0', '0', '1', '1'};
 int survie[9] = {'1', '1', '1', '1', '1', '0', '1', '1','1'};
 
-int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE];
 
 void placement_config_depart(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
 void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
