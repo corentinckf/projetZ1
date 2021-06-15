@@ -28,36 +28,35 @@ void end_sdl(char ok,                                                 // fin nor
        }                                                               
 }
 
-void draw(SDL_Renderer* renderer)                                   // Je pense que vous allez faire moins laid :)
+void draw(SDL_Renderer* renderer, int *x, int *y, int *nb)                                   // Je pense que vous allez faire moins laid :)
 {
        SDL_Rect rectangle;
-       SDL_Rect carre;                                             
-
-       SDL_SetRenderDrawColor(renderer,                                
-                                   0, 0, 75,                               // mode Red, Green, Blue (tous dans 0..255)
-                                   255);                                   // 0 = transparent ; 255 = opaque
-
-       for (i=0;i<6;i++)
+       SDL_Rect carre;
+       int i;
+       
+       if (*nb %2 == 0)
        {
-              rectangle.x=600/2;
-              rectangle.y=0;
-              rectangle.w=200;
-              rectangle.h=100;
-
-              carre.x=300;
-              carre.y=300;
-              carre.w=200;
-              carre.h=200;
-
-              SDL_RenderFillRect(renderer,&carre);
-              SDL_RenderFillRect(renderer,&rectangle);
-
-              SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-              SDL_RenderDrawLine(renderer,
-                                   0, 0,                                       // x,y du point de la première extrémité
-                                   600, 600);                                  // x,y seconde extrémité
-              SDL_RenderDrawLine(renderer)
+              SDL_SetRenderDrawColor(renderer,                                
+              0, 0, 100,                               // mode Red, Green, Blue (tous dans 0..255)
+              255);                                   // 0 = transparent ; 255 = opaque
        }
+       else
+       {
+              SDL_SetRenderDrawColor(renderer,                                
+                                   200, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
+                                   255);                                   // 0 = transparent ; 255 = opaque
+       }
+       
+       rectangle.x=*x+0;
+       rectangle.y=*y+600/2;
+       rectangle.w=100;
+       rectangle.h=100;
+       SDL_RenderFillRect(renderer,&rectangle);
+
+       /*SDL_RenderDrawLine(renderer,
+                            0, 300+200,                                       // x,y du point de la première extrémité
+                            200, 300);                                        // x,y seconde extrémité
+       SDL_RenderDrawLine(renderer,0,300,200,300+100);*/
 
 
        /* tracer un cercle n'est en fait pas trivial, voilà le résultat sans algo intelligent ... */
@@ -72,13 +71,16 @@ void draw(SDL_Renderer* renderer)                                   // Je pense 
                             200 + 100 * cos(angle),                  // coordonnée en x
                             200 + 150 * sin(angle));                 //            en y   
        }*/
-       }
+}
 
 int main()
 {
        SDL_Window* window = NULL;
        SDL_Renderer* renderer = NULL;
        SDL_DisplayMode screen;
+       int i;
+       int x=0,y=0;
+       int nb;
        window = SDL_CreateWindow("Premier dessin",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED, 600,
@@ -90,10 +92,22 @@ int main()
               window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
        if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-       draw(renderer);
-       SDL_RenderPresent(renderer);
-       SDL_Delay(3000); 
-
+       SDL_SetRenderDrawColor(renderer,                                
+              0, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
+              255);                                   // 0 = transparent ; 255 = opaque
+       
+       for (i=0;i<6;i++)
+       {
+              draw(renderer,&x,&y,&nb);
+              SDL_RenderPresent(renderer);
+              SDL_Delay(1000);
+              SDL_SetRenderDrawColor(renderer,                                
+                                          0, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
+                                          255);                                  // 0 = transparent ; 255 = opaque
+              SDL_RenderClear(renderer);
+              x+=100;
+              nb++;
+       } 
        end_sdl(1, "Normal ending", window, renderer);
        return EXIT_SUCCESS;
-       }
+}
