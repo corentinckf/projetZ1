@@ -61,8 +61,6 @@ int main()
     if (sun == NULL)
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
 
-    init_map(map);
-
     //animation
     animation(window, renderer, background, trou_noir, sprite, shadow, map, couleurs);
     /*
@@ -81,7 +79,7 @@ int main()
     end_sdl(1, "Fermeture SDL normale", window, renderer);
     return 0;
 }
-
+/*
 void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3])
 {
     int i, j, c;
@@ -97,7 +95,7 @@ void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int
             else
                 opacite == 255;
 
-            SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], 0);
+            SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], 255);
             rect.x = j * TAILLE_PIXEL;
             rect.y = i * TAILLE_PIXEL;
             rect.w = 1 * TAILLE_PIXEL;
@@ -172,6 +170,9 @@ int dessine_perso(int i, int j)
     }
     return partie_perso;
 }
+
+
+*/
 
 void play_texture_full_window(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer)
 {
@@ -368,8 +369,8 @@ void play_texture_xy_taille(SDL_Texture *my_texture, SDL_Window *window, SDL_Ren
     destination.h = source.h * taille;
     destination.w = source.w * taille;
 
-    destination.x = (window_dimensions.w - 0.7 * destination.w - taille) / 2;
-    destination.y = (window_dimensions.h - 1.6 * destination.h - taille) / 2;
+    destination.x = (1.15 * window_dimensions.w - destination.w) / 2;
+    destination.y = (0.8 *  window_dimensions.h - destination.h) / 2;
     SDL_RenderCopy(renderer, my_texture, &source, &destination);
 }
 
@@ -377,8 +378,7 @@ void animation(SDL_Window *window, SDL_Renderer *renderer,
                SDL_Texture *bg_texture, SDL_Texture *trou_noir, SDL_Texture *sprite, SDL_Texture *shadow,
                int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3])
 {
-    int x_perso = 10;
-    int y_perso = 70;
+
     float taille = 0.01;
 
     SDL_Rect
@@ -408,22 +408,21 @@ void animation(SDL_Window *window, SDL_Renderer *renderer,
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
-    destination.y = 0.7 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
+    destination.y = 0.9 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
 
-    for (int t = 0; t < 50; t++)
+    for (int t = 0; t < 200; t++)
     {
         play_texture_full_window(bg_texture, window, renderer);
-        play_texture_xy_taille(trou_noir, window, renderer, t * taille);
+        play_texture_xy_taille(trou_noir, window, renderer, t * taille / 5);
 
-        destination.x = 0.8 * window_dimensions.w - 7 * t; // Position en x pour l'affichage du sprite
-        state.x += offset_x;                               // On passe à la vignette suivante dans l'image
-        state.x %= source.w;                               // La vignette qui suit celle de fin de ligne est
+        destination.x = 0.1 * window_dimensions.w + 7 * t; // Position en x pour l'affichage du sprite
+        destination.y -= t/5;
+        state.x += offset_x; // On passe à la vignette suivante dans l'image
+        state.x %= source.w; // La vignette qui suit celle de fin de ligne est
 
         SDL_RenderCopy(renderer, sprite, &state, &destination);
-        placement_perso(map, x_perso, y_perso);
-        //draw(renderer, map, couleurs);
+
         SDL_RenderPresent(renderer);
         SDL_Delay(60);
-        effacement_perso(map, x_perso, y_perso);
     }
 }
