@@ -104,12 +104,13 @@ int main()
 
         if (!paused)
         { // Si on n'est pas en pause
+            SDL_Delay(vitesse);
             etape(super_grille, grille_etat_n);
             draw(renderer, super_grille[grille_etat_n], couleurs);
             grille_etat_n = (grille_etat_n + 1) % 2;
             SDL_RenderPresent(renderer);
         }
-        SDL_Delay(5 + vitesse); // Petite pause
+        SDL_Delay(10); // Petite pause
     }
 
     SDL_Delay(1500);
@@ -230,8 +231,8 @@ void placement_cellule_souris(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], int x_
     {
         if (j >= 0 && j < LARGEUR_FENETRE)
             grille[i][j] = !grille[i][j];
-        printf("y_mouse %d, i %d\n", y_m, i);
-        printf("x_mouse %d, j %d\n", x_m, j);
+        //printf("y_mouse %d, i %d\n", y_m, i);
+        //printf("x_mouse %d, j %d\n", x_m, j);
     }
     else
         printf("erreur dans les indices retourne par la souris\n");
