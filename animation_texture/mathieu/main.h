@@ -32,3 +32,6 @@ void play_texture_xy_taille(SDL_Texture *my_texture, SDL_Window *window, SDL_Ren
 
 void animation(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *bg_texture, SDL_Texture *trou_noir, SDL_Texture *sprite, SDL_Texture *shadow, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleur[10][3]);
 #endif
+
+
+
