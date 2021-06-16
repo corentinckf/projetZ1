@@ -4,8 +4,9 @@ int main()
 {
     int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE];
 
-    int n;
     int grille_etat_n = 0;
+    //int init_grille_main = 1;
+    int vitesse = VITESSE_BASE;
     SDL_DisplayMode screen;
     SDL_Window *fenetre = NULL;
     SDL_Renderer *renderer = NULL;
@@ -36,25 +37,82 @@ int main()
         0);
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", fenetre, renderer);
+    /******* fin initialisation de la sdl *************/
 
+    //initialisation des grilles a 0
     init_map(super_grille[0]);
     init_map(super_grille[1]);
-    placement_config_depart(super_grille[0]);
+    //placement_config_depart_alea_alea(super_grille[0]);
 
-    draw(renderer, super_grille[0], couleurs); // appel de la fonction qui crée l'image
-    SDL_RenderPresent(renderer);               // affichage
+    int x_mouse, y_mouse;
 
-    for (n = 1; n < N; n++)
-    {
+    SDL_bool
+        program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
+        paused = 1;            // Booléen pour dire que le programme est en pause
 
-        SDL_Delay(VITESSE);
-        etape(super_grille, grille_etat_n);
+    while (program_on)
+    {                    // La boucle des évènements
+        SDL_Event event; // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event))
+        { // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+            // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type)
+            {                           // En fonction de la valeur du type de cet évènement
+            case SDL_QUIT:              // Un évènement simple, on a cliqué sur la x de la // fenêtre
+                program_on = SDL_FALSE; // Il est temps d'arrêter le programme
+                break;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_q:                // 'q'
+                    program_on = SDL_FALSE; // Il est temps d'arrêter le programme
+                    break;
+                case SDLK_p:          // 'p'
+                    paused = !paused; // basculement pause/unpause
+                    break;
+                case SDLK_SPACE:      // 'SPC'
+                    paused = !paused; // basculement pause/unpause
+                    break;
+                case SDLK_KP_PLUS: // '+'
+                    if (vitesse - 10 > 0)
+                    {
+                        vitesse -= 10; // augment la vitesse de jeu
+                        //printf("+++\n");
+                    }
+                    break;
+                case SDLK_KP_MINUS: // '-'
+                    vitesse += 10;  // diminue la vitesse de jeu
+                    break;
+                default:
+                    break;
+                }
+            case SDL_MOUSEBUTTONDOWN: // Click souris
+                if (paused && SDL_GetMouseState(&x_mouse, &y_mouse) & SDL_BUTTON(SDL_BUTTON_LEFT))
+                { // Si c'est un click gauche
+                    placement_cellule_souris(super_grille[0], x_mouse, y_mouse);
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        //draw(state, &color, renderer, window); // On redessine
         draw(renderer, super_grille[grille_etat_n], couleurs);
-        grille_etat_n = n % 2;
         SDL_RenderPresent(renderer);
+        //printf("pause %d\n", paused);
+
+        if (!paused)
+        { // Si on n'est pas en pause
+            etape(super_grille, grille_etat_n);
+            draw(renderer, super_grille[grille_etat_n], couleurs);
+            grille_etat_n = (grille_etat_n + 1) % 2;
+            SDL_RenderPresent(renderer);
+        }
+        SDL_Delay(5 + vitesse); // Petite pause
     }
 
-    SDL_Delay(2000);
+    SDL_Delay(1500);
     end_sdl(0, "Fin normal", fenetre, renderer);
     return EXIT_SUCCESS;
 }
@@ -98,7 +156,6 @@ int cb_nb_voisins(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], int x, int y)
 
     nb_voisins -= grille[y][x];
 
-
     return nb_voisins;
 }
 
@@ -121,7 +178,7 @@ void draw(SDL_Renderer *renderer, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], in
     }
 }
 
-void placement_config_depart(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
+void placement_config_depart_alea(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
 {
     srand(time(NULL));
     int i, j;
@@ -163,4 +220,19 @@ void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *rendere
     {
         exit(EXIT_FAILURE);
     }
+}
+
+void placement_cellule_souris(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], int x_m, int y_m)
+{
+    int i = y_m / TAILLE_PIXEL;
+    int j = x_m / TAILLE_PIXEL;
+    if (i >= 0 && i < HAUTEUR_GRILLE)
+    {
+        if (j >= 0 && j < LARGEUR_FENETRE)
+            grille[i][j] = !grille[i][j];
+        printf("y_mouse %d, i %d\n", y_m, i);
+        printf("x_mouse %d, j %d\n", x_m, j);
+    }
+    else
+        printf("erreur dans les indices retourne par la souris\n");
 }
