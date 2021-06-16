@@ -25,7 +25,7 @@
 #define FALSE 0
 
 #define N 500
-#define VITESSE_BASE 100
+#define VITESSE_BASE 200
 
 int couleurs[NB_COULEURS][3] = {{255, 255, 255}, //0 mort blanc : 255 255 255
                                 {0, 0, 0}};      //1 vivant : 0 0 0

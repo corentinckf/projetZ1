@@ -5,7 +5,7 @@ int main()
     int super_grille[2][HAUTEUR_GRILLE][LARGEUR_GRILLE];
 
     int grille_etat_n = 0;
-    int init_grille_main = 1;
+    //int init_grille_main = 1;
     int vitesse = VITESSE_BASE;
     SDL_DisplayMode screen;
     SDL_Window *fenetre = NULL;
@@ -74,12 +74,15 @@ int main()
                 case SDLK_SPACE:      // 'SPC'
                     paused = !paused; // basculement pause/unpause
                     break;
-                case SDLK_PLUS: // '+'
-                    if (vitesse > 0)
-                        --vitesse; // augment la vitesse de jeu
+                case SDLK_KP_PLUS: // '+'
+                    if (vitesse - 10 > 0)
+                    {
+                        vitesse -= 10; // augment la vitesse de jeu
+                        //printf("+++\n");
+                    }
                     break;
-                case SDLK_MINUS: // '-'
-                    ++vitesse;   // diminue la vitesse de jeu
+                case SDLK_KP_MINUS: // '-'
+                    vitesse += 10;  // diminue la vitesse de jeu
                     break;
                 default:
                     break;
@@ -97,17 +100,16 @@ int main()
         //draw(state, &color, renderer, window); // On redessine
         draw(renderer, super_grille[grille_etat_n], couleurs);
         SDL_RenderPresent(renderer);
-        printf("pause %d\n", paused);
+        //printf("pause %d\n", paused);
 
         if (!paused)
         { // Si on n'est pas en pause
-            SDL_Delay(vitesse);
             etape(super_grille, grille_etat_n);
             draw(renderer, super_grille[grille_etat_n], couleurs);
             grille_etat_n = (grille_etat_n + 1) % 2;
             SDL_RenderPresent(renderer);
         }
-        SDL_Delay(50); // Petite pause
+        SDL_Delay(5 + vitesse); // Petite pause
     }
 
     SDL_Delay(1500);
