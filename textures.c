@@ -31,7 +31,7 @@ void affiche_background(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer
     SDL_RenderClear(renderer);                    // Effacer la fenêtre
 }
 
-/*
+
 void affiche_background_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
 {
     SDL_Rect 
@@ -48,7 +48,6 @@ void affiche_background_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Render
     destination = window_dimensions;              // On fixe les dimensions de l'affichage à  celles de la fenêtre
     SDL_RenderCopy(renderer, my_texture,&source,&destination); 
 }
-*/
 
 
 void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *renderer)
@@ -65,7 +64,6 @@ void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *ren
     SDL_QueryTexture(my_texture, NULL, NULL,&source.w,&source.h);
 
     int colonnes=9,lignes=3;
-    int nb_images=colonnes*lignes-3;
     float zoom = 1;
     int offset_x = source.w/colonnes;
     int offset_y = source.h/lignes;
@@ -108,7 +106,7 @@ void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *ren
     }
 }
 
-void incrustation(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer)
+void incrustation(SDL_Texture *background, SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer)
 {
     SDL_Rect 
             source = {0},                      // Rectangle définissant la zone de la texture à récupérer
@@ -121,12 +119,13 @@ void incrustation(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *rend
         SDL_QueryTexture(my_texture, NULL, NULL,
                         &source.w, &source.h);  // Récupération des dimensions de l'image
 
-        float zoom = 0.4;                        // Facteur de zoom à appliquer    
+        float zoom = 0.3;                        // Facteur de zoom à appliquer    
         destination.w = source.w * zoom;         // La destination est un zoom de la source
         destination.h = source.h * zoom;         // La destination est un zoom de la source
         destination.x = 0;
         destination.y = 0;
 
+        affiche_background_1(background,window,renderer);
         SDL_RenderCopy(renderer, my_texture,     // Préparation de l'affichage  
                     &source,
                     &destination);            
@@ -180,7 +179,8 @@ int main()
 
     //affiche_background(background,window,renderer);
     //move_texture(my_image,window,renderer);
-    incrustation(sun,window,renderer);
+    incrustation(background, sun,window,renderer);
+    SDL_Delay(3000);
 
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(my_image);
