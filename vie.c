@@ -9,10 +9,10 @@
 #define COLONNES 50
 
 //le tableau survie est rempli de 0 et 1 : si survie[k]=1, alors la cellule survit et 0 sinon
-int survie[9] = {0,1,0,1,0,0,0,1,1};
-int naissance[9] = {1,0,1,0,1,1,1,0,0};
+int survie[9] = {0,0,1,1,0,0,0,0,0};
+int naissance[9] = {0,0,0,1,0,0,0,0,0};
 
-//on construit les tableaux survie et naissance aléatoirement
+//on construit les tableaux survie et naissance aleatoirement
 /*int k;
 
 for (k=0;k<9;k++)
@@ -21,7 +21,7 @@ for (k=0;k<9;k++)
     naissance[k]=rand()%2;
 }*/
 
-//on construit les tableaux survie et naissance selon la regle donnée par ScienceEtonnante
+//on construit les tableaux survie et naissance selon la regle donnee par ScienceEtonnante
 /*
 int k;
 
@@ -36,9 +36,9 @@ naissance[3] = 1;
 */
 
 void end_sdl(char ok,                                                 // fin normale : ok = 0 ; anormale ok = 1
-                  char const* msg,                                    // message à afficher
-                  SDL_Window* window,                                 // fenêtre à fermer
-                  SDL_Renderer* renderer) {                           // renderer à fermer
+                  char const* msg,                                    // message a afficher
+                  SDL_Window* window,                                 // fenêtre a fermer
+                  SDL_Renderer* renderer) {                           // renderer a fermer
        char msg_formated[255];                                         
        int l;                                                          
 
@@ -67,15 +67,17 @@ int devenir(int mat[LIGNES][COLONNES], int *i, int *j)
     int ligne,colonne;
     int resultat=-1; //la valeur -1 indique une erreur
 
-    for (ligne = ((*i)-1 + LIGNES) % LIGNES ; ligne < ((*i)+2) % LIGNES ; ligne++)
+    for (ligne = (*i)-1 ; ligne < (*i)+2; ligne++)
     {
-        for (colonne = ((*j)-1 + COLONNES) % COLONNES ; colonne < ((*j)+2) % COLONNES ; colonne++)
+        for (colonne = (*j)-1 ; colonne < (*j)+2 ; colonne++)
         {
-            s+=mat[ligne][colonne];
+            s+=mat[(ligne+LIGNES) % LIGNES][(colonne+COLONNES) % COLONNES];
         }
     }
     s-=mat[*i][*j];
     //s est la somme des 8 cases entourant la cellule (i,j), s est donc le nombre de voisins de la cellule
+
+    //fprintf(stdout,"nombre de voisins : %d\n", s);
 
     if (mat[*i][*j] == 1)   //cellule en vie
     {
@@ -88,7 +90,7 @@ int devenir(int mat[LIGNES][COLONNES], int *i, int *j)
     return resultat;    
 }
 
-//evolution de l'etat N à l'etat N+1 ; renvoie l'entier changement qui indique s'il y a eu un changement de l'etat n à n+1 ou pas
+//evolution de l'etat N a l'etat N+1 ; renvoie l'entier changement qui indique s'il y a eu un changement de l'etat n a n+1 ou pas
 int evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
 {
     int changement=0,resultat;
@@ -97,6 +99,7 @@ int evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
 
     while (ligne < LIGNES && changement == 0)
     {
+        colonne=0;
         while (colonne < COLONNES && changement == 0)
         {
             resultat=devenir(mat,&ligne,&colonne);
@@ -191,7 +194,7 @@ int main()
 
     window = SDL_CreateWindow("Jeu de la vie",
                         SDL_WINDOWPOS_CENTERED,
-                        SDL_WINDOWPOS_CENTERED, 600,
+                        SDL_WINDOWPOS_CENTERED, 1000,
                         600,
                         SDL_WINDOW_OPENGL);
     if (window == NULL) end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
@@ -209,7 +212,7 @@ int main()
             0, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
             255);                                   // 0 = transparent ; 255 = opaque
 
-    //initialisation aléatoire
+    //initialisation aleatoire
     for (i=0;i<LIGNES;i++)
     {
         for (j=0;j<COLONNES;j++)
@@ -224,21 +227,16 @@ int main()
     SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
     SDL_RenderClear(renderer);
 
-    for (int cpt=0; cpt<10; cpt++)
-    {
+    for (int cpt=0; cpt<1000; cpt++)
+    {   
         //afficher l'etat n
         draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
         SDL_RenderPresent(renderer);
-        SDL_Delay(1000);
+        SDL_Delay(100);
         SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
         SDL_RenderClear(renderer);
 
-        //afficher l'etat n+1
-        draw(renderer,etat_suiv, &hauteur_pixel, &largeur_pixel);
-        SDL_RenderPresent(renderer);
-        SDL_Delay(1000);
-        SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
-        SDL_RenderClear(renderer);
+        changement = evolution(etat_n,etat_suiv);
 
         //recopie de la matrice etat n+1 dans la matrice etat_n
         for (i=0;i<LIGNES;i++)
@@ -248,8 +246,5 @@ int main()
                 etat_n[i][j] = etat_suiv[i][j];
             }
         }
-        changement = evolution(etat_n,etat_suiv);
-    }
-
-    return 0;
+    }  
 }
