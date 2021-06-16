@@ -21,7 +21,7 @@
 
 typedef struct perso
 {
-    SDL_Texture *sprite[9];
+    SDL_Texture **sprite;
     SDL_Rect info;
     int direction;
     int score;
@@ -32,4 +32,5 @@ perso_t *creer_perso(SDL_Window *window, SDL_Renderer *renderer);
 void supp_perso(perso_t *perso);
 int calcul_dir_anim_perso(int a);
 void play_with_texture_2(perso_t *perso, SDL_Window *window, SDL_Renderer *renderer);
+char *path_perso_determine(int n);
 #endif

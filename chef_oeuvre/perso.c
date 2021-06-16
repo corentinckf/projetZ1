@@ -8,12 +8,12 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
     supp_perso(perso);
 
     int vitesse = -4;
-
+/*
     for (i = 0; i < 10; ++i)
     {
         play_with_texture_2(perso, window, renderer);
     }
-
+*/
     return 0;
 }
 
@@ -24,6 +24,7 @@ perso_t *creer_perso(SDL_Window *window, SDL_Renderer *renderer)
     perso = malloc(sizeof(perso_t));
     if (perso == NULL)
         exit(EXIT_FAILURE);
+    perso->sprite = malloc(sizeof(SDL_Renderer *) * NB_IMG_PERSO);
 
     perso->info.w = LARGEUR_PERSO;
     perso->info.h = HAUTEUR_PERSO;
@@ -34,8 +35,8 @@ perso_t *creer_perso(SDL_Window *window, SDL_Renderer *renderer)
 
     for (i = 0; i < NB_IMG_PERSO; i++)
     {
-        path_perso = path_perso(i)
-                         perso->sprite[i] = IMG_LoadTexture(renderer, path_perso);
+        path_perso = path_perso_determine(i + 1);
+        perso->sprite[i] = IMG_LoadTexture(renderer, path_perso);
         if (perso->sprite[i] == NULL)
             end_sdl(0, "Echec du chargement de l'image dans la texture du perso", window, renderer);
     }
@@ -47,6 +48,7 @@ void supp_perso(perso_t *perso)
     {
         SDL_DestroyTexture(perso->sprite[i]);
     }
+    free(perso->sprite);
     free(perso);
     perso = NULL;
 }
@@ -104,16 +106,14 @@ void play_with_texture_2(perso_t *perso,
     SDL_RenderClear(renderer); // Effacer la fenêtre
 }
 
-char *path_perso(int n)
+char *path_perso_determine(int n)
 {
-
     char *nom = malloc(NB_MAX_CHAR_PATH * sizeof(char));
     nom[0] = '\0';
     strcat(nom, PATH_IMG_PERSO);
     char nb[1] = "";
     sprintf(nb, "%d", n);
     strcat(nom, nb);
-
     strcat(nom, PATH_IMG_PERSO_EXT);
     return nom;
 }
