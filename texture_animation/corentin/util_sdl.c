@@ -101,8 +101,8 @@ void draw_texture(SDL_Texture *my_texture, SDL_Window *window,
     SDL_RenderCopy(renderer, my_texture,     // Préparation de l'affichage  
                 &source,
                 &destination);            
-    //SDL_RenderPresent(renderer);             
-    //SDL_Delay(1000);                         
+    SDL_RenderPresent(renderer);             
+    SDL_Delay(1000);                         
 
     SDL_RenderClear(renderer);               // Effacer la fenêtre
 }
