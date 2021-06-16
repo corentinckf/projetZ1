@@ -1,4 +1,3 @@
-
 void end_sdl(char ok,                                                 // fin normale : ok = 0 ; anormale ok = 1
                   char const* msg,                                    // message à afficher
                   SDL_Window* window,                                 // fenêtre à fermer
