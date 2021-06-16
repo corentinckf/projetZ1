@@ -31,8 +31,9 @@ int couleurs[NB_COULEURS][3] = {{255, 255, 255}, //0 mort blanc : 255 255 255
                                 {0, 0, 0}};      //1 vivant : 0 0 0
 
 //B0123478/S01234678
-int naissance[9] = {0, 0, 0, 1, 0, 0, 0, 1, 1};
-int survie[9] = {0, 0, 1, 1, 0, 0, 0, 0, 0};
+//B35678/S5678
+int naissance[9] = {1, 0, 0, 1, 0, 1, 1, 1, 1};
+int survie[9] = {0, 0, 0,0, 0, 1, 1, 1, 0};
 
 void placement_config_depart_alea(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
 void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
