@@ -5,7 +5,7 @@
 #include <math.h>
 
 //Affichage d'une texture sur la totalité de la fenêtre
-void affiche_texture(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
+void affiche_background(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
 {
     SDL_Rect 
             source = {0},                         // Rectangle définissant la zone de la texture à récupérer
@@ -31,7 +31,7 @@ void affiche_texture(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *r
     SDL_RenderClear(renderer);                    // Effacer la fenêtre
 }
 
-void affiche_texture_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
+void affiche_background_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
 {
     SDL_Rect 
             source = {0},                         // Rectangle définissant la zone de la texture à récupérer
@@ -54,7 +54,8 @@ void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *ren
     SDL_Rect 
         source = {0},                             // Rectangle définissant la zone de la texture à récupérer
         window_dimensions = {0},                  // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
-        destination = {0};                        // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        destination = {0},                        // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};                              // Rectangle de la vignette en cours dans la planche 
     
     SDL_GetWindowSize(                                
         window, &window_dimensions.w,                 
@@ -63,46 +64,46 @@ void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *ren
 
     int colonnes=9,lignes=3;
     int nb_images=colonnes*lignes-3;
-    //float zoom=4;
+    float zoom = 1;
     int offset_x = source.w/colonnes;
     int offset_y = source.h/lignes;
 
-    int i=0,x=0,y=0;
-    SDL_Rect state[24];
+    destination.x = (window_dimensions.w - destination.w) /2;
+    destination.y = (window_dimensions.h - destination.h) /2;
+    destination.w = offset_x * zoom;
+    destination.h = offset_y * zoom;
+
+    int x=0,y=0;
 
     for (y = 0; y < source.h - 1; y += offset_y)
     {
         for (x = 0; x < source.w; x += offset_x)
         {
-            state[i].x = x;
-            state[i].y = y;
-            state[i].w = offset_x;
-            state[i].h = offset_y;
-            i++;
+            state.x = x;
+            state.y = y;
+            state.w = offset_x;
+            state.h = offset_y;
+
+            SDL_RenderCopy(renderer,my_texture, &state, &destination);
+            SDL_RenderPresent(renderer);              // Affichage
+            SDL_Delay(150);                           // Pause en ms
+            SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
+            SDL_RenderClear(renderer);
         }
     }
     //la derniere ligne est incomplete
     for (x = 0; x < source.w - 2*offset_x; x += offset_x)
     {
-        state[i].x = x;
-        state[i].y = y;
-        state[i].w = offset_x;
-        state[i].h = offset_y;
-        i++;
-    }
-
-    int cpt=0;
-    i=0;
-
-    for (cpt = 0; cpt < nb_images; cpt++)
-    {
-        affiche_texture_1(my_texture, window, renderer); 
-        SDL_RenderCopy(renderer,my_texture, &state[i], &destination);
-        i ++;                  // Passage à l'image suivante
+        state.x = x;
+        state.y = y;
+        state.w = offset_x;
+        state.h = offset_y;
+        SDL_RenderCopy(renderer,my_texture, &state, &destination);   // Préparation de l'affichage    
         SDL_RenderPresent(renderer);              // Affichage
-        SDL_Delay(100);                           // Pause en ms
+        SDL_Delay(150);                           // Pause en ms
+        SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
+        SDL_RenderClear(renderer);
     }
-    SDL_RenderClear(renderer);
 }
 
 int main()
@@ -112,7 +113,7 @@ int main()
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
-    window = SDL_CreateWindow("Premier dessin",
+    window = SDL_CreateWindow("Texture",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED, 600,
                             600,
@@ -139,7 +140,7 @@ int main()
         fprintf(stderr,"erreur lors de l'ouverture de l'image\n");
     }
 
-    //affiche_texture(my_texture,window,renderer);
+    //affiche_background(my_texture,window,renderer);
     move_texture(my_image,window,renderer);
 
     SDL_DestroyTexture(my_texture);
