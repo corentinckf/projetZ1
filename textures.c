@@ -31,6 +31,7 @@ void affiche_background(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer
     SDL_RenderClear(renderer);                    // Effacer la fenêtre
 }
 
+/*
 void affiche_background_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer) 
 {
     SDL_Rect 
@@ -47,6 +48,7 @@ void affiche_background_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Render
     destination = window_dimensions;              // On fixe les dimensions de l'affichage à  celles de la fenêtre
     SDL_RenderCopy(renderer, my_texture,&source,&destination); 
 }
+*/
 
 
 void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *renderer)
@@ -106,10 +108,39 @@ void move_texture(SDL_Texture* my_texture, SDL_Window *window, SDL_Renderer *ren
     }
 }
 
+void incrustation(SDL_Texture *my_texture, SDL_Window *window,SDL_Renderer *renderer)
+{
+    SDL_Rect 
+            source = {0},                      // Rectangle définissant la zone de la texture à récupérer
+            window_dimensions = {0},           // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+            destination = {0};                 // Rectangle définissant où la zone_source doit être déposée dans le renderer
+
+        SDL_GetWindowSize(
+            window, &window_dimensions.w,
+            &window_dimensions.h);               // Récupération des dimensions de la fenêtre
+        SDL_QueryTexture(my_texture, NULL, NULL,
+                        &source.w, &source.h);  // Récupération des dimensions de l'image
+
+        float zoom = 0.4;                        // Facteur de zoom à appliquer    
+        destination.w = source.w * zoom;         // La destination est un zoom de la source
+        destination.h = source.h * zoom;         // La destination est un zoom de la source
+        destination.x = 0;
+        destination.y = 0;
+
+        SDL_RenderCopy(renderer, my_texture,     // Préparation de l'affichage  
+                    &source,
+                    &destination);            
+        SDL_RenderPresent(renderer);             
+        SDL_Delay(1000);                         
+
+        SDL_RenderClear(renderer);               // Effacer la fenêtre
+}
+
 int main()
 {
-    SDL_Texture *my_texture;
+    SDL_Texture *background;
     SDL_Texture *my_image;
+    SDL_Texture *sun;
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
@@ -126,8 +157,8 @@ int main()
 
     SDL_SetRenderDrawColor(renderer,0,0,0,255);  
 
-    my_texture = IMG_LoadTexture(renderer,"./supports/maps/secsample.png");
-    if (my_texture == NULL) 
+    background = IMG_LoadTexture(renderer,"./supports/maps/secsample.png");
+    if (background == NULL) 
     {
         //end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
         fprintf(stderr,"erreur lors de l'ouverture de la texture\n");
@@ -137,12 +168,22 @@ int main()
     if (my_image == NULL) 
     {
         //end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
-        fprintf(stderr,"erreur lors de l'ouverture de l'image\n");
+        fprintf(stderr,"erreur lors de l'ouverture du joueur\n");
     }
 
-    //affiche_background(my_texture,window,renderer);
-    move_texture(my_image,window,renderer);
+    sun = IMG_LoadTexture(renderer,"./executables/img/sun.png");
+    if (sun == NULL) 
+    {
+        //end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+        fprintf(stderr,"erreur lors de l'ouverture du soleil\n");
+    }
 
-    SDL_DestroyTexture(my_texture);
+    //affiche_background(background,window,renderer);
+    //move_texture(my_image,window,renderer);
+    incrustation(sun,window,renderer);
+
+    SDL_DestroyTexture(background);
+    SDL_DestroyTexture(my_image);
+    SDL_DestroyTexture(sun);
     IMG_Quit(); 
 }
