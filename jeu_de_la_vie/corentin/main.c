@@ -6,7 +6,7 @@
 #define MATLIG 50
 #define NOM_FENETRE "Jeu de la vie corentin"
 
-#define TAUXDEFECONDITE 5
+#define TAUXDEFECONDITE 3
 
 typedef int Grille[MATCOL][MATLIG];
 
@@ -58,7 +58,7 @@ void draw(SDL_Renderer* renderer, Grille grille)
                 else
                 {
                     SDL_SetRenderDrawColor(renderer,                                
-                                        0, 0, 0,                               
+                                        rand() % 200, rand() % 200, rand() % 200,                               
                                         255);                                 
                 }
                 rectangle.x= j*cube_l;
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     int code_retour_sdl;
 
     int fait = 0;
-    int step = 50;
+    int step = 100;
     Grille g;
     Grille n;
     
