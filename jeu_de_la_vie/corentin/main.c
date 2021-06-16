@@ -6,6 +6,8 @@
 #define MATLIG 30
 #define NOM_FENETRE "Fenêtre"
 
+typedef int Grille[MATCOL][MATLIG];
+
 /*règle Maze*/
 int survie[9] = {0,0,0,0,0,1,0,0,0};
 int naissance[9] = {0,0,0,0,0,1,1,0,0};
@@ -13,34 +15,30 @@ int naissance[9] = {0,0,0,0,0,1,1,0,0};
 int cube_l = HAUTEUR_FENETRE / MATLIG;
 int cube_h = LARGEUR_FENETRE / MATCOL;
 
-int keskeJeDeviens(int grille[MATLIG][MATCOL], int * i, int  * j)
+int num_voisins(Grille grille, int x, int y)
 {
-    int res = -1;
-    int nb_neigh = num_voisins(grille,*i,*j);
-    if(grille[*i][*j] == 1){
-        res = survie[nb_neigh];
-    }else{
-        res = naissance[nb_neigh];
-    }
-    return res;
-}
-
-int num_voisins(int grille[MATLIG][MATCOL], int x, int y)
-{
-    int i, j;
     int res = 0;
-    for (i = -1; i < 2; i++)
-        for (j = -1; j < 2; j++)
-        {
-            res+= grille[(y + j + MATLIG) % MATLIG][(x + j   + MATCOL) % MATCOL];
-        }
-
-    res -= grille[y][x];
-
-    return res;
+    for(int i = -1; i < 2;++i)
+        for(int j = -1;j < 2 ;++j)
+            res += grille[(x + i + MATLIG) % MATLIG][(y + j + MATCOL) % MATCOL];
+    return res -= grille[x][y];
 }
 
-void draw(SDL_Renderer* renderer, int tamer[MATLIG][MATCOL])
+void next(Grille grille, Grille next)
+{
+    for(int i = 0; i < MATLIG;++i)
+    {
+        for(int j = 0; j < MATCOL;++j)
+        {
+            int neigh = num_voisins(grille,i,j);
+            int actual = grille[i][j];
+            if(actual) next[i][j] = survie[neigh];
+            else next[i][j] = naissance[neigh];
+        }
+    }
+}
+
+void draw(SDL_Renderer* renderer, Grille grille)
 {
        SDL_Rect rectangle;
         int i,j;
@@ -48,7 +46,7 @@ void draw(SDL_Renderer* renderer, int tamer[MATLIG][MATCOL])
        {
         for(j = 0; j < MATCOL;++j)
             {
-                if (tamer[i][j]==0)
+                if (grille[i][j]==0)
                 {
                     SDL_SetRenderDrawColor(renderer,                                
                     255, 255, 255,
@@ -75,8 +73,9 @@ int main(int argc, char **argv)
 
     int fait = 0;
     int step = 100;
-    int grille[MATLIG][MATCOL];
-    int neigh[MATLIG][MATCOL];
+    Grille g;
+    Grille n;
+    
     SDL_Window * window = initWindow(LARGEUR_FENETRE,
                                      HAUTEUR_FENETRE,
                                      SDL_WINDOWPOS_UNDEFINED,
@@ -109,28 +108,29 @@ int main(int argc, char **argv)
     srand(time(NULL));
     for(int i = 0; i < MATLIG;++i)
         for(int j = 0; j < MATCOL;++j)
-            grille[i][j] = rand() % 2;
+            g[i][j] = rand() % 2;
 
     for(int i = 0; i < MATLIG;++i)
         for(int j = 0; j < MATCOL;++j)
-            neigh[i][j] = grille[i][j];
+            n[i][j] = g[i][j];
+
+    Grille *pg = &g;
+    Grille *pn = &n;
 
     for(int a = 0; a < step;++a)
     {
-        draw(renderer,neigh);
+        draw(renderer,*pg);
         SDL_RenderPresent(renderer);
         SDL_Delay(250);
         SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
         SDL_RenderClear(renderer);
         
         //On check les cellules qui vont rester/pas
-        for(int i = 0; i < MATLIG;++i)
-        {
-            for(int j = 0; j < MATCOL;++j)
-            {
-                neigh[i][j] = keskeJeDeviens(grille,&i,&j);
-            }
-        }
+        next(*pg,*pn);
+        Grille *ptemp = pg;
+        pg = pn;
+        pn = ptemp;
+
     }
     end_sdl(1,"Normal ending", window, renderer, &code_retour_sdl);
 
