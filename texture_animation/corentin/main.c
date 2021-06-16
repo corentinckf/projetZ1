@@ -1,8 +1,8 @@
 #include "util_sdl.h"
 
-#define LARGEUR_FENETRE 400
-#define HAUTEUR_FENETRE 300
-#define NOM_FENETRE "Fenêtre"
+#define LARGEUR_FENETRE 640
+#define HAUTEUR_FENETRE 400
+#define NOM_FENETRE "Animation texture Corentin"
 
 int main(int argc, char **argv)
 {
@@ -35,7 +35,12 @@ int main(int argc, char **argv)
      renderer,
      &code_retour_sdl
     );
-    
+
+    /*Load texture*/
+    SDL_Texture * sun = load_texture_from_image("../../exemples_executables/img/sun.png", window, renderer);
+    SDL_Texture * ken = load_texture_from_image("../../exemples_executables/img/player-spritemap-v9.png", window, renderer);
+    SDL_Texture * bg = load_texture_from_image("../../exemples_executables/img/nasa-xFO2Xt33xgI-unsplash.jpg", window, renderer);
+
     while (!fait)
     {
         SDL_Event event;
@@ -47,7 +52,7 @@ int main(int argc, char **argv)
 
     }
     end_sdl(1,"Normal ending", window, renderer, &code_retour_sdl);
-
+    IMG_Quit();
     if(code_retour_sdl == -1) exit(EXIT_FAILURE);
 
     return 0;
