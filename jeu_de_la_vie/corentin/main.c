@@ -1,16 +1,19 @@
 #include "util_sdl.h"
 
-#define LARGEUR_FENETRE 500
-#define HAUTEUR_FENETRE 300
-#define MATCOL 50
-#define MATLIG 30
-#define NOM_FENETRE "Fenêtre"
+#define LARGEUR_FENETRE 1000
+#define HAUTEUR_FENETRE 500
+#define MATCOL 100
+#define MATLIG 50
+#define NOM_FENETRE "Jeu de la vie corentin"
+
+#define TAUXDEFECONDITE 5
 
 typedef int Grille[MATCOL][MATLIG];
 
-/*règle Maze*/
-int survie[9] = {0,0,0,0,0,1,0,0,0};
-int naissance[9] = {0,0,0,0,0,1,1,0,0};
+/*règle Gems*/
+
+int survie[9] = {0,0,0,1,1,1,0,1,0};
+int naissance[9] = {0,0,0,0,1,1,1,0,1};
 
 int cube_l = HAUTEUR_FENETRE / MATLIG;
 int cube_h = LARGEUR_FENETRE / MATCOL;
@@ -72,7 +75,7 @@ int main(int argc, char **argv)
     int code_retour_sdl;
 
     int fait = 0;
-    int step = 100;
+    int step = 50;
     Grille g;
     Grille n;
     
@@ -107,8 +110,18 @@ int main(int argc, char **argv)
     /*Init remplissement de départ*/
     srand(time(NULL));
     for(int i = 0; i < MATLIG;++i)
+    {
         for(int j = 0; j < MATCOL;++j)
-            g[i][j] = rand() % 2;
+        {
+            int randint = rand() % 10;
+            if(randint < TAUXDEFECONDITE)
+                g[i][j] = 1;
+            else
+                g[i][j] = 0;
+        }
+            
+    }
+        
 
     for(int i = 0; i < MATLIG;++i)
         for(int j = 0; j < MATCOL;++j)
@@ -121,11 +134,10 @@ int main(int argc, char **argv)
     {
         draw(renderer,*pg);
         SDL_RenderPresent(renderer);
-        SDL_Delay(250);
+        SDL_Delay(100);
         SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
         SDL_RenderClear(renderer);
         
-        //On check les cellules qui vont rester/pas
         next(*pg,*pn);
         Grille *ptemp = pg;
         pg = pn;
