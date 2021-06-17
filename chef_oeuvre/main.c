@@ -39,6 +39,14 @@ int main()
         end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
     /**** fin initialisation  *****/
 
+    /****** chargement de la font *******/
+    TTF_Font *font = NULL;                                                                                   // la variable 'police de caractère'
+    font = TTF_OpenFont(PATH_FONT, TAILLE_FONT); // La police à charger, la taille désirée    if (font == NULL)
+    if (font == NULL)
+        end_sdl(0, "Can't load font", window, renderer);
+
+  
+    /***************************/
     perso = creer_perso(window, renderer);
     init_map(grille);
 
@@ -89,6 +97,8 @@ int main()
         //draw(state, &color, renderer, window); // On redessine
         if (!paused)
         { // Si on n'est pas en pause
+
+            affichage_texte(window, renderer, font, texte_score(perso->score), 1, LARGEUR_FENETRE / 2, 0);
             deplacement_perso(perso, &vitesse);
             check_collision(perso, grille);
             play_with_texture_perso(perso, window, renderer);
@@ -135,8 +145,6 @@ void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *rendere
     if (window != NULL)
         SDL_DestroyWindow(window);
 
-    main_perso(window, renderer);
-
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
@@ -145,4 +153,17 @@ void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *rendere
     {
         exit(EXIT_FAILURE);
     }
+}
+
+char *texte_score(int a)
+{
+
+    char *nom = malloc(12 * sizeof(char));
+    nom[0] = '\0';
+    strcat(nom, "score : ");
+    char nb[1] = "";
+    sprintf(nb, "%d", a);
+    strcat(nom, nb);
+
+    return nom;
 }

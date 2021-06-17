@@ -131,7 +131,7 @@ char *path_perso_determine(int n)
 
 int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
 {
-    printf("y=%d, x=%d\n", perso->info.y / HAUTEUR_PERSO, (perso->info.x / LARGEUR_PERSO));
+    //printf("y=%d, x=%d\n", perso->info.y / HAUTEUR_PERSO, (perso->info.x / LARGEUR_PERSO));
 
     int item_point = grille[perso->info.y / HAUTEUR_PERSO][(perso->info.x / LARGEUR_PERSO)];
     perso->score += item_point;
