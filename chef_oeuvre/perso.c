@@ -77,6 +77,7 @@ int calcul_dir_anim_perso(int a)
 void deplacement_perso(perso_t *perso, int *vitesse)
 {
     int signe = *vitesse / *vitesse;
+    printf("signe %d\n", signe);
     if (*vitesse != 0)
     {
         for (int i = 0; i < abs(*vitesse); ++i)
@@ -84,7 +85,7 @@ void deplacement_perso(perso_t *perso, int *vitesse)
             if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_GRILLE)
                 perso->info.x += signe;
         }
-        //*vitesse += (-1) * signe;
+        *vitesse += (-1) * signe;
     }
     perso->direction = *vitesse;
 }
