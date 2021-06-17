@@ -2,11 +2,11 @@
 #define __MAIN_H__
 #include "util_sdl.h"
 
-#define IMG_BACKGROUND "/home/local.isima.fr/mavilledie4/shared/projetZ1/exemples_executables/img/nasa-xFO2Xt33xgI-unsplash.jpg"
-#define IMG_TROU_NOIR "/home/local.isima.fr/mavilledie4/shared/projetZ1/exemples_executables/img/trou-noir.png"
-#define IMG_SPRITE "/home/local.isima.fr/mavilledie4/shared/projetZ1/exemples_executables/img/player-spritemap-v9.png"
-#define IMG_SUN "/home/local.isima.fr/mavilledie4/shared/projetZ1/exemples_executables/img/sun.png"
-#define IMG_SHADOW "/home/local.isima.fr/mavilledie4/shared/projetZ1/exemples_executables/img/shadow-80x70.png"
+#define IMG_BACKGROUND ".img/nasa-xFO2Xt33xgI-unsplash.jpg"
+#define IMG_TROU_NOIR "./img/trou-noir.png"
+#define IMG_SPRITE "./img/player-spritemap-v9.png"
+#define IMG_SUN "./img/sun.png"
+#define IMG_SHADOW "./img/shadow-80x70.png"
 
 #define LARGEUR_FENETRE 1000
 #define HAUTEUR_FENETRE 800
