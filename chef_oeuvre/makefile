@@ -11,7 +11,7 @@ main.o : main.c main.h
 perso.o : perso.c perso.h  
 	$(CC) $(OPT) perso.c 
 
-affichage.o : affichage.c affichage.h  
+affichage.o : affichage.c affichage.h  main.h
 	$(CC) $(OPT) affichage.c 
 
 

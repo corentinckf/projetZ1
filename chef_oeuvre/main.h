@@ -18,14 +18,13 @@
 #define HAUTEUR_GRILLE 20
 #define LARGEUR_GRILLE 10
 
-#define HAUTEUR_PIXEL HAUTEUR_FENETRE/HAUTEUR_GRILLE
-#define LARGEUR_PIXEL LARGEUR_FENETRE/LARGEUR_GRILLE
+#define HAUTEUR_PIXEL HAUTEUR_FENETRE / HAUTEUR_GRILLE
+#define LARGEUR_PIXEL LARGEUR_FENETRE / LARGEUR_GRILLE
 
 #define GOAL_SCORE 100
 
 void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
 
-void end_sdl(char,char const *, SDL_Window*, SDL_Renderer*);
-
-
+void end_sdl(char, char const *, SDL_Window *, SDL_Renderer *);
+char *texte_score(int a);
 #endif

@@ -1,8 +1,8 @@
-#include "main.h"
+#include "affichage.h"
 
-void affichage_texte(TTF_Font *font, char *texte, int taille, int x, int y)
+void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, char *texte, int taille, int x, int y)
 {
-    TTF_SetFontStyle(font, 0); // en italique, gras
+    TTF_SetFontStyle(font, TTF_STYLE_BOLD); // en italique, gras
 
     SDL_Color color = {250, 250, 250, 255}; // la couleur du texte
 
@@ -21,9 +21,13 @@ void affichage_texte(TTF_Font *font, char *texte, int taille, int x, int y)
     SDL_Rect pos = {0, 0, 0, 0};                                // rectangle où le texte va être positionné
     SDL_QueryTexture(text_texture, NULL, NULL, &pos.w, &pos.h); // récupération de la taille (w, h) du texte
 
-    SDL_GetWindowSize(window, &pos.x, &pos.y);
-    pos.x = x;
-    pos.y = y;
+    pos.w = pos.w * taille;
+    pos.h = pos.h * taille;
+
+    //SDL_GetWindowSize(window, &pos.x, &pos.y);
+    pos.x = x - pos.w / 2;
+    pos.y = y + pos.h / 2;
     SDL_RenderCopy(renderer, text_texture, NULL, &pos); // Ecriture du texte dans le renderer
     SDL_DestroyTexture(text_texture);                   // On n'a plus besoin de la texture avec le texte
+
 }
