@@ -5,8 +5,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define LIGNES 50
-#define COLONNES 10
+#define LIGNES 5
+#define COLONNES 3
 
 //gestion des items
 
@@ -25,13 +25,71 @@ void init(int grille[LIGNES][COLONNES])
 
 void evolution(int grille[LIGNES][COLONNES],int *etape)
 {
-    int valeur = rand()%5;     //valeur entre 0 et 4
-    int signe = 2 * rand()%2 - 1; //signe vaut -1 ou 1
-    int j;
-
+    int valeur,signe;
+    int alea;
+    int j;//
+    
     for (j=0;j<COLONNES;j++)
     {
+        alea = rand()%20;
+
+        switch (alea)
+        {
+        case 0:
+            valeur = -4;
+            break;
+        case 1:
+            valeur = -3;
+            break;
+        case 2:
+            valeur = -2;
+            break;
+        case 3:
+            valeur = -1;
+            break;
+        case 4:
+            valeur = 1;
+            break;
+        case 5:
+            valeur = 2;
+            break;
+        case 6:
+            valeur = 3;
+            break;
+        case 7:
+            valeur = 4;
+            break;
+        default:
+            valeur = 0;
+            break;
+        }
+        grille[*etape][j] = valeur;
+    }
+
+    
+    /*
+    for (j=0;j<COLONNES;j++)
+    {
+        valeur = rand()%5;     //valeur entre 0 et 4
+        signe = (2 * (rand()%2)) - 1;   //signe vaut -1 ou 1
         grille[*etape][j] = valeur * signe;
+    }
+    */
+    
+}
+void afficher_grille(int grille[LIGNES][COLONNES])
+{
+    int i,j;
+
+    printf("valeurs grille :\n");
+
+    for (i=0;i<LIGNES;i++)
+    {
+        for (j=0;j<COLONNES;j++)
+        {
+            printf("%d\t", grille[i][j]);
+        }
+        printf("\n");
     }
 }
 
@@ -59,62 +117,64 @@ void draw(SDL_Renderer* renderer, int grille[LIGNES][COLONNES], SDL_Texture *pla
     for (i=0;i<LIGNES;i++)
     {
         //fprintf(stdout,"premier for\n");
-        ligne = (*etape + i) % LIGNES;
-        destination.x = i * (*hauteur_pixel);
+        ligne = (i + (*etape)) % LIGNES;
+        //printf("ligne : %d\n");
+        destination.y = i * (*hauteur_pixel);
 
         for (j=0;j<COLONNES;j++)
         {
             //fprintf(stdout,"deuxieme for\n");
-            destination.y = j * (*largeur_pixel);
+            destination.x = j * (*largeur_pixel);
             switch (grille[ligne][j])
             {
                 //fprintf(stdout,"valeur : %d\n", grille[ligne][j]);
-                case 0:
+                case 0 :
                     //ne rien afficher : on voit le background
                     break;
-                case -1:
+                case -1 :
                     state.x = 0;
                     state.y = 0;
                     break;
-                case 1:
+                case 1 :
                     state.x = offset_x;
                     state.y = 0;
                     break;
-                case -2:
+                case -2 :
                     state.x = 2 * offset_x;
                     state.y = 0;
                     break;
-                case 2:
+                case 2 :
                     state.x = 3 * offset_x;
                     state.y = 0;
                     break;
-                case -3:
+                case -3 :
                     state.x = 0;
                     state.y = offset_y;
                     break;
-                case 3:
+                case 3 :
                     state.x = offset_x;
                     state.y = offset_y;
                     break;
-                case -4:
+                case -4 :
                     state.x = 2 * offset_x;
                     state.y = offset_y;
                     break;
-                case 4:
+                case 4 :
                     state.x = 3 * offset_x;
                     state.y = offset_y;
                     break;
-                default:
-                    fprintf(stdout,"valeur dans grille incoherente");
+                default :
+                    fprintf(stdout,"valeur dans grille incoherente\n");
+                    //fprintf(stdout,"valeur : %d\n", grille[ligne][j]);
                     break;
             }
-            SDL_RenderCopy(renderer,planche,&state,&destination);  
-            SDL_RenderPresent(renderer);
-            SDL_Delay(10);
-            //SDL_SetRenderDrawColor(renderer,0,0,0,255);
-            SDL_RenderClear(renderer);
+            if (grille[ligne][j] != 0) SDL_RenderCopy(renderer,planche,&state,&destination);
         }
-    }   
+    }  
+    SDL_RenderPresent(renderer);
+    SDL_Delay(500);
+    //SDL_SetRenderDrawColor(renderer,0,0,0,255);
+    SDL_RenderClear(renderer);   
 }
 
 int main()
@@ -133,7 +193,7 @@ int main()
 
     window = SDL_CreateWindow("Jeu de la vie",
                         SDL_WINDOWPOS_CENTERED,
-                        SDL_WINDOWPOS_CENTERED, 600,
+                        SDL_WINDOWPOS_CENTERED, 1000,
                         600,
                         SDL_WINDOW_OPENGL);
     if (window == NULL) fprintf(stderr,"erreur lors de l'ouverture de la fenêtre");
@@ -153,30 +213,19 @@ int main()
         fprintf(stderr,"erreur lors de l'ouverture des boutons\n");
     }
 
-    SDL_bool program_on = SDL_TRUE;
+    //SDL_bool program_on = SDL_TRUE;
+    //SDL_Event event;
 
     init(grille);
     //fprintf(stdout,"grille initialisee\n");
 
-    while (program_on)
+    for (int cpt=0;cpt<100;cpt++)
     {
-        SDL_Event event;
-
-        while (program_on && SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-                case SDL_QUIT :
-                    program_on = SDL_FALSE;
-                    break;
-                default:
-                    break;
-            }
-        }
         //fprintf(stdout,"on rentre dans la boucle\n");
         draw(renderer,grille,planche,&etape,&hauteur_pixel,&largeur_pixel);
         //fprintf(stdout,"dessin fait\n");
-        //evolution(grille,&etape);
+        evolution(grille,&etape);
+        //afficher_grille(grille);
         etape++;
     }
     SDL_DestroyTexture(planche);
