@@ -63,4 +63,3 @@ void affichage_bgScroll(SDL_Window * window,SDL_Renderer * renderer, SDL_Texture
         SDL_RenderCopy(renderer, bg, &source, &destination);
         SDL_RenderCopy(renderer, bg2, &source2, &destination2);
 }
-

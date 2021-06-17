@@ -30,7 +30,7 @@ int main()
 
     /************** creation window ****************/
     window = SDL_CreateWindow(
-        "Jeu de la Vie",
+        "Chef d'oeuvre",
         (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
         LARGEUR_FENETRE, HAUTEUR_FENETRE,
         0);
@@ -130,11 +130,12 @@ int main()
             //affichage_texte(window, renderer, font, "score", 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
             draw(renderer, grille, planche, &etape, &hauteur_pixel, &largeur_pixel);
 
-            if (c > 5)
+            if (c > 10)
             {
-                //printf("ICI\n");
                 evolution(grille, &etape);
-                etape = (etape+1)%HAUTEUR_GRILLE;
+                etape = (etape + 1) % HAUTEUR_GRILLE;
+                //printf("etapte=%d\n", etape);
+
                 c = 0;
                 //perso->score++;
             }
@@ -156,7 +157,7 @@ int main()
                 program_on = 0;
             }
         }
-        SDL_Delay(40); // Petite pause
+        SDL_Delay(20); // Petite pause
     }
 
     //end_sdl(1, "fin normal", window, renderer);
@@ -221,11 +222,11 @@ void evolution(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], int *etape)
 {
     int valeur, signe;
     int alea;
-    int j; //
+    int j; 
 
     for (j = 0; j < LARGEUR_GRILLE; j++)
     {
-        alea = rand() % 20;
+        alea = rand() % 70;
 
         switch (alea)
         {
@@ -299,19 +300,20 @@ void draw(SDL_Renderer *renderer, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], SD
     int i, j;
     int ligne = 0;
 
-    float zoom = 0.5;
+    float zoom = 0.25;
     destination.w = offset_x * zoom;
     destination.h = offset_y * zoom;
 
     state.w = offset_x;
     state.h = offset_y;
+    //destination.y = HAUTEUR_FENETRE;
 
     for (i = 0; i < HAUTEUR_GRILLE; i++)
     {
         //fprintf(stdout,"premier for\n");
         ligne = (i + (*etape)) % HAUTEUR_GRILLE;
-        //printf("ligne : %d\n");
-        destination.y = i * HAUTEUR_PIXEL;
+        destination.y = i*HAUTEUR_PERSO ;
+        printf("y : %d\n", destination.y);
 
         for (j = 0; j < LARGEUR_GRILLE; j++)
         {

@@ -140,6 +140,7 @@ int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], 
 
     int item_point = 0;
     item_point = grille[ligne_zero][(perso->info.x / LARGEUR_PERSO)];
+    grille[ligne_zero][(perso->info.x / LARGEUR_PERSO)] = 0;
     perso->score += item_point;
     return item_point;
 }
