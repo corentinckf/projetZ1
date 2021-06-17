@@ -31,3 +31,36 @@ void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     SDL_DestroyTexture(text_texture);                   // On n'a plus besoin de la texture avec le texte
 
 }
+
+void affichage_bgScroll(SDL_Window * window,SDL_Renderer * renderer, SDL_Texture * bg,
+                        SDL_Texture * bg2, int * cordy_bg,int * cordy_bg2)
+{
+
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone de la texture à récupérer
+        source2 = {0},
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},
+        destination2 = {0};       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        SDL_GetWindowSize(window, &window_dimensions.w, & window_dimensions.h);
+        SDL_QueryTexture(bg,NULL,NULL,&source.w, &source.h);
+        SDL_QueryTexture(bg2,NULL,NULL,&source2.w, &source2.h);
+
+        destination.h = window_dimensions.h;
+        destination.w = window_dimensions.w;
+        destination2.h = window_dimensions.h;
+        destination2.w = window_dimensions.w;
+
+        destination.x = 0, destination2.x = 0;
+
+        destination.y = 0;
+        destination2.y = -window_dimensions.h;
+        
+        destination.y += *cordy_bg;
+
+        destination2.y += *cordy_bg2;
+
+        SDL_RenderCopy(renderer, bg, &source, &destination);
+        SDL_RenderCopy(renderer, bg2, &source2, &destination2);
+}
+
