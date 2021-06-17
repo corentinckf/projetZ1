@@ -37,9 +37,9 @@ int main(int argc, char **argv)
     );
 
     /*Load texture*/
-    SDL_Texture * sun = load_texture_from_image("../../exemples_executables/img/sun.png", window, renderer);
-    SDL_Texture * ken = load_texture_from_image("../../exemples_executables/img/player-spritemap-v9.png", window, renderer);
-    SDL_Texture * trou_noir = load_texture_from_image("../../exemples_executables/img/trou-noir.png", window, renderer);
+    SDL_Texture * sun = load_texture_from_image("/img/sun.png", window, renderer);
+    SDL_Texture * ken = load_texture_from_image("img/player-spritemap-v9.png", window, renderer);
+    SDL_Texture * trou_noir = load_texture_from_image("img/trou-noir.png", window, renderer);
     SDL_Texture * bg = load_texture_from_image("malik-shibly--ZcQQ7gUj6Y-unsplash.jpg", window, renderer);
 
     //draw_texture(bg,window,renderer,0.125,0,0);
