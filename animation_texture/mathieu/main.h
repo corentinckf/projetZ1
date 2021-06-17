@@ -2,7 +2,7 @@
 #define __MAIN_H__
 #include "util_sdl.h"
 
-#define IMG_BACKGROUND ".img/nasa-xFO2Xt33xgI-unsplash.jpg"
+#define IMG_BACKGROUND "./img/nasa-xFO2Xt33xgI-unsplash.jpg"
 #define IMG_TROU_NOIR "./img/trou-noir.png"
 #define IMG_SPRITE "./img/player-spritemap-v9.png"
 #define IMG_SUN "./img/sun.png"
