@@ -14,7 +14,6 @@ int naissance[9] = {0,0,0,1,0,0,0,0,0};
 
 //on construit les tableaux survie et naissance aleatoirement
 /*int k;
-
 for (k=0;k<9;k++)
 {
     survie[k]=rand()%2;
@@ -24,7 +23,6 @@ for (k=0;k<9;k++)
 //on construit les tableaux survie et naissance selon la regle donnee par ScienceEtonnante
 /*
 int k;
-
 for (k=0;k<9;k++)
 {
     survie[k]=0;
@@ -163,8 +161,8 @@ void draw(SDL_Renderer* renderer, int mat[LIGNES][COLONNES], int *h, int *l)
                 if (mat[i][j] == 0)     //cellule morte : en blanc
                 {
                         SDL_SetRenderDrawColor(renderer,                                
-                        255, 255, 255,                               // mode Red, Green, Blue (tous dans 0..255)
-                        255);                                   // 0 = transparent ; 255 = opaque
+                                                255, 255, 255,                               // mode Red, Green, Blue (tous dans 0..255)
+                                                255);                                   // 0 = transparent ; 255 = opaque
                 }
                 else                    //cellule en vie : en noir
                 {
@@ -179,6 +177,20 @@ void draw(SDL_Renderer* renderer, int mat[LIGNES][COLONNES], int *h, int *l)
                 SDL_RenderFillRect(renderer,&rectangle);
            }
        }
+}
+
+void init(int mat[LIGNES][COLONNES])
+{
+    int i,j;
+
+    //initialisation aleatoire
+    for (i=0;i<LIGNES;i++)
+    {
+        for (j=0;j<COLONNES;j++)
+        {
+            mat[i][j] = rand()%2;
+        }
+    }
 }
 
 int main()
@@ -199,8 +211,6 @@ int main()
                         SDL_WINDOW_OPENGL);
     if (window == NULL) end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
 
-    //SDL_GetWindowSize(window,&largeur_ecran,&hauteur_ecran);
-
     int hauteur_pixel = 600 / LIGNES;
     int largeur_pixel = 1000 / COLONNES;
 
@@ -211,23 +221,17 @@ int main()
     SDL_SetRenderDrawColor(renderer,                                
             0, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
             255);                                   // 0 = transparent ; 255 = opaque
-
-    //initialisation aleatoire
-    for (i=0;i<LIGNES;i++)
-    {
-        for (j=0;j<COLONNES;j++)
-        {
-            etat_n[i][j] = rand()%2;
-        }
-    }
-
-    draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
     SDL_RenderPresent(renderer);
     SDL_Delay(1000);
+
+    init(etat_n);
+    draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(100);
     SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
     SDL_RenderClear(renderer);
 
-    for (int cpt=0; cpt<1000; cpt++)
+    for (int cpt=0; cpt<300; cpt++)
     {   
         //afficher l'etat n
         draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
