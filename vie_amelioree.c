@@ -14,7 +14,6 @@ int naissance[9] = {0,0,0,1,0,0,0,0,0};
 
 //on construit les tableaux survie et naissance aleatoirement
 /*int k;
-
 for (k=0;k<9;k++)
 {
     survie[k]=rand()%2;
@@ -24,7 +23,6 @@ for (k=0;k<9;k++)
 //on construit les tableaux survie et naissance selon la regle donnee par ScienceEtonnante
 /*
 int k;
-
 for (k=0;k<9;k++)
 {
     survie[k]=0;
@@ -181,11 +179,10 @@ void draw(SDL_Renderer* renderer, int mat[LIGNES][COLONNES], int *h, int *l)
        }
 }
 
-void affichage_init(int mat[LIGNES][COLONNES], SDL_Renderer* renderer, int *hauteur_pixel, int *largeur_pixel)
+void init(int mat[LIGNES][COLONNES])
 {
     int i,j;
 
-    //initialisation aleatoire
     for (i=0;i<LIGNES;i++)
     {
         for (j=0;j<COLONNES;j++)
@@ -193,11 +190,6 @@ void affichage_init(int mat[LIGNES][COLONNES], SDL_Renderer* renderer, int *haut
             mat[i][j] = 0;
         }
     }
-    draw(renderer,mat, hauteur_pixel, largeur_pixel);
-    SDL_RenderPresent(renderer);
-    SDL_Delay(100);
-    SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
-    SDL_RenderClear(renderer);
 }
 
 int main()
@@ -209,11 +201,11 @@ int main()
     int i,j;
     int *x, *y;     //position de la souris
 
-    SDL_Window* window = NULL;
+    SDL_Window *window = NULL;
     SDL_Renderer* renderer = NULL;
     SDL_bool
         program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
-        paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
+        //paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
 
     window = SDL_CreateWindow("Jeu de la vie",
                         SDL_WINDOWPOS_CENTERED,
@@ -232,11 +224,19 @@ int main()
     SDL_SetRenderDrawColor(renderer,                                
             0, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
             255);                                   // 0 = transparent ; 255 = opaque
+    SDL_RenderPresent(renderer);
+    SDL_Delay(1000);
+
+    init(etat_n);
+    draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(100);
+    SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
+    SDL_RenderClear(renderer);
 
     while (program_on)
     {   
         SDL_Event event;
-        affichage_init(etat_n, renderer, &hauteur_pixel, &largeur_pixel,);
         while (program_on && SDL_PollEvent(&event))   // Tant que la file des evenements stockes n'est pas vide et qu'on n'a pas termine le programme Defiler l'element en tête de file dans 'event'
         {
             switch (event.type)                         // En fonction de la valeur du type de cet evenement
@@ -258,15 +258,15 @@ int main()
                     }
                     break;
                 case SDL_MOUSEBUTTONDOWN:                     // Click souris   
-                    if (SDL_GetMouseState(&x, &y) && SDL_BUTTON(SDL_BUTTON_LEFT) )         // Si c'est un click gauche
+                    if (SDL_GetMouseState(x, y) && SDL_BUTTON(SDL_BUTTON_LEFT) )         // Si c'est un click gauche
                     {
                         etat_n[(*x)/largeur_pixel][(*y)/hauteur_pixel] = 1;           //faire naitre la cellule lors d'un click gauche
                     }
-                    break;
-                    else if (SDL_GetMouseState(&x, &y) && SDL_BUTTON(SDL_BUTTON_RIGHT) )         // Si c'est un click droit
+                    else if (SDL_GetMouseState(x, y) && SDL_BUTTON(SDL_BUTTON_RIGHT) )         // Si c'est un click droit
                     {
                         etat_n[(*x)/largeur_pixel][(*y)/hauteur_pixel] = 0;          //faire mourir la cellule lors d'un click droit
                     }
+                    break;
                 default:                                      // Les evenements qu'on n'a pas envisage
                     break;
             }
