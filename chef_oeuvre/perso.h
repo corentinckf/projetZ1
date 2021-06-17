@@ -16,8 +16,8 @@
 #define PATH_IMG_PERSO "/home/local.isima.fr/mavilledie4/shared/projetZ1/chef_oeuvre/img2/redfighter000"
 #define PATH_IMG_PERSO_EXT ".png"
 
-#define LARGEUR_PERSO 1
-#define HAUTEUR_PERSO 1
+#define LARGEUR_PERSO LARGEUR_PIXEL
+#define HAUTEUR_PERSO HAUTEUR_PIXEL
 
 #define VITESSE_MIN -4
 #define VITESSE_MAX 4

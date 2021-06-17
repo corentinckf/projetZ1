@@ -76,14 +76,17 @@ int calcul_dir_anim_perso(int a)
 
 void deplacement_perso(perso_t *perso, int *vitesse)
 {
-    int signe = *vitesse / *vitesse;
-    printf("signe %d\n", signe);
+
+    int signe = 0;
+    if (*vitesse != 0)
+        signe = *vitesse / abs(*vitesse);
+    //printf("signe %d\n", signe);
     if (*vitesse != 0)
     {
         for (int i = 0; i < abs(*vitesse); ++i)
         {
             if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_GRILLE)
-                perso->info.x += signe;
+                perso->info.x += signe ;
         }
         *vitesse += (-1) * signe;
     }
@@ -109,11 +112,11 @@ void play_with_texture_perso(perso_t *perso,
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     SDL_QueryTexture(perso->sprite[calcul_dir_anim_perso(perso->direction)], NULL, NULL, &source.w, &source.h);
 
-    float zoom = 0.5;                // Facteur de zoom à appliquer
-    destination.w = source.w * zoom; // La destination est un zoom de la source
-    destination.h = source.h * zoom; // La destination est un zoom de la source
+    float zoom = 1;                // Facteur de zoom à appliquer
+    destination.w = LARGEUR_PERSO; // La destination est un zoom de la source
+    destination.h = HAUTEUR_PERSO; // La destination est un zoom de la source
 
-    destination.x = perso->info.x * LARGEUR_PIXEL;
+    destination.x = perso->info.x;
     destination.y = perso->info.y;
 
     SDL_RenderCopy(renderer, perso->sprite[calcul_dir_anim_perso(perso->direction)], // Préparation de l'affichage
