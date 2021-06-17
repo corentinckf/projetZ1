@@ -2,6 +2,7 @@
 
 int main()
 {
+    int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE];
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -39,6 +40,7 @@ int main()
     /**** fin initialisation  *****/
 
     perso = creer_perso(window, renderer);
+    init_map(grille);
 
     SDL_bool
         program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
@@ -75,24 +77,12 @@ int main()
                 case SDLK_RIGHT:
                     if (vitesse < VITESSE_MAX)
                         vitesse++;
+                    break;
                 default: // Une touche appuyée qu'on ne traite pas
                     break;
                 }
                 break;
-            case SDL_MOUSEBUTTONDOWN: // Click souris
-                if (SDL_GetMouseState(NULL, NULL) &
-                    SDL_BUTTON(SDL_BUTTON_LEFT))
-                { // Si c'est un click gauche
-                    //change_state(state, 1, window); // Fonction à éxécuter lors d'un click gauche
-                }
-                else if (SDL_GetMouseState(NULL, NULL) &
-                         SDL_BUTTON(SDL_BUTTON_RIGHT))
-                { // Si c'est un click droit
-                    //change_state(state, 2, window); // Fonction à éxécuter lors d'un click droit
-                }
-                break;
             default: // Les évènements qu'on n'a pas envisagé
-                //vitesse += (vitesse / vitesse) * (-1);
                 break;
             }
         }
@@ -100,16 +90,30 @@ int main()
         if (!paused)
         { // Si on n'est pas en pause
             deplacement_perso(perso, &vitesse);
+            check_collision(perso, grille);
             play_with_texture_perso(perso, window, renderer);
             SDL_RenderPresent(renderer);
-            SDL_Delay(100);
+            SDL_Delay(10);
             SDL_RenderClear(renderer);
+            if (perso->score >= GOAL_SCORE)
+            {
+                printf("Score atteint %d\n", perso->score);
+                program_on = 0;
+            }
         }
         SDL_Delay(50); // Petite pause
     }
 
     //end_sdl(1, "fin normal", window, renderer);
     return 0;
+}
+
+void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
+{
+    int i, j;
+    for (i = 0; i < HAUTEUR_GRILLE; i++)
+        for (j = 0; j < LARGEUR_GRILLE; j++)
+            grille[i][j] = 0;
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)

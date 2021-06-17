@@ -11,5 +11,9 @@ main.o : main.c main.h
 perso.o : perso.c perso.h  
 	$(CC) $(OPT) perso.c 
 
+#util_sdl.o : util_sdl.c util_sdl.h  
+#	$(CC) $(OPT) util_sdl.c 
+
+
 clear :
 	rm -f *.o

@@ -19,11 +19,16 @@
 #define LARGEUR_PERSO LARGEUR_PIXEL
 #define HAUTEUR_PERSO HAUTEUR_PIXEL
 
+#define VITESSE_HORIZONTAL 2
 #define VITESSE_MIN -4
 #define VITESSE_MAX 4
 
 #define X_POS_PERSO_DEPART 0
-#define Y_POS_PERSO_DEPART 0
+#define Y_POS_PERSO_DEPART HAUTEUR_FENETRE - (1.5) * HAUTEUR_PERSO
+
+#define HAUTEUR_GRILLE 20
+#define LARGEUR_GRILLE 10
+
 
 typedef struct perso
 {
@@ -40,6 +45,8 @@ void supp_perso(perso_t *perso);
 
 void deplacement_perso(perso_t *perso, int *vitesse);
 int calcul_dir_anim_perso(int a);
+
+int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
 
 void play_with_texture_perso(perso_t *perso, SDL_Window *window, SDL_Renderer *renderer);
 char *path_perso_determine(int n);

@@ -76,7 +76,6 @@ int calcul_dir_anim_perso(int a)
 
 void deplacement_perso(perso_t *perso, int *vitesse)
 {
-
     int signe = 0;
     if (*vitesse != 0)
         signe = *vitesse / abs(*vitesse);
@@ -85,19 +84,12 @@ void deplacement_perso(perso_t *perso, int *vitesse)
     {
         for (int i = 0; i < abs(*vitesse); ++i)
         {
-            if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_GRILLE)
-                perso->info.x += signe ;
+            if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_FENETRE - LARGEUR_PERSO)
+                perso->info.x += VITESSE_HORIZONTAL * signe;
         }
         *vitesse += (-1) * signe;
     }
     perso->direction = *vitesse;
-}
-
-int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
-{
-    int item_point = grille[perso->info.y][perso->info.x];
-    perso->score += item_point;
-    return item_point;
 }
 
 void play_with_texture_perso(perso_t *perso,
@@ -135,6 +127,15 @@ char *path_perso_determine(int n)
     strcat(nom, PATH_IMG_PERSO_EXT);
     //printf("%s\n", nom);
     return nom;
+}
+
+int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
+{
+    printf("y=%d, x=%d\n", perso->info.y / HAUTEUR_PERSO, (perso->info.x / LARGEUR_PERSO));
+
+    int item_point = grille[perso->info.y / HAUTEUR_PERSO][(perso->info.x / LARGEUR_PERSO)];
+    perso->score += item_point;
+    return item_point;
 }
 
 void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer)
