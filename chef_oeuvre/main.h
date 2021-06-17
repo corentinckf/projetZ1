@@ -4,6 +4,7 @@
 #include "perso.h"
 #include "affichage.h"
 
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -12,7 +13,10 @@
 #include <math.h>
 #include <string.h>
 
-#define HAUTEUR_FENETRE 1000
+#define PATH_IMG_ITEM "./img2/buttons.png"
+#define PATH_IMG_BG "bg.png"
+
+#define HAUTEUR_FENETRE 900
 #define LARGEUR_FENETRE 500
 
 #define HAUTEUR_GRILLE 20
@@ -27,4 +31,11 @@ void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
 
 void end_sdl(char, char const *, SDL_Window *, SDL_Renderer *);
 char *texte_score(int a);
+
+
+void init_grille(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
+void evolution(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE],int *etape);
+void afficher_grille(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
+void draw(SDL_Renderer* renderer, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], SDL_Texture *planche, int *etape, int *hauteur_pixel, int *largeur_pixel);
+
 #endif

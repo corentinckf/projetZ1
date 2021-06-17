@@ -14,6 +14,8 @@ perso.o : perso.c perso.h
 affichage.o : affichage.c affichage.h  main.h
 	$(CC) $(OPT) affichage.c 
 
+item.o : item.c   main.h
+	$(CC) $(OPT) item.c 
 
 clear :
 	rm -f *.o
