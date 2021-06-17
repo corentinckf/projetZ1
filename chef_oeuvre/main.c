@@ -39,6 +39,13 @@ int main()
         end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
     /**** fin initialisation  *****/
 
+    /****** chargement de la font *******/
+    TTF_Font *font = NULL;                       // la variable 'police de caractère'
+    font = TTF_OpenFont(PATH_FONT, TAILLE_FONT); // La police à charger, la taille désirée
+    if (font == NULL)
+        if (end_sdl(0, "Can't load font", window, renderer) == -1)
+            return EXIT_FAILURE;
+
     perso = creer_perso(window, renderer);
     init_map(grille);
 
@@ -115,6 +122,8 @@ void init_map(int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
         for (j = 0; j < LARGEUR_GRILLE; j++)
             grille[i][j] = 0;
 }
+
+
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)
 { // renderer à fermer

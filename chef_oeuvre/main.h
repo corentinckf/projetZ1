@@ -2,6 +2,7 @@
 #define __MAIN_H__
 
 #include "perso.h"
+#include "affichage.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
