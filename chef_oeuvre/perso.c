@@ -15,7 +15,7 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
         play_with_texture_perso(perso, window, renderer);
         deplacement_perso(perso, &vitesse);
         //vitesse += 1;
-        printf("vitesse %d\n", vitesse);
+        //printf("vitesse %d\n", vitesse);
         SDL_RenderPresent(renderer);
         SDL_Delay(50);
 

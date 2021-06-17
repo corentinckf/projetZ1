@@ -19,6 +19,9 @@
 #define LARGEUR_PERSO 1
 #define HAUTEUR_PERSO 1
 
+#define VITESSE_MIN -4
+#define VITESSE_MAX 4
+
 #define X_POS_PERSO_DEPART 0
 #define Y_POS_PERSO_DEPART 0
 

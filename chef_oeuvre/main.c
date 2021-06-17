@@ -6,6 +6,9 @@ int main()
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
+    int vitesse = 0;
+    perso_t *perso = NULL;
+
     /* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -35,8 +38,75 @@ int main()
         end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
     /**** fin initialisation  *****/
 
+    perso = creer_perso(window, renderer);
 
-    main_perso(window, renderer);
+    SDL_bool
+        program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
+        paused = SDL_FALSE;    // Booléen pour dire que le programme est en pause
+    while (program_on)
+    {                    // La boucle des évènements
+        SDL_Event event; // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event))
+        { // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+            // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type)
+            {                           // En fonction de la valeur du type de cet évènement
+            case SDL_QUIT:              // Un évènement simple, on a cliqué sur la x de la // fenêtre
+                program_on = SDL_FALSE; // Il est temps d'arrêter le programme
+                break;
+            case SDL_KEYDOWN: // Le type de event est : une touche appuyée
+                              // comme la valeur du type est SDL_Keydown, dans la pratie 'union' de
+                              // l'event, plusieurs champs deviennent pertinents
+                switch (event.key.keysym.sym)
+                {                     // la touche appuyée est ...
+                case SDLK_p:          // 'p'
+                case SDLK_SPACE:      // 'SPC'
+                    paused = !paused; // basculement pause/unpause
+                    break;
+                case SDLK_ESCAPE:   // 'ESCAPE'
+                case SDLK_q:        // 'q'
+                    program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
+                    break;
+                case SDLK_LEFT:
+                    if (vitesse > VITESSE_MIN)
+                        vitesse--;
+                    break;
+                case SDLK_RIGHT:
+                    if (vitesse < VITESSE_MAX)
+                        vitesse++;
+                default: // Une touche appuyée qu'on ne traite pas
+                    break;
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN: // Click souris
+                if (SDL_GetMouseState(NULL, NULL) &
+                    SDL_BUTTON(SDL_BUTTON_LEFT))
+                { // Si c'est un click gauche
+                    //change_state(state, 1, window); // Fonction à éxécuter lors d'un click gauche
+                }
+                else if (SDL_GetMouseState(NULL, NULL) &
+                         SDL_BUTTON(SDL_BUTTON_RIGHT))
+                { // Si c'est un click droit
+                    //change_state(state, 2, window); // Fonction à éxécuter lors d'un click droit
+                }
+                break;
+            default: // Les évènements qu'on n'a pas envisagé
+                //vitesse += (vitesse / vitesse) * (-1);
+                break;
+            }
+        }
+        //draw(state, &color, renderer, window); // On redessine
+        if (!paused)
+        { // Si on n'est pas en pause
+            deplacement_perso(perso, &vitesse);
+            play_with_texture_perso(perso, window, renderer);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(100);
+            SDL_RenderClear(renderer);
+        }
+        SDL_Delay(50); // Petite pause
+    }
 
     //end_sdl(1, "fin normal", window, renderer);
     return 0;
