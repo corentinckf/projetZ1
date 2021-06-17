@@ -1,7 +1,7 @@
 #include "util_sdl.h"
 
-#define LARGEUR_FENETRE 300
-#define HAUTEUR_FENETRE 300
+#define LARGEUR_FENETRE 600
+#define HAUTEUR_FENETRE 600
 #define NOM_FENETRE "Fenêtre"
 
 typedef struct background
@@ -64,6 +64,7 @@ int main(int argc, char **argv)
         program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
         paused = 1;            // Booléen pour dire que le programme est en pause
     int cordy_bg = 0, cordy_bg2 = 0;
+
     while (program_on)
     {                    // La boucle des évènements
         SDL_Event event; // Evènement à traiter
@@ -105,33 +106,45 @@ int main(int argc, char **argv)
 
 
         SDL_Rect
-            source = {0},            // Rectangle définissant la zone de la texture à récupérer
-            window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
-            destination = {0};       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        source = {0},            // Rectangle définissant la zone de la texture à récupérer
+        source2 = {0},
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},
+        destination2 = {0};       // Rectangle définissant où la zone_source doit être déposée dans le renderer
         SDL_GetWindowSize(window, &window_dimensions.w, & window_dimensions.h);
         SDL_QueryTexture(bg,NULL,NULL,&source.w, &source.h);
+        SDL_QueryTexture(bg2,NULL,NULL,&source2.w, &source2.h);
 
-        destination.h = source.h;
-        destination.w = source.w;
+        destination.h = source.h*2;
+        destination.w = source.w*2;
         
         destination.x = 0;
+        destination.y = 0;
+
+        destination2.h = source2.h*2;
+        destination2.w = source2.w*2;
         
-        if(destination.y >= window_dimensions.h)
-        {
-            destination.y = 0;
-            
-        }else
-        {
-            cordy_bg += 2;
-            destination.y += cordy_bg;
-            
-        }
+        destination2.x = 0;
+        destination2.y = -destination.h;
+        
+        cordy_bg+=2;
+        if(cordy_bg >= window_dimensions.h)
+            cordy_bg = -window_dimensions.h;
+
+        destination.y += cordy_bg;
+        cordy_bg2+=2;
+        if(cordy_bg2 >= window_dimensions.h)
+            cordy_bg2 = 0;
+
+        destination2.y += cordy_bg2;
         SDL_RenderCopy(renderer, bg, &source, &destination);
+        SDL_RenderCopy(renderer, bg2, &source2, &destination2);
 
         printf("\n dépassé de : %d", destination.y - window_dimensions.h);
 
         SDL_RenderPresent(renderer);
         SDL_Delay(10); // Petite pause
+        SDL_RenderClear(renderer);  
     
     }
     
