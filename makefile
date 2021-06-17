@@ -1,15 +1,12 @@
 CC = gcc
-CFLAGS = -g -Wall -Wextra
-LDFLAGS = -lm
-OBJFILES = nomdufichierobjet.o
-SDL2FLAGS = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
-TARGET = prog
+OPT  = -Wextra -Wall -g
+SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
+EXEC = chef_oeuvre
 
-all: $(TARGET)
+all: $(EXEC)
 
-$(TARGET) : $(OBJFILES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS) $(SDL2FLAGS)
+chef_oeuvre : chef_oeuvre.c
+	$(CC) chef_oeuvre.c $(OPT) $(SDL2) -o  chef_oeuvre
 
 clean:
-	rm -f $(OBJFILES) $(TARGET)
-
+	rm -rf $(EXEC)
