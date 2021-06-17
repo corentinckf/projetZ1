@@ -46,7 +46,7 @@ void supp_perso(perso_t *perso);
 void deplacement_perso(perso_t *perso, int *vitesse);
 int calcul_dir_anim_perso(int a);
 
-int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE]);
+int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE], int gauche_grille);
 
 void play_with_texture_perso(perso_t *perso, SDL_Window *window, SDL_Renderer *renderer);
 char *path_perso_determine(int n);

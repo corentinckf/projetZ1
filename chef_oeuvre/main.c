@@ -127,25 +127,26 @@ int main()
                 cordy_bg2 = 0;
 
             affichage_bgScroll(window, renderer, bg, bg2, &cordy_bg, &cordy_bg2);
-            affichage_texte(window, renderer, font, texte_score(perso->score), 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
             //affichage_texte(window, renderer, font, "score", 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
-            //draw(renderer, grille, planche, &etape, &hauteur_pixel, &largeur_pixel);
+            draw(renderer, grille, planche, &etape, &hauteur_pixel, &largeur_pixel);
 
-            if (c > 20)
+            if (c > 5)
             {
                 //printf("ICI\n");
-               // evolution(grille, &etape);
-                etape++;
+                evolution(grille, &etape);
+                etape = (etape+1)%HAUTEUR_GRILLE;
                 c = 0;
-                perso->score++;
+                //perso->score++;
             }
             else
             {
                 c++;
             }
             deplacement_perso(perso, &vitesse);
-            check_collision(perso, grille);
+            check_collision(perso, grille, etape % HAUTEUR_GRILLE);
             play_with_texture_perso(perso, window, renderer);
+            affichage_texte(window, renderer, font, texte_score(perso->score), 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
+
             SDL_RenderPresent(renderer);
             SDL_Delay(10);
             SDL_RenderClear(renderer);
