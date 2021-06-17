@@ -15,7 +15,7 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
         play_with_texture_perso(perso, window, renderer);
         deplacement_perso(perso, &vitesse);
         //vitesse += 1;
-        printf("vitesse %d\n", vitesse);
+        //printf("vitesse %d\n", vitesse);
         SDL_RenderPresent(renderer);
         SDL_Delay(50);
 
@@ -76,24 +76,20 @@ int calcul_dir_anim_perso(int a)
 
 void deplacement_perso(perso_t *perso, int *vitesse)
 {
-    int signe = *vitesse / *vitesse;
+    int signe = 0;
+    if (*vitesse != 0)
+        signe = *vitesse / abs(*vitesse);
+    //printf("signe %d\n", signe);
     if (*vitesse != 0)
     {
         for (int i = 0; i < abs(*vitesse); ++i)
         {
-            if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_GRILLE)
-                perso->info.x += signe;
+            if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_FENETRE - LARGEUR_PERSO)
+                perso->info.x += VITESSE_HORIZONTAL * signe;
         }
-        //*vitesse += (-1) * signe;
+        *vitesse += (-1) * signe;
     }
     perso->direction = *vitesse;
-}
-
-int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
-{
-    int item_point = grille[perso->info.y][perso->info.x];
-    perso->score += item_point;
-    return item_point;
 }
 
 void play_with_texture_perso(perso_t *perso,
@@ -108,11 +104,11 @@ void play_with_texture_perso(perso_t *perso,
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     SDL_QueryTexture(perso->sprite[calcul_dir_anim_perso(perso->direction)], NULL, NULL, &source.w, &source.h);
 
-    float zoom = 0.5;                // Facteur de zoom à appliquer
-    destination.w = source.w * zoom; // La destination est un zoom de la source
-    destination.h = source.h * zoom; // La destination est un zoom de la source
+    float zoom = 1;                // Facteur de zoom à appliquer
+    destination.w = LARGEUR_PERSO; // La destination est un zoom de la source
+    destination.h = HAUTEUR_PERSO; // La destination est un zoom de la source
 
-    destination.x = perso->info.x * LARGEUR_PIXEL;
+    destination.x = perso->info.x;
     destination.y = perso->info.y;
 
     SDL_RenderCopy(renderer, perso->sprite[calcul_dir_anim_perso(perso->direction)], // Préparation de l'affichage
@@ -131,6 +127,15 @@ char *path_perso_determine(int n)
     strcat(nom, PATH_IMG_PERSO_EXT);
     //printf("%s\n", nom);
     return nom;
+}
+
+int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
+{
+    printf("y=%d, x=%d\n", perso->info.y / HAUTEUR_PERSO, (perso->info.x / LARGEUR_PERSO));
+
+    int item_point = grille[perso->info.y / HAUTEUR_PERSO][(perso->info.x / LARGEUR_PERSO)];
+    perso->score += item_point;
+    return item_point;
 }
 
 void play_texture_xy(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer)
