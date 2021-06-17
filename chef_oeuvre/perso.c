@@ -11,12 +11,12 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
 
     int vitesse = -4;
 
-    /*
+    
     for (i = 0; i < 10; ++i)
     {
         play_with_texture_2(perso, window, renderer);
     }
-*/
+
     return 0;
 }
 
@@ -35,10 +35,8 @@ perso_t *creer_perso(SDL_Window *window, SDL_Renderer *renderer)
     perso->direction = calcul_dir_anim_perso(0);
     perso->score = 0;
 
-    char *path_perso = malloc(sizeof(char) * 1000);
-    //perso->sprite = IMG_LoadTexture(renderer, "/home/local.isima.fr/mavilledie4/shared/projetZ1/chef_oeuvre/img2/redfighter0001.png");
+    char *path_perso = malloc(sizeof(char) * NB_MAX_CHAR_PATH);
 
-    //play_texture_xy(perso->sprite, window, renderer);
 
     for (i = 0; i < NB_IMG_PERSO; i++)
     {
@@ -47,7 +45,6 @@ perso_t *creer_perso(SDL_Window *window, SDL_Renderer *renderer)
         perso->sprite[i] = IMG_LoadTexture(renderer, path_perso);
         if (perso->sprite[i] == NULL)
             end_sdl(0, "Echec du chargement de l'image dans la texture du perso", window, renderer);
-        //play_texture_xy(perso->sprite[i], window, renderer);
     }
     return perso;
 }
@@ -65,7 +62,8 @@ void supp_perso(perso_t *perso)
 
 int calcul_dir_anim_perso(int a)
 {
-    return (a + (NB_IMG_PERSO / 2));
+    printf("a=%d et indice =%d\n", a ,(a + (NB_IMG_PERSO / 2)) % NB_IMG_PERSO);
+    return (a + (NB_IMG_PERSO / 2)) % NB_IMG_PERSO;
 }
 
 void deplacement_perso(perso_t *perso, int *vitesse)
