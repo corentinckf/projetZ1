@@ -13,7 +13,7 @@
 
 #define NB_IMG_PERSO 9
 #define NB_MAX_CHAR_PATH 500
-#define PATH_IMG_PERSO "/home/local.isima.fr/mavilledie4/shared/projetZ1/chef_oeuvre/img2/redfighter000"
+#define PATH_IMG_PERSO "./img2/redfighter000"
 #define PATH_IMG_PERSO_EXT ".png"
 
 #define LARGEUR_PERSO LARGEUR_PIXEL

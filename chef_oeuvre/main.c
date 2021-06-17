@@ -10,6 +10,10 @@ int main()
     int vitesse = 0;
     perso_t *perso = NULL;
 
+    int cordy_bg = 0, cordy_bg2 = 0;
+    SDL_Rect window_dimensions = {0};
+    
+
     /* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -28,7 +32,7 @@ int main()
         0);
     if (window == NULL)
         end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
-
+    SDL_GetWindowSize(window, &window_dimensions.w, & window_dimensions.h);
     /************** creation renderer ****************/
     renderer = SDL_CreateRenderer(window, -1, 0);
     if (renderer == NULL)
@@ -44,6 +48,13 @@ int main()
     font = TTF_OpenFont(PATH_FONT, TAILLE_FONT); // La police à charger, la taille désirée    if (font == NULL)
     if (font == NULL)
         end_sdl(0, "Can't load font", window, renderer);
+
+    /*Loading texture*/
+    SDL_Texture * bg = IMG_LoadTexture(renderer,"bg.png");
+    if (bg == NULL) end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+
+    SDL_Texture * bg2 = IMG_LoadTexture(renderer,"bg.png");
+    if (bg2 == NULL) end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
 
   
     /***************************/
@@ -97,7 +108,13 @@ int main()
         //draw(state, &color, renderer, window); // On redessine
         if (!paused)
         { // Si on n'est pas en pause
-
+            cordy_bg+=6;
+            if(cordy_bg >= window_dimensions.h)
+                cordy_bg = 0;
+            cordy_bg2+=6;
+            if(cordy_bg2 >= window_dimensions.h)
+                cordy_bg2 = 0;
+            affichage_bgScroll(window, renderer,bg,bg2, &cordy_bg, &cordy_bg2);
             affichage_texte(window, renderer, font, texte_score(perso->score), 1, LARGEUR_FENETRE / 2, 0);
             deplacement_perso(perso, &vitesse);
             check_collision(perso, grille);
