@@ -198,11 +198,16 @@ int main()
     int etat_n[LIGNES][COLONNES];
     int etat_suiv[LIGNES][COLONNES];
     int changement=1;
-    int ligne=0,colonne=0;
     int i,j;
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    {
+        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError());      // l'initialisation de la SDL a échoué 
+        exit(EXIT_FAILURE);
+    }
 
     window = SDL_CreateWindow("Jeu de la vie",
                         SDL_WINDOWPOS_CENTERED,
@@ -217,12 +222,6 @@ int main()
     renderer = SDL_CreateRenderer(
             window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
-
-    SDL_SetRenderDrawColor(renderer,                                
-            0, 0, 0,                               // mode Red, Green, Blue (tous dans 0..255)
-            255);                                   // 0 = transparent ; 255 = opaque
-    SDL_RenderPresent(renderer);
-    SDL_Delay(1000);
 
     init(etat_n);
     draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
