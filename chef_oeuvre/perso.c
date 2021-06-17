@@ -6,7 +6,6 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
 
     int i;
     perso_t *perso = creer_perso(window, renderer);
-    // supp_perso(perso);
     //play_texture_xy(perso->sprite[0], window, renderer);
 
     int vitesse = -4;
@@ -14,8 +13,11 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
     for (i = 0; i < 9; ++i)
     {
         play_with_texture_2(perso, window, renderer);
-        perso->direction += 1;
+        //deplacement_perso(perso, vitesse);
+        //vitesse += 1;
     }
+
+    supp_perso(perso);
 
     return 0;
 }
@@ -54,15 +56,14 @@ void supp_perso(perso_t *perso)
     {
         SDL_DestroyTexture(perso->sprite[i]);
     }
-    free(perso->sprite);
     free(perso);
     perso = NULL;
 }
 
 int calcul_dir_anim_perso(int a)
 {
-    printf("a=%d et indice =%d\n", a, (a + (NB_IMG_PERSO / 2)));
-    return (a + (NB_IMG_PERSO / 2));
+    //printf("a=%d et indice =%d\n", a, (a + (NB_IMG_PERSO / 2)));
+    return ((a + (NB_IMG_PERSO / 2)) + NB_IMG_PERSO) % NB_IMG_PERSO;
 }
 
 void deplacement_perso(perso_t *perso, int *vitesse)
