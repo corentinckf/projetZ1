@@ -35,7 +35,11 @@ int main()
         end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
     /**** fin initialisation  *****/
 
-    main_perso(window,renderer);
+
+    main_perso(window, renderer);
+
+    //end_sdl(1, "fin normal", window, renderer);
+    return 0;
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)

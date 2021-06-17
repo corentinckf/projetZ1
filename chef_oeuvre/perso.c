@@ -8,13 +8,18 @@ int main_perso(SDL_Window *window, SDL_Renderer *renderer)
     perso_t *perso = creer_perso(window, renderer);
     //play_texture_xy(perso->sprite[0], window, renderer);
 
-    int vitesse = -4;
+    int vitesse = 3;
     perso->direction = vitesse;
     for (i = 0; i < 9; ++i)
     {
-        play_with_texture_2(perso, window, renderer);
-        //deplacement_perso(perso, vitesse);
+        play_with_texture_perso(perso, window, renderer);
+        deplacement_perso(perso, &vitesse);
         //vitesse += 1;
+        printf("vitesse %d\n", vitesse);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(50);
+
+        SDL_RenderClear(renderer); // Effacer la fenêtre
     }
 
     supp_perso(perso);
@@ -30,6 +35,9 @@ perso_t *creer_perso(SDL_Window *window, SDL_Renderer *renderer)
     if (perso == NULL)
         exit(EXIT_FAILURE);
     //perso->sprite = malloc(sizeof(SDL_Renderer *) * NB_IMG_PERSO);
+
+    perso->info.x = X_POS_PERSO_DEPART;
+    perso->info.y = Y_POS_PERSO_DEPART;
 
     perso->info.w = LARGEUR_PERSO;
     perso->info.h = HAUTEUR_PERSO;
@@ -62,7 +70,7 @@ void supp_perso(perso_t *perso)
 
 int calcul_dir_anim_perso(int a)
 {
-    //printf("a=%d et indice =%d\n", a, (a + (NB_IMG_PERSO / 2)));
+    //printf("a=%d et indice =%d\n", a, (a + (NB_IMG_PERSO / 2)) % NB_IMG_PERSO);
     return ((a + (NB_IMG_PERSO / 2)) + NB_IMG_PERSO) % NB_IMG_PERSO;
 }
 
@@ -73,11 +81,12 @@ void deplacement_perso(perso_t *perso, int *vitesse)
     {
         for (int i = 0; i < abs(*vitesse); ++i)
         {
-            if (perso->info.x - 1 >= 0 && perso->info.x + 1 < LARGEUR_GRILLE)
+            if (perso->info.x + signe >= 0 && perso->info.x + signe < LARGEUR_GRILLE)
                 perso->info.x += signe;
         }
-        *vitesse = (-1) * signe;
+        //*vitesse += (-1) * signe;
     }
+    perso->direction = *vitesse;
 }
 
 int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
@@ -87,9 +96,9 @@ int check_collision(perso_t *perso, int grille[HAUTEUR_GRILLE][LARGEUR_GRILLE])
     return item_point;
 }
 
-void play_with_texture_2(perso_t *perso,
-                         SDL_Window *window,
-                         SDL_Renderer *renderer)
+void play_with_texture_perso(perso_t *perso,
+                             SDL_Window *window,
+                             SDL_Renderer *renderer)
 {
     SDL_Rect
         source = {0},            // Rectangle définissant la zone de la texture à récupérer
@@ -102,16 +111,13 @@ void play_with_texture_2(perso_t *perso,
     float zoom = 0.5;                // Facteur de zoom à appliquer
     destination.w = source.w * zoom; // La destination est un zoom de la source
     destination.h = source.h * zoom; // La destination est un zoom de la source
-    destination.x = (window_dimensions.w - destination.w) / 2;
-    destination.y = (window_dimensions.h - destination.h) / 2;
+
+    destination.x = perso->info.x * LARGEUR_PIXEL;
+    destination.y = perso->info.y;
 
     SDL_RenderCopy(renderer, perso->sprite[calcul_dir_anim_perso(perso->direction)], // Préparation de l'affichage
                    &source,
                    &destination);
-    SDL_RenderPresent(renderer);
-    SDL_Delay(500);
-
-    SDL_RenderClear(renderer); // Effacer la fenêtre
 }
 
 char *path_perso_determine(int n)
