@@ -128,11 +128,12 @@ int main()
 
             affichage_bgScroll(window, renderer, bg, bg2, &cordy_bg, &cordy_bg2);
             affichage_texte(window, renderer, font, "00", 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
-            draw(renderer, grille, planche, &etape, &hauteur_pixel, &largeur_pixel);
+            //draw(renderer, grille, planche, &etape, &hauteur_pixel, &largeur_pixel);
 
-            if (c > 10)
+            if (c > 20)
             {
-                evolution(grille, &etape);
+                printf("ICI\n");
+               // evolution(grille, &etape);
                 etape++;
                 c = 0;
             }
