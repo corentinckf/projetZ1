@@ -5,13 +5,16 @@ int main()
     int i;
     int x_perso = 10;
     int y_perso = 80;
+    int x_rect = 5;
+    int y_rect = 10;
     int map[HAUTEUR_MATRICE][LARGEUR_MATRICE];
-    int couleurs[6][3] = {{135, 206, 235},
+    int couleurs[7][3] = {{135, 206, 235},
                           {255, 0, 0},
                           {0, 0, 255},
                           {245, 245, 220},
                           {0, 0, 0},
-                          {250, 250, 0}};
+                          {250, 250, 0},
+                          {100, 100, 100}};
 
     //ciel 0    //tete 3
     //jambe 1   //cheveux 4
@@ -50,13 +53,19 @@ int main()
 
     /**************On dessine dans le renderer *************/
     init_map(map);
-    for (i = 0; i < 20; ++i)
+    for (i = 0; i < 30; ++i)
     {
-        x_perso += 1 ;
-        y_perso -= 1 +  (-1)*(i % 2);
+        x_perso += 1;
+        y_perso -= 1 + (-1) * (i % 2);
+        if (i < 25)
+            x_rect++;
+        else
+            y_rect++;
+        map[y_rect][x_rect] = 7;
+
         placement_perso(map, x_perso, y_perso);
-        draw(renderer, map, couleurs); // appel de la fonction qui crée l'image
-        SDL_RenderPresent(renderer);   // affichage
+        draw(renderer, map, couleurs, i); // appel de la fonction qui crée l'image
+        SDL_RenderPresent(renderer);      // affichage
         SDL_RenderClear(renderer);
         effacement_perso(map, x_perso, y_perso);
         SDL_Delay(200);
@@ -68,23 +77,36 @@ int main()
     return EXIT_SUCCESS;
 }
 
-void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3])
+void draw(SDL_Renderer *renderer, int map[HAUTEUR_MATRICE][LARGEUR_MATRICE], int couleurs[10][3], int k)
 {
     int i, j, c;
     SDL_Rect rect;
+    int rect_bool = 0;
+    SDL_Rect rect2;
+    rect2.h = 10 * TAILLE_PIXEL;
+    rect2.w = 20 * TAILLE_PIXEL;
+    rect2.x = 2*LARGEUR_MATRICE - rect2.w *  + 0.1 * k;
+    rect2.y = 100;
+
     for (i = 0; i < HAUTEUR_MATRICE; i++)
     {
         for (j = 0; j < LARGEUR_MATRICE; j++)
         {
             c = map[i][j];
             SDL_SetRenderDrawColor(renderer, couleurs[c][0], couleurs[c][1], couleurs[c][2], 255);
+            if (c == 7)
+                rect_bool = 10;
+            else
+                rect_bool = 1;
             rect.x = j * TAILLE_PIXEL;
             rect.y = i * TAILLE_PIXEL;
-            rect.w = 1 * TAILLE_PIXEL;
-            rect.h = 1 * TAILLE_PIXEL;
+            rect.w = 1 * TAILLE_PIXEL * rect_bool;
+            rect.h = 1 * TAILLE_PIXEL * rect_bool;
             SDL_RenderFillRect(renderer, &rect);
         }
     }
+    SDL_SetRenderDrawColor(renderer, couleurs[7][0], couleurs[7][1], couleurs[7][2], 255);
+    SDL_RenderFillRect(renderer, &rect2);
 }
 
 void init_map(int map[HAUTEUR_MATRICE][LARGEUR_MATRICE])
@@ -198,4 +220,3 @@ void end_sdl(char ok,            // fin anormale : ok = 0 ; normale ok = 1
         exit(EXIT_FAILURE);
     }
 }
-
