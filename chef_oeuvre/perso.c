@@ -119,13 +119,18 @@ void play_with_texture_perso(perso_t *perso,
 char *path_perso_determine(int n)
 {
     char *nom = malloc(NB_MAX_CHAR_PATH * sizeof(char));
+    //char nom[500];
     nom[0] = '\0';
     strcat(nom, PATH_IMG_PERSO);
-    char nb[1] = "";
+    printf("1 : %s\n", nom);
+
+    char nb[5] = "";
     sprintf(nb, "%d", n);
     strcat(nom, nb);
+    printf("2 : %s\n", nom);
+
     strcat(nom, PATH_IMG_PERSO_EXT);
-    //printf("%s\n", nom);
+    printf("3 : %s\n", nom);
     return nom;
 }
 

@@ -14,7 +14,7 @@
 #include <string.h>
 
 #define PATH_IMG_ITEM "./img2/buttons.png"
-#define PATH_IMG_BG "bg.png"
+#define PATH_IMG_BG "./img2/bg.png"
 
 #define HAUTEUR_FENETRE 900
 #define LARGEUR_FENETRE 500

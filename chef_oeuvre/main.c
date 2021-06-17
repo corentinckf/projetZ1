@@ -62,11 +62,11 @@ int main()
     /*Loading texture*/
     SDL_Texture *bg = IMG_LoadTexture(renderer, PATH_IMG_BG);
     if (bg == NULL)
-        end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+        end_sdl(0, "Echec du chargement de l'image dans la texture bg1", window, renderer);
 
-    SDL_Texture *bg2 = IMG_LoadTexture(renderer, "bg.png");
+    SDL_Texture *bg2 = IMG_LoadTexture(renderer, "./img2/bg.png");
     if (bg2 == NULL)
-        end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+        end_sdl(0, "Echec du chargement de l'image dans la texture bg2", window, renderer);
 
     /***************************/
     perso = creer_perso(window, renderer);
@@ -127,15 +127,17 @@ int main()
                 cordy_bg2 = 0;
 
             affichage_bgScroll(window, renderer, bg, bg2, &cordy_bg, &cordy_bg2);
-            affichage_texte(window, renderer, font, "00", 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
+            affichage_texte(window, renderer, font, texte_score(perso->score), 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
+            //affichage_texte(window, renderer, font, "score", 1, LARGEUR_FENETRE / 2, 8 * HAUTEUR_FENETRE / 10);
             //draw(renderer, grille, planche, &etape, &hauteur_pixel, &largeur_pixel);
 
             if (c > 20)
             {
-                printf("ICI\n");
+                //printf("ICI\n");
                // evolution(grille, &etape);
                 etape++;
                 c = 0;
+                perso->score++;
             }
             else
             {
@@ -191,10 +193,10 @@ void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *rendere
 
 char *texte_score(int a)
 {
-    char *nom = malloc(12 * sizeof(char));
+    char *nom = malloc(15 * sizeof(char));
     nom[0] = '\0';
     strcat(nom, "score : ");
-    char nb[1] = "";
+    char nb[5] = "";
     sprintf(nb, "%d", a);
     strcat(nom, nb);
 
