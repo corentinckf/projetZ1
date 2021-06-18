@@ -183,8 +183,8 @@ int main()
         fprintf(stderr,"erreur lors de l'ouverture du soleil\n");
     }
 
-    //affiche_background(background,window,renderer);
-    //move_texture(my_image,window,renderer);
+    affiche_background(background,window,renderer);
+    move_texture(my_image,window,renderer);
     incrustation(background, sun,window,renderer);
     SDL_Delay(3000);
 
