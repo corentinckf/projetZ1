@@ -118,13 +118,11 @@ void modifier(tete_t *tete, int place, int augmenter)
 void construire(int tab[7], tete_t *tete)
 {
     int i=0;
-    int *cour = tete->tas;
 
     for (i=0;i<7;i++)
     {
         ajouter(tete,tab[i]);
         i++;
-        cour++;
     }
 }
 
