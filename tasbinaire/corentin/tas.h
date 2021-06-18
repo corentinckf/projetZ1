@@ -4,9 +4,9 @@
 
 typedef int element_t;
 typedef struct tas{
-    element_t * content;
     int nb_max;
     int nb_courant;
+    element_t content[150];
 } tas_t;
 
 /*Prototypes*/
@@ -22,4 +22,5 @@ void aug(tas_t, element_t);
 void dim(tas_t, element_t);
 */
 tas_t * constructTas(int,element_t *);
+void interchanger(element_t *x, element_t *y);
 
