@@ -5,8 +5,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define LIGNES 5
-#define COLONNES 3
+#define LIGNES 8
+#define COLONNES 8
 
 //gestion des items
 
@@ -27,7 +27,7 @@ void evolution(int grille[LIGNES][COLONNES],int *etape)
 {
     int valeur,signe;
     int alea;
-    int j;//
+    int j;
     
     for (j=0;j<COLONNES;j++)
     {
@@ -174,7 +174,7 @@ void draw(SDL_Renderer* renderer, int grille[LIGNES][COLONNES], SDL_Texture *pla
     SDL_RenderPresent(renderer);
     SDL_Delay(500);
     //SDL_SetRenderDrawColor(renderer,0,0,0,255);
-    SDL_RenderClear(renderer);   
+    SDL_RenderClear(renderer);
 }
 
 int main()
@@ -227,6 +227,7 @@ int main()
         evolution(grille,&etape);
         //afficher_grille(grille);
         etape++;
+        etape%=LIGNES;
     }
     SDL_DestroyTexture(planche);
     IMG_Quit();
