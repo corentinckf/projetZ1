@@ -7,7 +7,7 @@ all: Y_fenetres serpents textures vie vie_amelioree tasbin
 tasbin : tasbin.c tasbin.h
 	$(CC) $< $(OPT) $(SDL2) -o  $@
 
-Y_fenetres : Y_fenetres.c Y_fenetres.h
+Y_fenetres : Y_fenetres.c
 	$(CC) $< $(OPT) $(SDL2) -o  $@
 
 serpents : serpents.c serpents.h

@@ -130,9 +130,9 @@ void construire(int tab[7], tete_t *tete)
 
 void liberer_tas(tete_t **tete)
 {
-    free(tete->tas);
-    free(tete);
-    tete = NULL;
+    free((*tete)->tas);
+    free(*tete);
+    *tete = NULL;
 }
 
 void afficher_tas(tete_t *tete)
