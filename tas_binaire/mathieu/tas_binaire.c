@@ -3,23 +3,37 @@
 int main()
 {
     int tab_v[NB_ELT_MAX];
-
+    init_tab(tab_v);
+    tab_v[0] = 12;
+    tab_v[1] = 24;
+    tab_v[2] = 345;
+    tab_v[3] = 44;
+    tab_v[4] = 58;
     tas_binaire_t *tas = NULL;
 
-    creer_tas_b(tas, tab_v);
+    tas = creer_tas_b(tas, tab_v);
+
+    fichier_graphiz(tas);
 
     return 0;
 }
 
-//Creer le tas a partir d'un tableau de valeur, 1 si reussi, 0 sinon
-int creer_tas_b(tas_binaire_t *tas, int tab_v[NB_ELT_MAX])
+void init_tab(int tab[NB_ELT_MAX])
 {
-    int succes = 0;
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        tab[i] = 0;
+    }
+}
+
+//Creer le tas a partir d'un tableau de valeur, 1 si reussi, 0 sinon
+tas_binaire_t *creer_tas_b(tas_binaire_t *tas_vide, int tab_v[NB_ELT_MAX])
+{
+    tas_binaire_t *tas = NULL;
     tas = malloc(sizeof(tas_binaire_t));
     if (tas != NULL)
     {
         tas->nb_elt = 0;
-        succes = 1;
         for (int i = 0; i < NB_ELT_MAX; i++)
         {
             tas->arbre[i] = tab_v[i];
@@ -27,7 +41,7 @@ int creer_tas_b(tas_binaire_t *tas, int tab_v[NB_ELT_MAX])
         }
     }
     //percolate_down();
-    return succes;
+    return tas;
 }
 
 int f_g(int i)
@@ -114,4 +128,28 @@ int retirer(tas_binaire_t *tas)
         printf("Pas d'elt dans le tas");
     }
     return rac;
+}
+
+void fichier_graphiz(tas_binaire_t *tas)
+{
+    FILE *fichier = NULL;
+    fichier = fopen("graph_tas.dot", "w");
+    if (fichier == NULL)
+        exit(EXIT_FAILURE);
+
+    int k = 0;
+
+    fprintf(fichier, "graph { ");
+    while (k < tas->nb_elt)
+    {
+        if (tas->arbre[k] != 0 && tas->arbre[f_g(k)] != 0)
+            fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_g(k)]);
+
+        if (tas->arbre[k] != 0 && tas->arbre[f_d(k)] != 0)
+            fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_d(k)]);
+        k++;
+    }
+    fprintf(fichier, "\n} ");
+
+    fclose(fichier);
 }
