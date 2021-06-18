@@ -2,8 +2,10 @@
 
 int main()
 {
-    int tab_v[NB_ELT_MAX]; 
-/*
+    int tab_v[NB_ELT_MAX];
+
+    init_tab(tab_v);
+
     tab_v[0] = 12;
     tab_v[1] = 24;
     tab_v[2] = 345;
@@ -13,25 +15,39 @@ int main()
     tab_v[6] = 6;
     tab_v[7] = 100;
     tab_v[8] = 41;
-*/
-    init_tab(tab_v);
-    remplir_tab_ale(tab_v);
+
+    //remplir_tab(tab_v);
+    affficher_tab(tab_v);
 
     tas_binaire_t *tas = NULL;
 
     tas = creer_tas_b(tas, tab_v);
+
+    //ajouter_elt(tas, 2);
+
+    printf("valeur retiree %d\n", retirer(tas));
+    
 
     fichier_graphiz(tas);
 
     return 0;
 }
 
-void remplir_tab_ale(int tab[NB_ELT_MAX])
+void affficher_tab(int tab[NB_ELT_MAX])
+{
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        printf("%d ", tab[i]);
+    }
+    printf("\n");
+}
+
+void remplir_tab(int tab[NB_ELT_MAX])
 {
     //srand(time(NULL));
-    for (int i = 0; i < NB_ELT_MAX-1; i++)
+    for (int i = 0; i < NB_ELT_MAX - 1; i++)
     {
-        tab[i] = i+1;
+        tab[i] = i + 1;
     }
 }
 
@@ -76,9 +92,9 @@ int pere(int i)
 
 void percolate_up(tas_binaire_t *tas)
 {
-    int i = 0;
+    int i = tas->nb_elt-1;
     int i_pere = pere(i);
-    while (i > 0 && tas->arbre[i] < tas->arbre[i_pere])
+    while (i >= 0 && tas->arbre[i] < tas->arbre[i_pere])
     {
         permute_a_b(&tas->arbre[i], &tas->arbre[i_pere]);
         i = i_pere;
@@ -157,12 +173,12 @@ void fichier_graphiz(tas_binaire_t *tas)
     int k = 0;
 
     fprintf(fichier, "graph { ");
-    while (k < tas->nb_elt)
+    while (k < tas->nb_elt - 1)
     {
-        if (tas->arbre[k] != 0 && tas->arbre[f_g(k)] != 0)
+        if (tas->arbre[k] > 0 && tas->arbre[f_g(k)] > 0 && f_g(k) < NB_ELT_MAX)
             fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_g(k)]);
 
-        if (tas->arbre[k] != 0 && tas->arbre[f_d(k)] != 0)
+        if (tas->arbre[k] > 0 && tas->arbre[f_d(k)] > 0 && f_d(k) < NB_ELT_MAX)
             fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_d(k)]);
         k++;
     }
