@@ -24,14 +24,15 @@ void affficher_tab(int tab[NB_ELT_MAX]);
 void remplir_tab(int tab[NB_ELT_MAX]);
 void init_tab(int tab[NB_ELT_MAX]);
 
-tas_binaire_t *creer_tas_b(int tab[NB_ELT_MAX], int valeur[NB_ELT_MAX]);
+tas_binaire_t *creer_tas_b(int tab[NB_ELT_MAX]);
 
 int f_d(int i);
 int f_g(int i);
 int pere(int i);
 
 
-void ajouter(tas_binaire_t*,int);
+void ajouter_elt(tas_binaire_t*,int);
+int retirer_elt(tas_binaire_t*);
 
 
 void permute_a_b(int *a, int *b);

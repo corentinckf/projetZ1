@@ -17,15 +17,18 @@ int main()
     tab_v[8] = 41;
 
     //remplir_tab(tab_v);
-    affficher_tab(tab_v);
 
     tas_binaire_t *tas = NULL;
 
-    tas = creer_tas_b(tab_v, tab_v);
+    tas = creer_tas_b(tab_v);
+    /*
+    ajouter_elt(tas, 4);
+    ajouter_elt(tas, 999);
+    ajouter_elt(tas, 60);
+*/
 
-    //ajouter_elt(tas, 2);
-
-    //printf("valeur retiree %d\n", retirer(tas));
+    printf("valeur retiree %d\n", retirer_elt(tas));
+    affficher_tab(tas->arbre);
 
     fichier_graphiz(tas);
 
@@ -41,7 +44,6 @@ void affficher_tab(int tab[NB_ELT_MAX])
     printf("\n");
 }
 
-
 void init_tab(int tab[NB_ELT_MAX])
 {
     for (int i = 0; i < NB_ELT_MAX; i++)
@@ -51,13 +53,13 @@ void init_tab(int tab[NB_ELT_MAX])
 }
 
 //Creer le tas a partir d'un tableau de valeur, 1 si reussi, 0 sinon
-tas_binaire_t *creer_tas_b(int tab[NB_ELT_MAX], int tab_v[NB_ELT_MAX])
+tas_binaire_t *creer_tas_b(int tab_v[NB_ELT_MAX])
 {
     tas_binaire_t *tas = NULL;
     tas = malloc(sizeof(tas_binaire_t));
-    
+
     init_tab(tas->arbre);
-    
+
     if (tas != NULL)
     {
         tas->nb_elt = 0;
@@ -83,7 +85,11 @@ int f_d(int i)
 }
 int pere(int i)
 {
-    return (i - 1) / 2;
+    int p = (i - 1) / 2;
+    if (p >= 0)
+        return p;
+    else
+        return 0;
 }
 
 void permute_a_b(int *a, int *b)
@@ -93,6 +99,73 @@ void permute_a_b(int *a, int *b)
     *b = temp;
 }
 
+void ajouter_elt(tas_binaire_t *tas, int val)
+{
+    if (tas->nb_elt < NB_ELT_MAX)
+    {
+        tas->arbre[tas->nb_elt] = val;
+        tas->nb_elt++;
+        detasser(tas, tas->nb_elt - 1);
+    }
+    else
+        printf("plus de place dans le tas");
+}
+
+int retirer_elt(tas_binaire_t *tas)
+{
+    int rac = 0;
+    if (tas->nb_elt > 0)
+    {
+        rac = tas->arbre[0];
+        tas->nb_elt--;
+        tas->arbre[0] = tas->arbre[tas->nb_elt];
+        entasser(tas, 0);
+    }
+    else
+    {
+        printf("plus rien a retirer\n");
+    }
+    return rac;
+}
+
+void entasser(tas_binaire_t *tas, int i)
+{
+    int l = f_g(i);
+    int r = f_d(i);
+    int max = i;
+
+    if (l < tas->nb_elt && tas->arbre[l] < tas->arbre[i])
+    {
+        max = l;
+    }
+    if (r < tas->nb_elt && tas->arbre[r] < tas->arbre[i])
+    {
+        max = r;
+    }
+    if (max != i)
+    {
+        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
+        entasser(tas, max);
+    }
+}
+
+void detasser(tas_binaire_t *tas, int i)
+{
+    int p = pere(i);
+
+    int max = i;
+
+    if (p > 0 && tas->arbre[p] > tas->arbre[i])
+    {
+        max = p;
+    }
+
+    if (max != i)
+    {
+        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
+        detasser(tas, max);
+    }
+}
 
 void fichier_graphiz(tas_binaire_t *tas)
 {
@@ -116,43 +189,4 @@ void fichier_graphiz(tas_binaire_t *tas)
     fprintf(fichier, "\n} ");
 
     fclose(fichier);
-}
-
-void entasser(tas_binaire_t *tas, int i)
-{
-    int l = f_g(i);
-    int r = f_d(i);
-    int max = i;
-
-    if (l < tas->nb_elt && tas->arbre[l] < tas->arbre[i])
-    {
-        max = l;
-    }
-    if (r < tas->nb_elt && tas->arbre[r] < tas->arbre[i])
-    {
-        max = r;
-    }
-    if(max !=i)
-    {
-        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
-        entasser(tas, max);
-    }
-}
-
-void detasser(tas_binaire_t *tas, int i)
-{
-    int p = pere(i);
-
-    int max = i;
-
-    if (pere <0 && tas->arbre[pere] >tas->arbre[i])
-    {
-        max = pere;
-    }
-
-    if(max !=i)
-    {
-        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
-        detasser(tas, max);
-    }
 }
