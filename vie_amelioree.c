@@ -93,52 +93,15 @@ int devenir(int mat[LIGNES][COLONNES], int *i, int *j)
     return resultat;
 }
 
-//evolution de l'etat N a l'etat N+1 ; renvoie l'entier changement qui indique s'il y a eu un changement de l'etat n a n+1 ou pas
-int evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
+//evolution de l'etat N a l'etat N+1
+void evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
 {
-    int changement = 0, resultat;
-    int ligne = 0, colonne = 0;
+    int resultat;
     int i, j;
 
-    while (ligne < LIGNES && changement == 0)
+    for (i=0;i<LIGNES;i++)
     {
-        colonne = 0;
-        while (colonne < COLONNES && changement == 0)
-        {
-            resultat = devenir(mat, &ligne, &colonne);
-            if (resultat < 0)
-            {
-                fprintf(stderr, "probleme d'evolution");
-            }
-            else
-            {
-                matsuiv[ligne][colonne] = resultat;
-                if (mat[ligne][colonne] != matsuiv[ligne][colonne])
-                {
-                    changement = 1;
-                }
-            }
-            colonne++;
-        }
-        ligne++;
-    }
-
-    for (j = colonne; j < COLONNES; j++)
-    {
-        resultat = devenir(mat, &ligne, &j);
-        if (resultat < 0)
-        {
-            fprintf(stderr, "probleme d'evolution");
-        }
-        else
-        {
-            matsuiv[ligne][j] = resultat;
-        }
-    }
-
-    for (i = ligne + 1; i < LIGNES; i++)
-    {
-        for (j = 0; j < COLONNES; j++)
+        for (j=0;j<COLONNES;j++)
         {
             resultat = devenir(mat, &i, &j);
             if (resultat < 0)
@@ -151,10 +114,9 @@ int evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
             }
         }
     }
-    return changement;
 }
 
-void draw(SDL_Renderer *renderer, int mat[LIGNES][COLONNES], int *h, int *l)
+void draw(SDL_Renderer *renderer, int mat[LIGNES][COLONNES], float *h, float *l)
 {
     SDL_Rect rectangle;
     int i, j;
@@ -197,13 +159,31 @@ void init(int mat[LIGNES][COLONNES])
     }
 }
 
+/*
+void afficher_mat(int mat[LIGNES][COLONNES])
+{
+    int i,j;
+
+    printf("contenu de la matrice :\n");
+
+    for (i=0;i<LIGNES;i++)
+    {
+        for (j=0;j<COLONNES;j++)
+        {
+            fprintf(stdout,"%d\t",mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+*/
+
 int main()
 {
     int etat_n[LIGNES][COLONNES];
     int etat_suiv[LIGNES][COLONNES];
-    int changement = 1;
     int i, j;
     int x, y; //position de la souris
+    int ligne=0,colonne=0;
 
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -226,8 +206,8 @@ int main()
     if (window == NULL)
         end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
 
-    int hauteur_pixel = 600 / LIGNES;
-    int largeur_pixel = 1000 / COLONNES;
+    float hauteur_pixel = 600 / LIGNES;
+    float largeur_pixel = 1000 / COLONNES;
 
     renderer = SDL_CreateRenderer(
         window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -263,13 +243,18 @@ int main()
         case SDL_MOUSEBUTTONDOWN:                                         // Click souris
             if (SDL_GetMouseState(&x, &y) && SDL_BUTTON(SDL_BUTTON_LEFT)) // Si c'est un click gauche
             {
-                etat_n[y / hauteur_pixel][x / largeur_pixel] = 1; //faire naitre la cellule lors d'un click gauche
+                ligne = y / hauteur_pixel;
+                colonne = x / largeur_pixel;
+                //printf("ligne : %d \t colonne : %d\n", ligne, colonne);
+                etat_n[ligne][colonne] = 1; //faire naitre la cellule lors d'un click gauche
                 draw(renderer, etat_n, &hauteur_pixel, &largeur_pixel);
                 SDL_RenderPresent(renderer);
             }
             else if (SDL_GetMouseState(&x, &y) && SDL_BUTTON(SDL_BUTTON_RIGHT)) // Si c'est un click droit
             {
-                etat_n[y / hauteur_pixel][x / largeur_pixel] = 0; //faire mourir la cellule lors d'un click droit
+                ligne = y / hauteur_pixel;
+                colonne = x / largeur_pixel;
+                etat_n[ligne][colonne] = 0; //faire mourir la cellule lors d'un click droit
                 draw(renderer, etat_n, &hauteur_pixel, &largeur_pixel);
                 SDL_RenderPresent(renderer);
             }
@@ -309,16 +294,21 @@ int main()
                 break;
             }
         }
-        while (paused && SDL_PollEvent(&event))
+        while (paused && program_on && SDL_PollEvent(&event))
         {
-            SDL_Delay(1000);
+            SDL_Delay(100);
             switch (event.type) // En fonction de la valeur du type de cet evenement
             {
+            case SDL_QUIT:              // Un evenement simple, on a clique sur la x de la // fenêtre
+                program_on = SDL_FALSE; // Il est temps d'arrêter le programme
+                break;
             case SDL_KEYDOWN: // Le type de event est : une touche appuyee ;comme la valeur du type est SDL_Keydown, dans la partie 'union' de l'event, plusieurs champs deviennent pertinents
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_SPACE:
                     paused = !paused;
+                    break;
+                default:
                     break;
                 }
             }
@@ -331,7 +321,7 @@ int main()
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
 
-            changement = evolution(etat_n, etat_suiv);
+            evolution(etat_n, etat_suiv);
 
             //recopie de la matrice etat n+1 dans la matrice etat n
             for (i = 0; i < LIGNES; i++)
@@ -341,8 +331,7 @@ int main()
                     etat_n[i][j] = etat_suiv[i][j];
                 }
             }
-            if (!changement)
-                program_on = SDL_FALSE;
         }
     }
+    return 0;
 }
