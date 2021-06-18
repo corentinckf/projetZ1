@@ -3,8 +3,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-#define NB_ELT_MAX 50
+#define NB_ELT_MAX 20
+
+/*
+gcc tas_binaire.c -o tas_binaire -Wall -Wextra
+./tas_binaire
+dot -Tjpg graph_tas.dot -o img.jpg
+*/
 
 typedef struct tas_binaire
 {
@@ -12,8 +19,8 @@ typedef struct tas_binaire
     int arbre[NB_ELT_MAX];
 } tas_binaire_t;
 
-void init_tab(int tab[NB_ELT_MAX])
-;
+void remplir_tab_ale(int tab[NB_ELT_MAX]);
+void init_tab(int tab[NB_ELT_MAX]);
 
 tas_binaire_t *creer_tas_b(tas_binaire_t *, int valeur[NB_ELT_MAX]);
 

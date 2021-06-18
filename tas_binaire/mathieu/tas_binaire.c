@@ -3,12 +3,20 @@
 int main()
 {
     int tab_v[NB_ELT_MAX];
-    init_tab(tab_v);
+/*
     tab_v[0] = 12;
     tab_v[1] = 24;
     tab_v[2] = 345;
     tab_v[3] = 44;
     tab_v[4] = 58;
+    tab_v[5] = 74;
+    tab_v[6] = 6;
+    tab_v[7] = 100;
+    tab_v[8] = 41;
+*/
+    init_tab(tab_v);
+    remplir_tab_ale(tab_v);
+
     tas_binaire_t *tas = NULL;
 
     tas = creer_tas_b(tas, tab_v);
@@ -16,6 +24,15 @@ int main()
     fichier_graphiz(tas);
 
     return 0;
+}
+
+void remplir_tab_ale(int tab[NB_ELT_MAX])
+{
+    //srand(time(NULL));
+    for (int i = 0; i < NB_ELT_MAX-1; i++)
+    {
+        tab[i] = i+1;
+    }
 }
 
 void init_tab(int tab[NB_ELT_MAX])
