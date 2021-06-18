@@ -41,14 +41,6 @@ void affficher_tab(int tab[NB_ELT_MAX])
     printf("\n");
 }
 
-void remplir_tab(int tab[NB_ELT_MAX])
-{
-    //srand(time(NULL));
-    for (int i = 0; i < NB_ELT_MAX - 1; i++)
-    {
-        tab[i] = i + 1;
-    }
-}
 
 void init_tab(int tab[NB_ELT_MAX])
 {
@@ -63,7 +55,9 @@ tas_binaire_t *creer_tas_b(int tab[NB_ELT_MAX], int tab_v[NB_ELT_MAX])
 {
     tas_binaire_t *tas = NULL;
     tas = malloc(sizeof(tas_binaire_t));
- 
+    
+    init_tab(tas->arbre);
+    
     if (tas != NULL)
     {
         tas->nb_elt = 0;
@@ -142,5 +136,23 @@ void entasser(tas_binaire_t *tas, int i)
     {
         permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
         entasser(tas, max);
+    }
+}
+
+void detasser(tas_binaire_t *tas, int i)
+{
+    int p = pere(i);
+
+    int max = i;
+
+    if (pere <0 && tas->arbre[pere] >tas->arbre[i])
+    {
+        max = pere;
+    }
+
+    if(max !=i)
+    {
+        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
+        detasser(tas, max);
     }
 }

@@ -25,14 +25,19 @@ void remplir_tab(int tab[NB_ELT_MAX]);
 void init_tab(int tab[NB_ELT_MAX]);
 
 tas_binaire_t *creer_tas_b(int tab[NB_ELT_MAX], int valeur[NB_ELT_MAX]);
-void entasser(tas_binaire_t *tas, int i);
 
 int f_d(int i);
 int f_g(int i);
 int pere(int i);
 
 
+void ajouter(tas_binaire_t*,int);
+
+
 void permute_a_b(int *a, int *b);
+
+void entasser(tas_binaire_t *tas, int i);
+void detasser(tas_binaire_t *tas, int i);
 
 
 void fichier_graphiz(tas_binaire_t *tas);
