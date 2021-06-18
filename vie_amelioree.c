@@ -159,23 +159,6 @@ void init(int mat[LIGNES][COLONNES])
     }
 }
 
-/*
-void afficher_mat(int mat[LIGNES][COLONNES])
-{
-    int i,j;
-
-    printf("contenu de la matrice :\n");
-
-    for (i=0;i<LIGNES;i++)
-    {
-        for (j=0;j<COLONNES;j++)
-        {
-            fprintf(stdout,"%d\t",mat[i][j]);
-        }
-        printf("\n");
-    }
-}
-*/
 
 int main()
 {
