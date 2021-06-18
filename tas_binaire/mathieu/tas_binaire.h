@@ -26,7 +26,7 @@ tas_binaire_t *creer_tas_b(tas_binaire_t *, int valeur[NB_ELT_MAX]);
 
 int f_d(int i);
 int f_g(int i);
-int pere(int i);
+int pere(int i); 
 
 void percolate_up(tas_binaire_t *tas);
 void percolate_down(tas_binaire_t *tas);

@@ -2,7 +2,7 @@
 
 int main()
 {
-    int tab_v[NB_ELT_MAX];
+    int tab_v[NB_ELT_MAX]; 
 /*
     tab_v[0] = 12;
     tab_v[1] = 24;
