@@ -1,0 +1,6 @@
+#include "tas.h"
+
+int main()
+{
+    return 0;
+}
