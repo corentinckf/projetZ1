@@ -2,22 +2,25 @@ CC= gcc
 OPT  = -Wextra -Wall -g
 SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
 
-all: Y_fenetres serpents textures vie vie_amelioree
+all: Y_fenetres serpents textures vie vie_amelioree tasbin
 
-Y_fenetres : Y_fenetres.c
-	$(CC) Y_fenetres.c $(OPT) $(SDL2) -o  Y_fenetres
+tasbin : tasbin.c tasbin.h
+	$(CC) $< $(OPT) $(SDL2) -o  $@
 
-serpents : serpents.c
-	$(CC) serpents.c $(OPT) $(SDL2) -o  serpents
+Y_fenetres : Y_fenetres.c Y_fenetres.h
+	$(CC) $< $(OPT) $(SDL2) -o  $@
 
-textures : textures.c
-	$(CC) textures.c $(OPT) $(SDL2) -o  textures
+serpents : serpents.c serpents.h
+	$(CC) $< $(OPT) $(SDL2) -o  $@
 
-vie : vie.c
-	$(CC) vie.c $(OPT) $(SDL2) -o  vie
+textures : textures.c textures.h
+	$(CC) $< $(OPT) $(SDL2) -o  $@
 
-vie_amelioree : vie_amelioree.c
-	$(CC) vie_amelioree.c $(OPT) $(SDL2) -o  vie_amelioree
+vie : vie.c vie.h
+	$(CC) $< $(OPT) $(SDL2) -o  $@
+
+vie_amelioree : vie_amelioree.c vie_amelioree.h
+	$(CC) $< $(OPT) $(SDL2) -o  $@
 
 clear :
-	rm -f *.o
+	rm -rf $(EXEC)
