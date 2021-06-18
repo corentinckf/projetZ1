@@ -2,10 +2,13 @@
 
 tas_t * initTas(int max){
     tas_t * tas = (tas_t *) malloc(sizeof(tas_t));
-    if(tas)
+    if(tas != NULL)
     {
+        printf("oui");
         tas->nb_courant = 0;
         tas->nb_max = max;
+        tas->content = (element_t *) malloc(max * sizeof(element_t));
+        printf("oui2");
     }
     
     return tas;
@@ -58,14 +61,4 @@ int add(tas_t * tas, element_t el)
 //void delete(tas_t tas);
 //void aug(tas_t tas, element_t el);
 //void dim(tas_t tas, element_t el);
-tas_t * constructTas(int nbMax,element_t * el_array){
-    tas_t * tas = initTas(nbMax);
-    return tas;
-}
 
-void interchanger(element_t *x, element_t *y)
-{
-    element_t temp = *x;
-    *x = *y;
-    *y = temp;
-}

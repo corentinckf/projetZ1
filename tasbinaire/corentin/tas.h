@@ -6,7 +6,7 @@ typedef int element_t;
 typedef struct tas{
     int nb_max;
     int nb_courant;
-    element_t content[150];
+    element_t * content;
 } tas_t;
 
 /*Prototypes*/

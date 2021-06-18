@@ -10,14 +10,10 @@ int main()
     
     element_t toAdd = 50;
     element_t tasInit[] = {100,19,36,17,3,25,1,2,7};
-    tas_t * tas1 = constructTas(NB_MAX, tasInit);
+    tas_t * tas1 = initTas(NB_MAX);
 
-    for(int i = 0; i < 9;++i)
-    {
-        ++tas1->nb_courant;
-        tas1->content[i] = tasInit[i];
-        
-    }
+    memcpy(tas1->content, tasInit, sizeof(element_t) * NB_MAX);
+
     add(tas1,toAdd);
     return 0;
 }
