@@ -88,57 +88,20 @@ int devenir(int mat[LIGNES][COLONNES], int *i, int *j)
     return resultat;    
 }
 
-//evolution de l'etat N a l'etat N+1 ; renvoie l'entier changement qui indique s'il y a eu un changement de l'etat n a n+1 ou pas
-int evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
+//evolution de l'etat N a l'etat N+1
+void evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
 {
-    int changement=0,resultat;
-    int ligne=0,colonne=0;
+    int resultat;
     int i,j;
 
-    while (ligne < LIGNES && changement == 0)
-    {
-        colonne=0;
-        while (colonne < COLONNES && changement == 0)
-        {
-            resultat=devenir(mat,&ligne,&colonne);
-            if (resultat < 0)
-            {
-                fprintf(stderr,"probleme d'evolution");
-            }
-            else
-            {
-                matsuiv[ligne][colonne] = resultat;
-                if (mat[ligne][colonne] != matsuiv[ligne][colonne])
-                {
-                    changement=1;
-                }
-            }
-            colonne++; 
-        }
-        ligne++;
-    }
-
-    for (j=colonne;j<COLONNES;j++)
-    {
-        resultat=devenir(mat,&ligne,&j);
-        if (resultat < 0)
-        {
-            fprintf(stderr,"probleme d'evolution");
-        }
-        else
-        {
-            matsuiv[ligne][j] = resultat;
-        }
-    }
-
-    for (i=ligne+1;i<LIGNES;i++)
+    for (i=0;i<LIGNES;i++)
     {
         for (j=0;j<COLONNES;j++)
         {
-            resultat=devenir(mat,&i,&j);
+            resultat = devenir(mat, &i, &j);
             if (resultat < 0)
             {
-                fprintf(stderr,"probleme d'evolution");
+                fprintf(stderr, "probleme d'evolution");
             }
             else
             {
@@ -146,7 +109,6 @@ int evolution(int mat[LIGNES][COLONNES], int matsuiv[LIGNES][COLONNES])
             }
         }
     }
-    return changement;
 }
 
 void draw(SDL_Renderer* renderer, int mat[LIGNES][COLONNES], int *h, int *l)
@@ -183,7 +145,19 @@ void init(int mat[LIGNES][COLONNES])
 {
     int i,j;
 
+    for (i=0;i<LIGNES;i++)
+    {
+        for (j=0;j<COLONNES;j++)
+        {
+            mat[i][j] = 0;
+        }
+    }
+    for (j=COLONNES/4;j<3*COLONNES/4;j++)
+    {
+        mat[LIGNES/2][j] = 1;
+    }
     //initialisation aleatoire
+    /*
     for (i=0;i<LIGNES;i++)
     {
         for (j=0;j<COLONNES;j++)
@@ -191,13 +165,13 @@ void init(int mat[LIGNES][COLONNES])
             mat[i][j] = rand()%2;
         }
     }
+    */
 }
 
 int main()
 {
     int etat_n[LIGNES][COLONNES];
     int etat_suiv[LIGNES][COLONNES];
-    int changement=1;
     int i,j;
 
     SDL_Window* window = NULL;
@@ -230,7 +204,7 @@ int main()
     SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
     SDL_RenderClear(renderer);
 
-    for (int cpt=0; cpt<300; cpt++)
+    for (int cpt=0; cpt<200; cpt++)
     {   
         //afficher l'etat n
         draw(renderer,etat_n, &hauteur_pixel, &largeur_pixel);
@@ -239,7 +213,7 @@ int main()
         SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
         SDL_RenderClear(renderer);
 
-        changement = evolution(etat_n,etat_suiv);
+        evolution(etat_n,etat_suiv);
 
         //recopie de la matrice etat n+1 dans la matrice etat_n
         for (i=0;i<LIGNES;i++)
