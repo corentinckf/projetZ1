@@ -12,6 +12,10 @@ gcc tas_binaire.c -o tas_binaire -Wall -Wextra
 ./tas_binaire
 dot -Tjpg graph_tas.dot -o img.jpg
 
+fichier_graphiz(tas);
+system("dot -Tjpg graph_tas.dot -o img.jpg");
+system("eog ./img.jpg");
+
 */
 
 typedef struct tas_binaire

@@ -21,17 +21,24 @@ int main()
     tas_binaire_t *tas = NULL;
 
     tas = creer_tas_b(tab_v);
+printf("\n\n tas cree\n\n\n");
+
     /*
     ajouter_elt(tas, 4);
     ajouter_elt(tas, 999);
     ajouter_elt(tas, 60);
-*/
+    */
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg");
 
+    printf("\n\n\n\n\n debut retirage");
     printf("valeur retiree %d\n", retirer_elt(tas));
     affficher_tab(tas->arbre);
 
     fichier_graphiz(tas);
-
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg");
     return 0;
 }
 
@@ -69,8 +76,15 @@ tas_binaire_t *creer_tas_b(int tab_v[NB_ELT_MAX])
             tas->nb_elt += (tab_v[i] != 0);
         }
 
-        for (int i = NB_ELT_MAX / 2; i > 0; i--)
+        for (int i = NB_ELT_MAX / 2; i >= 0; i--)
+        {
             entasser(tas, i);
+            /*
+            fichier_graphiz(tas);
+            system("dot -Tjpg graph_tas.dot -o img.jpg");
+            system("eog ./img.jpg");
+            */
+        }
     }
     return tas;
 }
@@ -119,7 +133,7 @@ int retirer_elt(tas_binaire_t *tas)
         rac = tas->arbre[0];
         tas->nb_elt--;
         tas->arbre[0] = tas->arbre[tas->nb_elt];
-        entasser(tas, 0);
+        //entasser(tas, 0);
     }
     else
     {
@@ -133,7 +147,9 @@ void entasser(tas_binaire_t *tas, int i)
     int l = f_g(i);
     int r = f_d(i);
     int max = i;
-
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg");
     if (l < tas->nb_elt && tas->arbre[l] < tas->arbre[i])
     {
         max = l;
