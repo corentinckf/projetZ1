@@ -14,7 +14,7 @@ dot -Tjpg graph_tas.dot -o img.jpg
 
 fichier_graphiz(tas);
 system("dot -Tjpg graph_tas.dot -o img.jpg");
-system("eog ./img.jpg");
+system("eog ./img.jpg 2> /dev/null");
 
 */
 
@@ -34,16 +34,15 @@ int f_d(int i);
 int f_g(int i);
 int pere(int i);
 
-
-void ajouter_elt(tas_binaire_t*,int);
-int retirer_elt(tas_binaire_t*);
-
+void ajouter_elt(tas_binaire_t *, int);
+int retirer_elt(tas_binaire_t *);
 
 void permute_a_b(int *a, int *b);
 
 void entasser(tas_binaire_t *tas, int i);
 void detasser(tas_binaire_t *tas, int i);
 
+void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
 
 void fichier_graphiz(tas_binaire_t *tas);
 

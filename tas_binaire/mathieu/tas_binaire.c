@@ -21,24 +21,45 @@ int main()
     tas_binaire_t *tas = NULL;
 
     tas = creer_tas_b(tab_v);
-printf("\n\n tas cree\n\n\n");
+    printf("\n\n tas cree\n\n\n");
 
     /*
     ajouter_elt(tas, 4);
-    ajouter_elt(tas, 999);
-    ajouter_elt(tas, 60);
-    */
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+    printf("\n\n fin ajout 4\n");
 
-    printf("\n\n\n\n\n debut retirage");
-    printf("valeur retiree %d\n", retirer_elt(tas));
+    ajouter_elt(tas, 999);
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+    printf("\n\n fin ajout 999\n");
+
+    ajouter_elt(tas, 60);
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+    printf("\n\n fin ajout 60\n");
+*/
+
+    //printf("\n\n\n\n\n debut retirage");
+    //printf("valeur retiree %d\n", retirer_elt(tas));
+
     affficher_tab(tas->arbre);
 
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+
+    modifier_cle(tas, 3, -31);
+
+    affficher_tab(tas->arbre);
+
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+
     return 0;
 }
 
@@ -82,7 +103,7 @@ tas_binaire_t *creer_tas_b(int tab_v[NB_ELT_MAX])
             /*
             fichier_graphiz(tas);
             system("dot -Tjpg graph_tas.dot -o img.jpg");
-            system("eog ./img.jpg");
+            system("eog ./img.jpg 2> /dev/null");
             */
         }
     }
@@ -147,9 +168,11 @@ void entasser(tas_binaire_t *tas, int i)
     int l = f_g(i);
     int r = f_d(i);
     int max = i;
+    /*
     fichier_graphiz(tas);
-    system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg");
+    system("dot -Tjp\ng graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+    */
     if (l < tas->nb_elt && tas->arbre[l] < tas->arbre[i])
     {
         max = l;
@@ -195,14 +218,29 @@ void fichier_graphiz(tas_binaire_t *tas)
     fprintf(fichier, "graph { ");
     while (k < tas->nb_elt - 1)
     {
-        if (tas->arbre[k] > 0 && tas->arbre[f_g(k)] > 0 && f_g(k) < NB_ELT_MAX)
+        if (tas->arbre[k] > 0 && tas->arbre[f_g(k)] > 0 && f_g(k) < tas->nb_elt)
             fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_g(k)]);
 
-        if (tas->arbre[k] > 0 && tas->arbre[f_d(k)] > 0 && f_d(k) < NB_ELT_MAX)
+        if (tas->arbre[k] > 0 && tas->arbre[f_d(k)] > 0 && f_d(k) < tas->nb_elt)
             fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_d(k)]);
         k++;
     }
     fprintf(fichier, "\n} ");
 
     fclose(fichier);
+}
+
+void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
+{
+    if (indice < tas->nb_elt)
+    {
+        printf("cle modifie : %d + %d = %d\n", tas->arbre[indice], val_ajoutee, tas->arbre[indice] + val_ajoutee);
+        tas->arbre[indice] += val_ajoutee;
+        if (val_ajoutee < 0)
+            detasser(tas, indice);
+        else
+            entasser(tas, indice);
+    }
+    else
+        printf("modification impossible : indice trop petit\n");
 }
