@@ -7,7 +7,12 @@
 
 #define NB_ELT_MAX 20
 
+/* Strucutre du tas binaire min
+tableaa avec case 0 = nb elt
+*/
+
 /*
+
 gcc tas_binaire.c -o tas_binaire -Wall -Wextra
 ./tas_binaire
 dot -Tjpg graph_tas.dot -o img.jpg
@@ -18,32 +23,27 @@ system("eog ./img.jpg 2> /dev/null");
 
 */
 
-typedef struct tas_binaire
-{
-    int nb_elt;
-    int arbre[NB_ELT_MAX];
-} tas_binaire_t;
-
 void affficher_tab(int tab[NB_ELT_MAX]);
 void remplir_tab(int tab[NB_ELT_MAX]);
 void init_tab(int tab[NB_ELT_MAX]);
 
-tas_binaire_t *creer_tas_b(int tab[NB_ELT_MAX]);
+int *creer_tas_b(int tab[NB_ELT_MAX]);
 
 int f_d(int i);
 int f_g(int i);
 int pere(int i);
 
-void ajouter_elt(tas_binaire_t *, int);
-int retirer_elt(tas_binaire_t *);
+void ajouter_elt(int *, int);
+int retirer_elt(int *);
 
 void permute_a_b(int *a, int *b);
 
-void entasser(tas_binaire_t *tas, int i);
-void detasser(tas_binaire_t *tas, int i);
+void entasser(int *tas, int i);
+void detasser(int *tas, int i);
 
-void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
+void modifier_cle(int *tas, int indice, int val_ajoutee);
+void diminuer_cle(int *tas, int indice, int val_ajoutee);
 
-void fichier_graphiz(tas_binaire_t *tas);
+void fichier_graphiz(int *tas);
 
 #endif

@@ -6,22 +6,25 @@ int main()
 
     init_tab(tab_v);
 
-    tab_v[0] = 12;
-    tab_v[1] = 24;
-    tab_v[2] = 345;
-    tab_v[3] = 44;
-    tab_v[4] = 58;
-    tab_v[5] = 74;
-    tab_v[6] = 6;
-    tab_v[7] = 100;
-    tab_v[8] = 41;
+    tab_v[1] = 12;
+    tab_v[2] = 24;
+    tab_v[3] = 345;
+    tab_v[4] = 44;
+    tab_v[5] = 58;
+    tab_v[6] = 74;
+    tab_v[7] = 6;
+    tab_v[8] = 100;
+    tab_v[9] = 41;
 
     //remplir_tab(tab_v);
 
-    tas_binaire_t *tas = NULL;
+    int *tas = NULL;
 
     tas = creer_tas_b(tab_v);
     printf("\n\n tas cree\n\n\n");
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
 
     /*
     ajouter_elt(tas, 4);
@@ -41,24 +44,44 @@ int main()
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
     printf("\n\n fin ajout 60\n");
+
+    ajouter_elt(tas, 10);
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+    printf("\n\n fin ajout 10\n");
 */
 
-    //printf("\n\n\n\n\n debut retirage");
-    //printf("valeur retiree %d\n", retirer_elt(tas));
+    /*
+    printf("\n\n\n\n\n debut retirage");
+    printf("valeur retiree %d\n", retirer_elt(tas));
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+*/
+    affficher_tab(tas);
 
-    affficher_tab(tas->arbre);
+    /*
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+*/
+
+    printf("valeur modifie tas[%d]=%d -> %d\n", 4, tas[4], 10);
+    diminuer_cle(tas, 4, 10);
 
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
 
-    modifier_cle(tas, 3, -31);
-
-    affficher_tab(tas->arbre);
+    printf("valeur modifie tas[%d]=%d, et nouvelle valeur %d\n", 3, tas[3], 2);
+    diminuer_cle(tas, 3, 2);
 
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
+
+    affficher_tab(tas);
 
     return 0;
 }
@@ -81,30 +104,25 @@ void init_tab(int tab[NB_ELT_MAX])
 }
 
 //Creer le tas a partir d'un tableau de valeur, 1 si reussi, 0 sinon
-tas_binaire_t *creer_tas_b(int tab_v[NB_ELT_MAX])
+int *creer_tas_b(int tab_v[NB_ELT_MAX])
 {
-    tas_binaire_t *tas = NULL;
-    tas = malloc(sizeof(tas_binaire_t));
+    int *tas = NULL;
+    tas = malloc(sizeof(int) * NB_ELT_MAX);
 
-    init_tab(tas->arbre);
+    init_tab(tas);
 
     if (tas != NULL)
     {
-        tas->nb_elt = 0;
-        for (int i = 0; i < NB_ELT_MAX; i++)
+        tas[0] = 0;
+        for (int i = 1; i < NB_ELT_MAX; i++)
         {
-            tas->arbre[i] = tab_v[i];
-            tas->nb_elt += (tab_v[i] != 0);
+            tas[i] = tab_v[i];
+            tas[0] += (tab_v[i] != 0);
         }
 
-        for (int i = NB_ELT_MAX / 2; i >= 0; i--)
+        for (int i = tas[0] / 2; i > 0; i--)
         {
             entasser(tas, i);
-            /*
-            fichier_graphiz(tas);
-            system("dot -Tjpg graph_tas.dot -o img.jpg");
-            system("eog ./img.jpg 2> /dev/null");
-            */
         }
     }
     return tas;
@@ -112,19 +130,15 @@ tas_binaire_t *creer_tas_b(int tab_v[NB_ELT_MAX])
 
 int f_g(int i)
 {
-    return (2 * i + 1);
+    return (2 * i);
 }
 int f_d(int i)
 {
-    return (2 * i + 2);
+    return (2 * i + 1);
 }
 int pere(int i)
 {
-    int p = (i - 1) / 2;
-    if (p >= 0)
-        return p;
-    else
-        return 0;
+    return i / 2;
 }
 
 void permute_a_b(int *a, int *b)
@@ -134,27 +148,27 @@ void permute_a_b(int *a, int *b)
     *b = temp;
 }
 
-void ajouter_elt(tas_binaire_t *tas, int val)
+void ajouter_elt(int *tas, int val)
 {
-    if (tas->nb_elt < NB_ELT_MAX)
+    if (tas[0] < NB_ELT_MAX)
     {
-        tas->arbre[tas->nb_elt] = val;
-        tas->nb_elt++;
-        detasser(tas, tas->nb_elt - 1);
+        tas[0]++;
+        tas[tas[0]] = val;
+        detasser(tas, tas[0]);
     }
     else
         printf("plus de place dans le tas");
 }
 
-int retirer_elt(tas_binaire_t *tas)
+int retirer_elt(int *tas)
 {
     int rac = 0;
-    if (tas->nb_elt > 0)
+    if (tas[0] > 0)
     {
-        rac = tas->arbre[0];
-        tas->nb_elt--;
-        tas->arbre[0] = tas->arbre[tas->nb_elt];
-        //entasser(tas, 0);
+        rac = tas[1];
+        tas[1] = tas[tas[0]];
+        tas[0]--;
+        entasser(tas, 1);
     }
     else
     {
@@ -163,7 +177,7 @@ int retirer_elt(tas_binaire_t *tas)
     return rac;
 }
 
-void entasser(tas_binaire_t *tas, int i)
+void entasser(int *tas, int i)
 {
     int l = f_g(i);
     int r = f_d(i);
@@ -173,56 +187,56 @@ void entasser(tas_binaire_t *tas, int i)
     system("dot -Tjp\ng graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
     */
-    if (l < tas->nb_elt && tas->arbre[l] < tas->arbre[i])
+    if (l <= tas[0] && tas[l] < tas[i])
     {
         max = l;
     }
-    if (r < tas->nb_elt && tas->arbre[r] < tas->arbre[i])
+    if (r <= tas[0] && tas[r] < tas[i])
     {
         max = r;
     }
     if (max != i)
     {
-        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
+        permute_a_b(&(tas[i]), &(tas[max]));
         entasser(tas, max);
     }
 }
 
-void detasser(tas_binaire_t *tas, int i)
+void detasser(int *tas, int i)
 {
     int p = pere(i);
 
     int max = i;
 
-    if (p > 0 && tas->arbre[p] > tas->arbre[i])
+    if (p > 1 && tas[p] > tas[i])
     {
         max = p;
     }
 
     if (max != i)
     {
-        permute_a_b(&(tas->arbre[i]), &(tas->arbre[max]));
+        permute_a_b(&(tas[i]), &(tas[max]));
         detasser(tas, max);
     }
 }
 
-void fichier_graphiz(tas_binaire_t *tas)
+void fichier_graphiz(int *tas)
 {
     FILE *fichier = NULL;
     fichier = fopen("graph_tas.dot", "w");
     if (fichier == NULL)
         exit(EXIT_FAILURE);
 
-    int k = 0;
+    int k = 1;
 
     fprintf(fichier, "graph { ");
-    while (k < tas->nb_elt - 1)
+    while (k <= tas[0])
     {
-        if (tas->arbre[k] > 0 && tas->arbre[f_g(k)] > 0 && f_g(k) < tas->nb_elt)
-            fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_g(k)]);
+        if (tas[k] > 0 && tas[f_g(k)] > 0 && f_g(k) <= tas[0])
+            fprintf(fichier, "\n\t%d--%d", tas[k], tas[f_g(k)]);
 
-        if (tas->arbre[k] > 0 && tas->arbre[f_d(k)] > 0 && f_d(k) < tas->nb_elt)
-            fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_d(k)]);
+        if (tas[k] > 0 && tas[f_d(k)] > 0 && f_d(k) <= tas[0])
+            fprintf(fichier, "\n\t%d--%d", tas[k], tas[f_d(k)]);
         k++;
     }
     fprintf(fichier, "\n} ");
@@ -230,16 +244,37 @@ void fichier_graphiz(tas_binaire_t *tas)
     fclose(fichier);
 }
 
-void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
+void modifier_cle(int *tas, int indice, int val_ajoutee)
 {
-    if (indice < tas->nb_elt)
+    if (indice < tas[0])
     {
-        printf("cle modifie : %d + %d = %d\n", tas->arbre[indice], val_ajoutee, tas->arbre[indice] + val_ajoutee);
-        tas->arbre[indice] += val_ajoutee;
+        printf("cle modifie : %d + %d = %d\n", tas[indice], val_ajoutee, tas[indice] + val_ajoutee);
+        tas[indice] += val_ajoutee;
         if (val_ajoutee < 0)
             detasser(tas, indice);
         else
+        {
             entasser(tas, indice);
+            entasser(tas, indice);
+        }
+    }
+    else
+        printf("modification impossible : indice trop petit\n");
+}
+
+void diminuer_cle(int *tas, int indice, int nouv_key)
+{
+    if (indice <= tas[0])
+    {
+        tas[indice] = nouv_key;
+        int i = indice;
+        int p_i = pere(i);
+        while (i > 1 && tas[p_i] > tas[i])
+        {
+            permute_a_b(&tas[i], &tas[p_i]);
+            i = p_i;
+            p_i = pere(i);
+        }
     }
     else
         printf("modification impossible : indice trop petit\n");

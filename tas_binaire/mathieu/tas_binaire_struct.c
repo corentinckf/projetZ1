@@ -1,4 +1,4 @@
-#include "tas_binaire.h"
+#include "tas_binaire_struct.h"
 
 int main()
 {
@@ -23,6 +23,10 @@ int main()
     tas = creer_tas_b(tab_v);
     printf("\n\n tas cree\n\n\n");
 
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+
     /*
     ajouter_elt(tas, 4);
     fichier_graphiz(tas);
@@ -43,15 +47,15 @@ int main()
     printf("\n\n fin ajout 60\n");
 */
 
-    //printf("\n\n\n\n\n debut retirage");
-    //printf("valeur retiree %d\n", retirer_elt(tas));
-
-    affficher_tab(tas->arbre);
-
+    printf("\n\n\n\n\n debut retirage");
+    printf("valeur retiree %d\n", retirer_elt(tas));
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
 
+    affficher_tab(tas->arbre);
+
+    /*
     modifier_cle(tas, 3, -31);
 
     affficher_tab(tas->arbre);
@@ -59,7 +63,7 @@ int main()
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
-
+*/
     return 0;
 }
 
@@ -154,7 +158,7 @@ int retirer_elt(tas_binaire_t *tas)
         rac = tas->arbre[0];
         tas->nb_elt--;
         tas->arbre[0] = tas->arbre[tas->nb_elt];
-        //entasser(tas, 0);
+        entasser(tas, 0);
     }
     else
     {
@@ -239,7 +243,28 @@ void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
         if (val_ajoutee < 0)
             detasser(tas, indice);
         else
+        {
             entasser(tas, indice);
+            entasser(tas, indice);
+        }
+    }
+    else
+        printf("modification impossible : indice trop petit\n");
+}
+
+void diminuer_cle(tas_binaire_t *tas, int indice, int nouv_key)
+{
+    if (indice < tas->nb_elt)
+    {
+        tas->arbre[indice] = nouv_key;
+        int i = indice;
+        int p_i = pere(i);
+        while (i > 1 && tas->arbre[p_i] > tas->arbre[i])
+        {
+            permute_a_b(&tas->arbre[i], &tas->arbre[p_i]);
+            i = p_i;
+            p_i = pere(i);
+        }
     }
     else
         printf("modification impossible : indice trop petit\n");
