@@ -88,18 +88,19 @@ int main()
     system("eog ./img.jpg 2> /dev/null");
 */
     //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
-/*
+
     printf("tableau non trie : ");
     affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
     tri_tas_min(tab_v, sizeof(tab_v) / sizeof(int));
     printf("tableau triee avec tri_tas_min: ");
     affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
-*/
+
+/*
     //tri avec qsort
     qsort(tab_v, sizeof tab_v / sizeof *tab_v, sizeof *tab_v, compare);
     printf("tableau triee avec qsort: ");
     affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
-
+*/
 
     return 0;
 }
