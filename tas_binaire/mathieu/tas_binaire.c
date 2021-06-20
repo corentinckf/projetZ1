@@ -2,10 +2,11 @@
 
 int main()
 {
-
+    //int t1[] = {1, 84, 700, 26, 44, 2, 72, 98, 10, 245, 631, 214, 578, 11, 99, 945};
+    //int t2[] = {1, 84, 700, 26, 44, 2, 72, 98, 10, 245, 631, 214, 578, 11, 99, 945};
     //int tab_bis[]= {912, 4, 3, 5, 44, 54, 21, 34, 67, 14};
     //init_tab(tab_v);
-
+    /*
     int tab_v[11];
 
     tab_v[0] = 48;
@@ -19,6 +20,7 @@ int main()
     tab_v[7] = 6;
     tab_v[8] = 100;
     tab_v[9] = 41;
+*/
     /*
     //remplir_tab(tab_v);
     printf("taille du tableau %ld\n", sizeof(tab_v) / sizeof(int));
@@ -88,19 +90,37 @@ int main()
     system("eog ./img.jpg 2> /dev/null");
 */
     //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
+    time_t debut;
+    time_t fin;
+    time_t tps_tri_tas_min;
+    time_t tps_qsort;
 
-    printf("tableau non trie : ");
-    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
-    tri_tas_min(tab_v, sizeof(tab_v) / sizeof(int));
+    int * t1 = malloc(sizeof(int)*NB_ELT_MAX);
+    int * t2 = malloc(sizeof(int)*NB_ELT_MAX);
+
+    init_tab(t1);
+    init_tab(t2);
+
+    debut = time(NULL);
+    //printf("tableau non trie : ");
+    //affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
+    tri_tas_min(t1, NB_ELT_MAX);
     printf("tableau triee avec tri_tas_min: ");
-    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
+    //affficher_tab(t1, NB_ELT_MAX);
+    fin = time(NULL);
+    tps_tri_tas_min = fin - debut;
 
-/*
     //tri avec qsort
-    qsort(tab_v, sizeof tab_v / sizeof *tab_v, sizeof *tab_v, compare);
+    //qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
+    debut = time(NULL);
+    qsort(t2, NB_ELT_MAX, sizeof *t2, compare);
     printf("tableau triee avec qsort: ");
-    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
-*/
+    //affficher_tab(t2,NB_ELT_MAX);
+    fin = time(NULL);
+    tps_qsort = fin - debut;
+
+    printf("temps : tri_tas_min=%ld s, qsort=%ld s\n", tps_tri_tas_min, tps_qsort);
+
 
     return 0;
 }
@@ -118,7 +138,7 @@ void init_tab(int tab[NB_ELT_MAX])
 {
     for (int i = 0; i < NB_ELT_MAX; i++)
     {
-        tab[i] = 0;
+        tab[i] = i;
     }
 }
 
@@ -139,13 +159,10 @@ int *creer_tas_b(int *tab_v, int nb_elt)
             tas[i + 1] = tab_v[i];
             tas[0] += (tab_v[i] != 0);
         }
-        fichier_graphiz(tas);
-        system("dot -Tjpg graph_tas.dot -o img.jpg");
-        system("eog ./img.jpg 2> /dev/null");
 
         for (int i = (tas[0] / 2); i > 0; i--)
         {
-            printf("tas[%d]=%d\n", i, tas[i]);
+            //printf("tas[%d]=%d\n", i, tas[i]);
             entasser(tas, i);
         }
     }
@@ -311,10 +328,7 @@ int *tri_tas_min(int *tab_valeur, int nb_elt)
 {
     int *tas = NULL;
     tas = creer_tas_b(tab_valeur, nb_elt);
-    affficher_tab(tas, NB_ELT_MAX);
-    fichier_graphiz(tas);
-    system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    //affficher_tab(tas, NB_ELT_MAX);
 
     if (tas != NULL)
     {
@@ -331,15 +345,14 @@ int *tri_tas_min(int *tab_valeur, int nb_elt)
     return tab_valeur;
 }
 
-
 /* fonction utilisateur de comparaison fournie a qsort() */
-static int compare (void const *a, void const *b)
+static int compare(void const *a, void const *b)
 {
-   /* definir des pointeurs type's et initialise's
+    /* definir des pointeurs type's et initialise's
       avec les parametres */
-   int const *pa = a;
-   int const *pb = b;
+    int const *pa = a;
+    int const *pb = b;
 
-   /* evaluer et retourner l'etat de l'evaluation (tri croissant) */
-   return *pa - *pb;
+    /* evaluer et retourner l'etat de l'evaluation (tri croissant) */
+    return *pa - *pb;
 }

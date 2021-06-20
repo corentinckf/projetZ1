@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NB_ELT_MAX 20
+#define NB_ELT_MAX 1000000
 
 /* Strucutre du tas binaire min
 tableaa avec case 0 = nb elt
