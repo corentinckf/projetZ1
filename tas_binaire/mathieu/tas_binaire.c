@@ -2,30 +2,37 @@
 
 int main()
 {
-    int tab_v[NB_ELT_MAX];
 
-    init_tab(tab_v);
+    //int tab_bis[]= {912, 4, 3, 5, 44, 54, 21, 34, 67, 14};
+    //init_tab(tab_v);
 
-    tab_v[1] = 12;
+    int tab_v[11];
+
+    tab_v[0] = 48;
+    tab_v[1] = 912;
+    tab_v[10] = 12;
     tab_v[2] = 24;
-    tab_v[3] = 345;
+    tab_v[3] = 98;
     tab_v[4] = 44;
     tab_v[5] = 58;
     tab_v[6] = 74;
     tab_v[7] = 6;
     tab_v[8] = 100;
     tab_v[9] = 41;
-
+    /*
     //remplir_tab(tab_v);
+    printf("taille du tableau %ld\n", sizeof(tab_v) / sizeof(int));
+    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
 
     int *tas = NULL;
 
-    tas = creer_tas_b(tab_v);
-    printf("\n\n tas cree\n\n\n");
+    tas = creer_tas_b(tab_v, sizeof(tab_v) / sizeof(int));
+    affficher_tab(tas, NB_ELT_MAX);
+    printf("\ntas cree\n");
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
-
+*/
     /*
     ajouter_elt(tas, 4);
     fichier_graphiz(tas);
@@ -59,14 +66,13 @@ int main()
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
 */
-    affficher_tab(tas);
 
     /*
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
 */
-
+    /*
     printf("valeur modifie tas[%d]=%d -> %d\n", 4, tas[4], 10);
     diminuer_cle(tas, 4, 10);
 
@@ -80,15 +86,21 @@ int main()
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("eog ./img.jpg 2> /dev/null");
+*/
+    //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
 
-    affficher_tab(tas);
+    printf("tableau non trie : ");
+    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
+    trie_tas_min(tab_v, sizeof(tab_v) / sizeof(int));
+    printf("tableau triee : ");
+    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
 
     return 0;
 }
 
-void affficher_tab(int tab[NB_ELT_MAX])
+void affficher_tab(int *tab, int nb_elt)
 {
-    for (int i = 0; i < NB_ELT_MAX; i++)
+    for (int i = 0; i < nb_elt; i++)
     {
         printf("%d ", tab[i]);
     }
@@ -104,7 +116,7 @@ void init_tab(int tab[NB_ELT_MAX])
 }
 
 //Creer le tas a partir d'un tableau de valeur, 1 si reussi, 0 sinon
-int *creer_tas_b(int tab_v[NB_ELT_MAX])
+int *creer_tas_b(int *tab_v, int nb_elt)
 {
     int *tas = NULL;
     tas = malloc(sizeof(int) * NB_ELT_MAX);
@@ -113,15 +125,20 @@ int *creer_tas_b(int tab_v[NB_ELT_MAX])
 
     if (tas != NULL)
     {
+
         tas[0] = 0;
-        for (int i = 1; i < NB_ELT_MAX; i++)
+        for (int i = 0; i < nb_elt; i++)
         {
-            tas[i] = tab_v[i];
+            tas[i+1] = tab_v[i];
             tas[0] += (tab_v[i] != 0);
         }
+        fichier_graphiz(tas);
+        system("dot -Tjpg graph_tas.dot -o img.jpg");
+        system("eog ./img.jpg 2> /dev/null");
 
-        for (int i = tas[0] / 2; i > 0; i--)
+        for (int i = (tas[0] / 2); i > 0; i--)
         {
+            printf("tas[%d]=%d\n", i, tas[i]);
             entasser(tas, i);
         }
     }
@@ -182,18 +199,21 @@ void entasser(int *tas, int i)
     int l = f_g(i);
     int r = f_d(i);
     int max = i;
-    /*
-    fichier_graphiz(tas);
-    system("dot -Tjp\ng graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
-    */
-    if (l <= tas[0] && tas[l] < tas[i])
+    //printf("tas[i]=%d, tas[l]=%d, tas[r]=%d\n", tas[i], tas[l], tas[r]);
+    if (tas[r] == 0 || tas[l] < tas[r])
     {
-        max = l;
+
+        if (l <= tas[0] && tas[l] < tas[i])
+        {
+            max = l;
+        }
     }
-    if (r <= tas[0] && tas[r] < tas[i])
+    else
     {
-        max = r;
+        if (r <= tas[0] && tas[r] < tas[i])
+        {
+            max = r;
+        }
     }
     if (max != i)
     {
@@ -278,4 +298,28 @@ void diminuer_cle(int *tas, int indice, int nouv_key)
     }
     else
         printf("modification impossible : indice trop petit\n");
+}
+
+int *trie_tas_min(int *tab_valeur, int nb_elt)
+{
+    int *tas = NULL;
+    tas = creer_tas_b(tab_valeur, nb_elt);
+    affficher_tab(tas, NB_ELT_MAX);
+    fichier_graphiz(tas);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("eog ./img.jpg 2> /dev/null");
+
+    if (tas != NULL)
+    {
+        int nb_elt = tas[0];
+        for (int i = 0; i < nb_elt; i++)
+        {
+            tab_valeur[i] = retirer_elt(tas);
+        }
+    }
+    else
+    {
+        printf("echec allocation malloc dans trie_tas_min\n");
+    }
+    return tab_valeur;
 }

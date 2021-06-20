@@ -23,11 +23,11 @@ system("eog ./img.jpg 2> /dev/null");
 
 */
 
-void affficher_tab(int tab[NB_ELT_MAX]);
+void affficher_tab(int *tab, int nb_elt);
 void remplir_tab(int tab[NB_ELT_MAX]);
 void init_tab(int tab[NB_ELT_MAX]);
 
-int *creer_tas_b(int tab[NB_ELT_MAX]);
+int *creer_tas_b(int *tab, int nb_elt);
 
 int f_d(int i);
 int f_g(int i);
@@ -45,5 +45,7 @@ void modifier_cle(int *tas, int indice, int val_ajoutee);
 void diminuer_cle(int *tas, int indice, int val_ajoutee);
 
 void fichier_graphiz(int *tas);
+
+int *trie_tas_min(int *tab_valeur, int nb_elt);
 
 #endif
