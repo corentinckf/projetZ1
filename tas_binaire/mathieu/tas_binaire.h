@@ -46,6 +46,8 @@ void diminuer_cle(int *tas, int indice, int val_ajoutee);
 
 void fichier_graphiz(int *tas);
 
-int *trie_tas_min(int *tab_valeur, int nb_elt);
+int *tri_tas_min(int *tab_valeur, int nb_elt);
+
+static int compare(void const *a, void const *b);
 
 #endif

@@ -88,12 +88,18 @@ int main()
     system("eog ./img.jpg 2> /dev/null");
 */
     //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
-
+/*
     printf("tableau non trie : ");
     affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
-    trie_tas_min(tab_v, sizeof(tab_v) / sizeof(int));
-    printf("tableau triee : ");
+    tri_tas_min(tab_v, sizeof(tab_v) / sizeof(int));
+    printf("tableau triee avec tri_tas_min: ");
     affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
+*/
+    //tri avec qsort
+    qsort(tab_v, sizeof tab_v / sizeof *tab_v, sizeof *tab_v, compare);
+    printf("tableau triee avec qsort: ");
+    affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
+
 
     return 0;
 }
@@ -129,7 +135,7 @@ int *creer_tas_b(int *tab_v, int nb_elt)
         tas[0] = 0;
         for (int i = 0; i < nb_elt; i++)
         {
-            tas[i+1] = tab_v[i];
+            tas[i + 1] = tab_v[i];
             tas[0] += (tab_v[i] != 0);
         }
         fichier_graphiz(tas);
@@ -300,7 +306,7 @@ void diminuer_cle(int *tas, int indice, int nouv_key)
         printf("modification impossible : indice trop petit\n");
 }
 
-int *trie_tas_min(int *tab_valeur, int nb_elt)
+int *tri_tas_min(int *tab_valeur, int nb_elt)
 {
     int *tas = NULL;
     tas = creer_tas_b(tab_valeur, nb_elt);
@@ -319,7 +325,20 @@ int *trie_tas_min(int *tab_valeur, int nb_elt)
     }
     else
     {
-        printf("echec allocation malloc dans trie_tas_min\n");
+        printf("echec allocation malloc dans tri_tas_min\n");
     }
     return tab_valeur;
+}
+
+
+/* fonction utilisateur de comparaison fournie a qsort() */
+static int compare (void const *a, void const *b)
+{
+   /* definir des pointeurs type's et initialise's
+      avec les parametres */
+   int const *pa = a;
+   int const *pb = b;
+
+   /* evaluer et retourner l'etat de l'evaluation (tri croissant) */
+   return *pa - *pb;
 }
