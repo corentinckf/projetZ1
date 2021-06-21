@@ -5,7 +5,7 @@ int main_partition()
 {
     int partition[2][NB_ELT_MAX];
     int hauteur[NB_ELT_MAX];
-    int classe[NB_ELT_MAX];
+    //int classe[NB_ELT_MAX];
     int x, y;
 
     creer_partition_arbo(partition, hauteur);

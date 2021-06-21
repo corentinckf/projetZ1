@@ -27,6 +27,7 @@ int main_connexe()
     creer_partition_arbo(part_connexe, hauteur_part);
     connexe_graph_couple(part_connexe, hauteur_part, graph);
     graphviz_affiche_arbo(part_connexe);
+    liberer_graph_couple(graph);
 
     return 0;
 }

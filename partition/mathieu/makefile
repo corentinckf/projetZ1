@@ -1,10 +1,13 @@
 CC=gcc
 OPT= -Wall -g
 
-prog : connexe.o partition.o  liste_chainee.o 
-	$(CC) $(OPT) connexe.o partition.o  liste_chainee.o -o prog
+prog : kruskal.o connexe.o partition.o  liste_chainee.o 
+	$(CC) $(OPT) kruskal.o connexe.o partition.o  liste_chainee.o -o prog
 
-connexe.o : connexe.c liste_chainee.h
+kruskal.o : kruskal.c kruskal.h
+	$(CC) $(OPT) -o kruskal.o -c kruskal.c
+
+connexe.o : connexe.c connexe.h
 	$(CC) $(OPT) -o connexe.o -c connexe.c
 
 partition.o : partition.c liste_chainee.h

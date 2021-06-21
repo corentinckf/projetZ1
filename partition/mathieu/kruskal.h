@@ -3,4 +3,6 @@
 
 #include "connexe.h"
 
+graph_couple_t * calcul_foret_couvrant(graph_couple_t *graph);
+
 #endif
