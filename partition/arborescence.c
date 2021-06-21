@@ -13,16 +13,6 @@ void creer(int *classes, int *hauteurs)
     }
 }
 
-void afficher_tab(int *tab)
-{
-    fprintf(stdout,"contenu du tableau : \t");
-    for (int i=0;i<TAILLE;i++)
-    {
-        fprintf(stdout,"%d\t",tab[i]);
-    }
-    fprintf(stdout,"\n");
-}
-
 void fusion(int i, int j, int *classes, int *hauteurs)
 {
     int hauteur1 = hauteurs[i];
@@ -69,14 +59,14 @@ int recuperer_classe(int i, int *classes)
     return classes[i];
 }
 
-int lister_classe(int indice, int *indices, int *classes, int *liste)
+void lister_classe(int indice, int *classes, int *liste)
 {
     int i = 0;
     for (int k=0;k<TAILLE;k++)
     {
         if (classes[k] == classes[indice])
         {
-            liste[i] = indices[k];
+            liste[i] = k;
             i++;
         }
     }
@@ -95,7 +85,7 @@ void afficher_elements(int *liste)
     fprintf(stdout,"\n");
 }
 
-void lister_partition(int *indices, int *classes, cellule_t *liste_classes[TAILLE])
+void lister_partition(int *classes, cellule_t *liste_classes[TAILLE])
 {
     cellule_t *tete = NULL;
     int classe;
@@ -104,7 +94,7 @@ void lister_partition(int *indices, int *classes, cellule_t *liste_classes[TAILL
     {
         classe = classes[k];
         tete = liste_classes[classe];
-        ADJ_TETE(&tete,indices[k]);
+        ADJ_TETE(&tete,k);
         liste_classes[classe] = tete;
     }
 }
@@ -122,20 +112,26 @@ void ADJ_TETE(cellule_t **ptete, int el)
     }
 }
 
-void fichier_graphiz(int *tas)
+void graph_partition(FILE *fichier, int *classes)
 {
-    FILE *fichier = NULL;
-    fichier = fopen("graph_tas.dot", "w");
-    
-    if (fichier == NULL)
-        exit(EXIT_FAILURE);
+    fprintf(fichier, "digraph {\n");
 
-    fprintf(fichier, "graph { ");
+    for (int k=0;k<TAILLE;k++)
+    {
+        if (k == classes[k])
+        {
+            fprintf(fichier,"\t%d -> %d\n",k,k);
+        }
+        else
+        {
+            fprintf(fichier,"\t%d -> %d\n",k,classes[k]);
+        }
+    }
+    fprintf(fichier, "}");
 }
 
 int main()
 {
-    int indices[TAILLE];
     int classes[TAILLE];
     int hauteurs[TAILLE];
     int elements_classe[TAILLE];
@@ -146,22 +142,29 @@ int main()
     {
         liste_classes[k] = NULL;
     }
-
-    //remplir tableau des indices
-    for (int i=0;i<TAILLE;i++)
+    
+    FILE *fichier = NULL;
+    fichier = fopen("graph_partition.dot", "w");
+    
+    if (fichier == NULL)
     {
-        indices[i] = i;
+        printf("erreur d'ouverture du fichier\n");
+        exit(EXIT_FAILURE);
     }
 
-    creer(classes,hauteurs);
-    afficher_tab(classes);
-    fusion(2,3,classes,hauteurs);
-    fusion(4,3,classes,hauteurs);
-    resultat = recuperer_classe(3,classes);
-    printf("elements de la classe 3 :\t");
-    lister_classe(3,indices,classes,elements_classe);
-    afficher_elements(elements_classe);
-    lister_partition(indices,classes,liste_classes);
+    if (fichier)
+    {      
+        creer(classes,hauteurs);
+        fusion(2,3,classes,hauteurs);
+        fusion(4,3,classes,hauteurs);
+        graph_partition(fichier,classes);
+        resultat = recuperer_classe(3,classes);
+        printf("elements de la classe 3 :\t");
+        lister_classe(3,classes,elements_classe);
+        afficher_elements(elements_classe);
+        lister_partition(classes,liste_classes);
+        fclose(fichier);
+    }
 
     return 0;
 }
