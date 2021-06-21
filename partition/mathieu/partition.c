@@ -5,22 +5,74 @@ int main()
     int partition[2][NB_ELT_MAX];
     int hauteur[NB_ELT_MAX];
     int classe[NB_ELT_MAX];
+    int x, y;
 
-    creer_partition(partition);
-    printf("%d\n", recuperer_classe(partition, 5));
-    afficher_partition(partition);
+    creer_partition_arbo(partition, hauteur);
 
-    printf("Fusion de %d et %d\n", 7,3);
-    fusion_arbo(partition, hauteur, 7, 3);
-    afficher_partition(partition);
+    graphviz_affiche(partition);
 
-    printf("nb_elt %d\n", lister_classe(partition, 3, classe));
+    //printf("%d\n", recuperer_classe(partition, 5));
+    //afficher_partition(partition);
+
+    x = 0;
+    y = 1;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 2;
+    y = 3;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 10;
+    y = 3;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 5;
+    y = 9;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 4;
+    y = 6;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 8;
+    y = 7;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 7;
+    y = 9;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    x = 6;
+    y = 8;
+    printf("Fusion de %d et %d\n", x, y);
+    fusion_arbo(partition, hauteur, x, y);
+    //afficher_partition(partition);
+    graphviz_affiche(partition);
+
+    //printf("nb_elt %d\n", lister_classe(partition, 3, classe));
 
     //lister_partition(partition);
-
-    fichier_graphviz(partition);
-    system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("display ./img.jpg 2> /dev/null");
 
     return 0;
 }
@@ -76,9 +128,37 @@ void fusion(int part[2][NB_ELT_MAX], int x, int y)
         printf("Erreur d'indice x=%d, i=%d et NB_ELT_MAX=%d\n", x, y, NB_ELT_MAX);
 }
 
-void fusion_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX],int x, int y)
+int recuperer_classe_arbo(int part[2][NB_ELT_MAX], int x)
 {
-//a faire
+    if (x != part[1][x])
+        return recuperer_classe_arbo(part, part[1][x]);
+    else
+        return part[1][x];
+}
+
+void fusion_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX], int x, int y)
+{
+    int c_x = recuperer_classe_arbo(part, x);
+    int c_y = recuperer_classe_arbo(part, y);
+    printf("c_x=%d, x=%d, hauteur=%d\n", c_x,x,hauteur[x]);
+    printf("c_y=%d, y=%d, hauteur=%d\n", c_y,y,hauteur[y]);
+    if (c_x != c_y)
+    {
+        if (hauteur[c_x] > hauteur[c_y])
+        {
+            part[1][c_y] = c_x;
+        }
+        else if (hauteur[c_x] < hauteur[c_y])
+        {
+            part[1][c_x] = c_y;
+        }
+        else
+        {
+            part[1][c_y] = c_x;
+            hauteur[c_x] +=1;
+            printf("hauteur de c_x=%d\n", hauteur[c_x]);
+        }
+    }
 }
 
 int lister_classe_a_partir_elt(int part[2][NB_ELT_MAX], int elt, int classe[NB_ELT_MAX])
@@ -91,13 +171,14 @@ int lister_classe_a_partir_elt(int part[2][NB_ELT_MAX], int elt, int classe[NB_E
         if (part[1][i] == v_classe)
         {
             classe[nb_elt] = part[0][i];
-            printf("| %d ", classe[i]);
+            printf("| %d ", classe[nb_elt]);
             nb_elt++;
         }
     }
     printf("|\n");
     return nb_elt;
 }
+
 int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX])
 {
     int nb_elt = 0;
@@ -107,7 +188,7 @@ int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX]
         if (part[1][i] == etiquette)
         {
             classe[nb_elt] = part[0][i];
-            printf("| %d ", classe[i]);
+            printf("| %d ", classe[nb_elt]);
             nb_elt++;
         }
     }
@@ -140,20 +221,28 @@ void lister_partition(int part[2][NB_ELT_MAX])
 void fichier_graphviz(int part[2][NB_ELT_MAX])
 {
     FILE *fichier = NULL;
-    fichier = fopen("graph_tas.dot", "w");
+    system("rm graph.dot");
+    fichier = fopen("graph.dot", "w");
     if (fichier == NULL)
         exit(EXIT_FAILURE);
 
-    int k = 1;
+    int k = 0;
 
     fprintf(fichier, "digraph { ");
     while (k < NB_ELT_MAX)
     {
-       // if (part[0][k] != part[1][k])
-            fprintf(fichier, "\n\t%d->%d", part[0][k], part[1][k]);
+        // if (part[0][k] != part[1][k])
+        fprintf(fichier, "\n\t%d->%d", part[0][k], part[1][k]);
         k++;
     }
     fprintf(fichier, "\n} ");
 
     fclose(fichier);
+}
+
+void graphviz_affiche(int part[2][NB_ELT_MAX])
+{
+    fichier_graphviz(part);
+    system("dot -Tjpg graph.dot -o img.jpg");
+    system("display ./img.jpg 2> /dev/null");
 }
