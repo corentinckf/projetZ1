@@ -1,9 +1,11 @@
 #include "util_sdl.h"
 
 #define LARGEUR_FENETRE 1000
-#define HAUTEUR_FENETRE 500
+#define HAUTEUR_FENETRE 1000
 #define MATCOL 100
-#define MATLIG 50
+#define MATLIG 100
+#define TAILLE_PIXEL 10
+#define TAILLE_PIXEL2 5
 #define NOM_FENETRE "Jeu de la vie corentin"
 
 #define TAUXDEFECONDITE 3
@@ -70,6 +72,17 @@ void draw(SDL_Renderer* renderer, Grille grille)
        }
 }   
 
+void placement_cellule_souris(int grille[MATLIG][MATCOL], int x_m, int y_m)
+{
+    int i = y_m / TAILLE_PIXEL;
+    int j = x_m / TAILLE_PIXEL;
+    if (i >= 0 && i < MATLIG)
+    {
+        if (j >= 0 && j < LARGEUR_FENETRE)
+            grille[i][j] = !grille[i][j];
+    }
+}
+
 int main(int argc, char **argv)
 {
     int code_retour_sdl;
@@ -113,10 +126,10 @@ int main(int argc, char **argv)
     {
         for(int j = 0; j < MATCOL;++j)
         {
-            int randint = rand() % 10;
+            /*int randint = rand() % 10;
             if(randint < TAUXDEFECONDITE)
                 g[i][j] = 1;
-            else
+            else*/
                 g[i][j] = 0;
         }
             
@@ -132,17 +145,80 @@ int main(int argc, char **argv)
 
     for(int a = 0; a < step;++a)
     {
+        
+
+    }
+    int x_mouse, y_mouse;
+
+    SDL_bool
+        program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
+        paused = 1;            // Booléen pour dire que le programme est en pause
+
+    while (program_on)
+    {                    // La boucle des évènements
+        SDL_Event event; // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event))
+        { // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+            // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type)
+            {                           // En fonction de la valeur du type de cet évènement
+            case SDL_QUIT:              // Un évènement simple, on a cliqué sur la x de la // fenêtre
+                program_on = SDL_FALSE; // Il est temps d'arrêter le programme
+                break;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_q:                // 'q'
+                    program_on = SDL_FALSE; // Il est temps d'arrêter le programme
+                    break;
+                case SDLK_p:          // 'p'
+                    paused = !paused; // basculement pause/unpause
+                    break;
+                case SDLK_SPACE:      // 'SPC'
+                    srand(time(NULL));
+                    for(int i = 0; i < MATLIG;++i)
+                    {
+                        for(int j = 0; j < MATCOL;++j)
+                        {
+                            int randint = rand() % 10;
+                            if(randint < TAUXDEFECONDITE)
+                                g[i][j] = 1;
+                            else
+                                g[i][j] = 0;
+                        }
+                            
+                    }
+                    break;
+                default:
+                    break;
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN: // Click souris
+                if (paused && SDL_GetMouseState(&x_mouse, &y_mouse) & SDL_BUTTON(SDL_BUTTON_LEFT))
+                { // Si c'est un click gauche
+                    placement_cellule_souris(g, x_mouse, y_mouse);
+                }
+                break;
+            default:
+                break;
+            }
+        }
         draw(renderer,*pg);
         SDL_RenderPresent(renderer);
-        SDL_Delay(100);
         SDL_SetRenderDrawColor(renderer,0, 0, 0,255);
-        SDL_RenderClear(renderer);
-        
-        next(*pg,*pn);
-        Grille *ptemp = pg;
-        pg = pn;
-        pn = ptemp;
 
+        if (!paused)
+        { // Si on n'est pas en pause
+            
+            SDL_RenderClear(renderer);
+            
+            next(*pg,*pn);
+            Grille *ptemp = pg;
+            pg = pn;
+            pn = ptemp;
+        }
+        SDL_Delay(10); // Petite pause
     }
     end_sdl(1,"Normal ending", window, renderer, &code_retour_sdl);
 
@@ -150,3 +226,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
