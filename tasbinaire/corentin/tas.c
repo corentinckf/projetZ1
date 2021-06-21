@@ -1,19 +1,5 @@
 #include "tas.h"
 
-tas_t * initTas(int max){
-    tas_t * tas = (tas_t *) malloc(sizeof(tas_t));
-    if(tas != NULL)
-    {
-        printf("oui");
-        tas->nb_courant = 0;
-        tas->nb_max = max;
-        tas->content = (element_t *) malloc(max * sizeof(element_t));
-        printf("oui2");
-    }
-    
-    return tas;
-}
-
 int parent(tas_t * tas, int el_indice)
 {   
     int res = 0;
@@ -29,36 +15,34 @@ int right(tas_t * tas, int el_indice)
     return (2*el_indice)+2;
 }
 
-int add(tas_t * tas, element_t el)
+void init_tas(tas_t * t)
 {
-    int code_retour = 1;
-    if(tas->nb_courant == tas->nb_max)
-    {
-        printf("pas assez de capacité");
-        code_retour = 0;
-    }
-        
-    else
-    {
-        /*On place l'élement à la fin de la liste dans un premmier temps*/
-        ++(tas->nb_courant);
-        int indice_dernier = tas->nb_courant - 1;
-        tas->content[indice_dernier] = el;
-
-        /*Ensuite on repositionne l'élément*/
-        while (tas->content[parent(tas,indice_dernier)] < tas->content[indice_dernier])
-        {
-            element_t temp = tas->content[parent(tas,indice_dernier)];
-            tas->content[parent(tas,indice_dernier)] = el;
-            tas->content[indice_dernier] = temp;
-            indice_dernier = parent(tas,indice_dernier);
-        }
-        
-    }
     
-    return code_retour;
 }
-//void delete(tas_t tas);
-//void aug(tas_t tas, element_t el);
-//void dim(tas_t tas, element_t el);
+
+
+void inserer_tas(tas_t * t, int el)
+{
+    
+    int i = t->nb_courant - 1, pere = parent(t,i), tmp;
+    /* On ajoute l'élément à la fin de la liste dans un premier temps*/
+    t->contenu[i] = el;
+    ++(t->nb_courant);
+
+    /*On récuperer la position du père*/
+    pere = parent(t,i);
+    while(i > 0 && t->contenu[pere] < t->contenu[i])
+    {
+        tmp = t->contenu[pere];
+        t->contenu[pere] = t->contenu[i];
+        t->contenu[i] = tmp;
+        i = pere;
+        pere = parent(t,i);
+    }
+}
+
+void supprimer_tas(tas_t * t)
+{
+
+}
 
