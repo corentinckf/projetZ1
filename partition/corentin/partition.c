@@ -89,11 +89,8 @@ void lister_partition(int ** partition, int taille_partition)
     cellule ** gigatab = (cellule **) malloc(taille_partition * sizeof(cellule *));
     for(int i = 0; i < taille_partition;++i)
     {
-        if(i == partition[1][i])
-        {
             cellule * cell = alloc_cellule(partition[0][i], NULL);
             ajouter_cellule(&gigatab[partition[1][i]], cell);
-        }
     }
 
     for(int i = 0; i < taille_partition;++i)
