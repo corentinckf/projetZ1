@@ -57,7 +57,30 @@ void fusion(int ** partition, int a, int b)
 }
     /*prend deux éléments x,y de E en entrée et fusionne les classes de x et de y
     dans la partition*/
-/*void lister_classe();*/
+ int * lister_classe(int ** partition, int taille_partition, int element)
+ {
+     int * liste = (int *) malloc((taille_partition + 1) * sizeof(int));
+     if(liste)
+     {
+         int classe = recuperer_classe(partition, element);
+         int nb_element = 1;
+         for(int i = 1; i < taille_partition;++i)
+         {
+             if(partition[1][i]==classe)
+             {
+                 printf("%d\n", partition[0][i]);
+                 liste[nb_element] = partition[0][i];
+                 ++nb_element;
+             }
+                
+         }
+
+         liste[0] = nb_element;
+         liste = (int *) realloc(liste, nb_element * sizeof(int));
+     }
+
+     return liste;
+ }
     /*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
 /*void lister_partition();*/
     /*renvoie la liste des classes*/

@@ -12,7 +12,7 @@ int recuperer_classe(int**, int);
 void fusion(int **, int, int);
     /*prend deux éléments x,y de E en entrée et fusionne les classes de x et de y
     dans la partition*/
-/*void lister_classe();*/
+int * lister_classe(int **, int, int);
     /*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
 /*void lister_partition();*/
     /*renvoie la liste des classes*/

@@ -15,8 +15,14 @@ int main()
     fusion(partition,3,10);
     fusion(partition,5,4);
     fusion(partition,7,9);
-    
+
     printf("\n");
     afficher_partition(partition,2,11);
+
+    int * list_class = lister_classe(partition, 11, 4);
+    for(int i = 0; i < list_class[0];++i)
+    {
+        printf("Element : %d \n", list_class[i]);
+    }
     return 0;
 }
