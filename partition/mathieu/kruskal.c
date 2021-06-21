@@ -1,6 +1,6 @@
 #include "kruskal.h"
 
-int main()
+int main_kruskal()
 {
     //generation graph couple
     graph_couple_t *graph = NULL;
@@ -27,6 +27,9 @@ int main()
 
 graph_couple_t *calcul_foret_couvrant(graph_couple_t *graph)
 {
+
+    //Ordonner par ordre croissant les arete de graph en fct de leur poids
+
 
     graph_couple_t *arbre = (graph_couple_t *)malloc(sizeof(graph_couple_t));
     int part[2][N];

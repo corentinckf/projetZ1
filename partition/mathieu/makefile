@@ -1,8 +1,13 @@
-CC=gcc
-OPT= -Wall -g
+CC= gcc
+OPT  = -c -Wextra -Wall -g
+SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
 
-prog : kruskal.o connexe.o partition.o  liste_chainee.o 
-	$(CC) $(OPT) kruskal.o connexe.o partition.o  liste_chainee.o -o prog
+prog : labyrinthe.o kruskal.o connexe.o partition.o  liste_chainee.o 
+	$(CC) labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o  $(SDL2) -o prog
+
+
+labyrinthe.o : labyrinthe.c labyrinthe.h
+	$(CC) $(OPT) -o labyrinthe.o -c labyrinthe.c
 
 kruskal.o : kruskal.c kruskal.h
 	$(CC) $(OPT) -o kruskal.o -c kruskal.c
