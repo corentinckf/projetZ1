@@ -1,9 +1,10 @@
 #ifndef __connexe_h__
 #define __connexe_h__
 
-#define LIGNES 8
-#define COLONNES 7
-#define TAILLE LIGNES*COLONNES
+#include "arborescence.h"
+
+#define LIGNES 4
+#define COLONNES 4
 
 void matrice_adjacence(int mat[LIGNES][COLONNES]);
 void graph_matrice(FILE *fichier, int mat[LIGNES][COLONNES]);
