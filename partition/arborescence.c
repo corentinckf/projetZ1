@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "arborescence.h"
 
-#define TAILLE 11
-
 void creer(int *classes, int *hauteurs)
 {
     for (int i=0;i<TAILLE;i++)
@@ -130,7 +128,7 @@ void graph_partition(FILE *fichier, int *classes)
     fprintf(fichier, "}");
 }
 
-int main()
+int main_arborescence()
 {
     int classes[TAILLE];
     int hauteurs[TAILLE];
@@ -157,6 +155,8 @@ int main()
         creer(classes,hauteurs);
         fusion(2,3,classes,hauteurs);
         fusion(4,3,classes,hauteurs);
+        //fusion(5,6,classes,hauteurs);
+        //fusion(5,2,classes,hauteurs);
         graph_partition(fichier,classes);
         resultat = recuperer_classe(3,classes);
         printf("elements de la classe 3 :\t");

@@ -1,7 +1,7 @@
 #ifndef __arborescence_h__
 #define __arborescence_h__
 
-#define TAILLE 11
+#define TAILLE 4
 
 typedef struct cellule{
     int indice;
