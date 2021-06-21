@@ -19,10 +19,12 @@ int main()
     printf("\n");
     afficher_partition(partition,2,11);
 
-    int * list_class = lister_classe(partition, 11, 4);
-    for(int i = 0; i < list_class[0];++i)
+    int * list_class = lister_classe(partition, 11, 5);
+    for(int i = 1; i < list_class[0];++i)
     {
         printf("Element : %d \n", list_class[i]);
     }
+
+    lister_partition(partition, 11);
     return 0;
 }

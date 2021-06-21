@@ -49,20 +49,21 @@ int recuperer_classe(int ** partition, int element)
 {
     return partition[1][element];
 }
-    
+
+/*prend deux éléments x,y de E en entrée et fusionne les classes de x et de y
+    dans la partition*/ 
 void fusion(int ** partition, int a, int b)
 {
     int classe = recuperer_classe(partition,a);
     partition[1][b] = classe;
 }
-    /*prend deux éléments x,y de E en entrée et fusionne les classes de x et de y
-    dans la partition*/
- int * lister_classe(int ** partition, int taille_partition, int element)
+    
+/*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
+ int * lister_classe(int ** partition, int taille_partition, int classe)
  {
      int * liste = (int *) malloc((taille_partition + 1) * sizeof(int));
      if(liste)
      {
-         int classe = recuperer_classe(partition, element);
          int nb_element = 1;
          for(int i = 1; i < taille_partition;++i)
          {
@@ -81,6 +82,25 @@ void fusion(int ** partition, int a, int b)
 
      return liste;
  }
-    /*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
-/*void lister_partition();*/
-    /*renvoie la liste des classes*/
+
+/*renvoie la liste des classes*/
+void lister_partition(int ** partition, int taille_partition)
+{
+    cellule ** gigatab = (cellule **) malloc(taille_partition * sizeof(cellule *));
+    for(int i = 0; i < taille_partition;++i)
+    {
+        if(i == partition[1][i])
+        {
+            cellule * cell = alloc_cellule(partition[0][i], NULL);
+            ajouter_cellule(&gigatab[partition[1][i]], cell);
+        }
+    }
+
+    for(int i = 0; i < taille_partition;++i)
+    {
+        printf("Classe %d :", i);
+        afficher_lch(gigatab[i], stdout);
+        printf("\n");
+    }
+}
+    

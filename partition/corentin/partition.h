@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "lch.h"
 
 /*Prototypes*/
 void afficher_partition(int **, int, int);
@@ -14,5 +15,5 @@ void fusion(int **, int, int);
     dans la partition*/
 int * lister_classe(int **, int, int);
     /*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
-/*void lister_partition();*/
+void lister_partition(int **, int);
     /*renvoie la liste des classes*/
