@@ -227,22 +227,8 @@ void entasser(int *tas, int i)
     {
         min = l;
     }
+void fichier_graphiz(int *tas)
 
-    if (r <= tas[0] && tas[r] < tas[min])
-    {
-        min = r;
-    }
-
-    if (min != i)
-    {
-        permute_a_b(&(tas[i]), &(tas[min]));
-        entasser(tas, min);
-    }
-}
-
-void detasser(int *tas, int i)
-{
-    int p = pere(i);
 
     int max = i;
 
