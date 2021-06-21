@@ -1,5 +1,7 @@
 #include "partition.h"
 
+
+
 void afficher_partition(int ** partition, int taille_ligne, int taille_colonne)
 {
 
@@ -13,14 +15,26 @@ void afficher_partition(int ** partition, int taille_ligne, int taille_colonne)
         fprintf(stdout, "\n");
     }
 }
+
+void afficher_hauteurs(int * hauteurs, int taille_partition)
+{
+    int         j;
+
+    for(j = 0; j < taille_partition;++j)
+    {
+        fprintf(stdout,"| %d |",hauteurs[j]);
+    }
+}
+
 /*crée à partir d'un ensemble E
     la partition où chaque élément est seul dans sa classe*/
-int ** creer(int taille_ensemble)
+int ** creer(int taille_ensemble, int ** hauteurs)
 {
     int         ** partition = (int **) malloc(2 * sizeof(int *));
+                   *hauteurs = (int *) calloc(taille_ensemble, sizeof(int));
     int            i = 0, j;
 
-    if(partition)
+    if(partition && hauteurs)
     {
         while(i < 2 && (partition[i] = (int *) malloc(taille_ensemble * sizeof(int))))
             ++i;
@@ -56,6 +70,27 @@ void fusion(int ** partition, int a, int b)
 {
     int classe = recuperer_classe(partition,a);
     partition[1][b] = classe;
+}
+
+void fusion_arbo(int ** partition,int * hauteurs, int a, int b)
+{
+    int classeA = recuperer_classe(partition, a);
+    int classeB = recuperer_classe(partition, b);
+
+    if(classeA != classeB)
+    {
+        if(hauteurs[classeA] > hauteurs[classeB])
+        {
+            partition[1][classeA] = classeB;
+        }else if(hauteurs[classeA] < hauteurs[classeB])
+        {   
+            partition[1][classeB] = classeA;
+        }else
+        {
+            partition[1][classeB] = classeA;
+            ++hauteurs[classeA];
+        }
+    }
 }
     
 /*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
