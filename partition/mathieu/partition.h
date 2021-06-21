@@ -21,6 +21,7 @@ void afficher_partition(int tab[2][NB_ELT_MAX]);
 void fusion(int part[2][NB_ELT_MAX], int x, int y);
 
 int recuperer_classe(int tab[2][NB_ELT_MAX], int elt);
+int lister_classe_a_partir_elt(int part[2][NB_ELT_MAX], int elt, int classe[NB_ELT_MAX]);
 int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX]);
 
 void lister_partition(int part[2][NB_ELT_MAX]);

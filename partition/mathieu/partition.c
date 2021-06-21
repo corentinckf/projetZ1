@@ -62,6 +62,23 @@ void fusion(int part[2][NB_ELT_MAX], int x, int y)
         printf("Erreur d'indice x=%d, i=%d et NB_ELT_MAX=%d\n", x, y, NB_ELT_MAX);
 }
 
+int lister_classe_a_partir_elt(int part[2][NB_ELT_MAX], int elt, int classe[NB_ELT_MAX])
+{
+    int nb_elt = 0;
+    int v_classe = recuperer_classe(part, elt);
+    printf("Classe %d : ", v_classe);
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        if (part[1][i] == v_classe)
+        {
+            classe[nb_elt] = part[0][i];
+            printf("| %d ", classe[i]);
+            nb_elt++;
+        }
+    }
+    printf("|\n");
+    return nb_elt;
+}
 int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX])
 {
     int nb_elt = 0;
