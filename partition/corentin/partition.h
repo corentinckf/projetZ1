@@ -1,3 +1,7 @@
+#ifndef __PARTITION_H__
+#define __PARTITION_H__
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "lch.h"
@@ -23,3 +27,6 @@ void lister_partition(int **, int);
     /*renvoie la liste des classes*/
 
 void visualiser_graph(int **, int);
+
+
+#endif

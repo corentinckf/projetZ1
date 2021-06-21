@@ -154,5 +154,8 @@ void visualiser_graph(int ** partition, int taille_classes)
     fprintf(fichier, "\n}");
 
     fclose(fichier);
+
+    system("dot -Tjpg graph.dot -o img.jpg");
+    system("display ./img.jpg 2> /dev/null");
 }
     
