@@ -12,9 +12,14 @@ system("display ./img.jpg 2> /dev/null");
 #include <stdio.h>
 #include <stdlib.h>
 
-int** creer_partition_tab( int n);
-void afficher_partition_tab(int **tab, int taille);
+#define NB_ELT_MAX 10
 
-void fichier_graphiz(int *tas);
+
+void creer_partition(int tab[2][NB_ELT_MAX]);
+void afficher_partition(int tab[2][NB_ELT_MAX]);
+
+int recuperer_classe(int tab[2][NB_ELT_MAX], int elt);
+
+void fichier_graphviz(int *tas);
 
 #endif

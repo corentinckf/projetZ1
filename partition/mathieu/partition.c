@@ -2,19 +2,19 @@
 
 int main()
 {
-    int **tab = NULL;
+    int part[2][NB_ELT_MAX];
     int n = 11;
-    tab = creer_partition_tab(n);
-    //printf("%d\n", tab[0][0]);
-    afficher_partition_tab(tab, n);
+    creer_partition(part);
+    printf("%d\n", recuperer_classe(part, 5));
+    afficher_partition(part);
 }
 
-void afficher_partition_tab(int **tab, int taille)
+void afficher_partition(int tab[2][NB_ELT_MAX])
 {
 
     for (int i = 0; i < 2; i++)
     {
-        for (int j = 0; j < taille; j++)
+        for (int j = 0; j < NB_ELT_MAX; j++)
         {
             printf("| %d |", tab[i][j]);
         }
@@ -23,40 +23,27 @@ void afficher_partition_tab(int **tab, int taille)
 }
 
 //Creeer un tableau pour partion renvoie 1 si reussi,0 sinon (echec)
-int **creer_partition_tab(int n)
+void creer_partition(int tab[2][NB_ELT_MAX])
 {
-    int k = 0;
-    int succes = 0;
-    int **tab;
-    tab = (int **)malloc(sizeof(int *) * 2);
-    if (tab != NULL)
+    for (int i = 0; i < NB_ELT_MAX; i++)
     {
-        while (k < 2)
-        {
-            tab[k] = (int *)malloc(sizeof(int) * n);
-            k++;
-        }
-        if (tab[0] == NULL || tab[1] == NULL)
-        {
-            printf("erreur de malloc\n");
-            free(tab[0]);
-            free(tab[1]);
-            free(tab);
-        }
-        else
-        {
-            for (int i = 0; i < n; i++)
-            {
-                tab[0][i] = i;
-                tab[1][i] = i;
-            }
-            succes = 1;
-        }
+        tab[0][i] = i;
+        tab[1][i] = i;
     }
-    return tab;
 }
 
-void fichier_graphiz(int *tas)
+//Renvoi -1 si elt en dehors de la taille, et sinon la classe associee
+int recuperer_classe(int tab[2][NB_ELT_MAX], int indice)
+{
+    int classe = -1;
+    if (indice < NB_ELT_MAX)
+        classe = tab[1][indice];
+    else
+        printf("Erreur indice indice\n");
+    return classe;
+}
+
+void fichier_graphviz(int *tas)
 {
     FILE *fichier = NULL;
     fichier = fopen("graph_tas.dot", "w");
