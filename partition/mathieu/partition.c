@@ -82,11 +82,10 @@ int lister_classe_a_partir_elt(int part[2][NB_ELT_MAX], int elt, int classe[NB_E
 int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX])
 {
     int nb_elt = 0;
-    int v_classe = recuperer_classe(part, etiquette);
-    printf("Classe %d : ", v_classe);
+    printf("Classe %d : ", etiquette);
     for (int i = 0; i < NB_ELT_MAX; i++)
     {
-        if (part[1][i] == v_classe)
+        if (part[1][i] == etiquette)
         {
             classe[nb_elt] = part[0][i];
             printf("| %d ", classe[i]);
