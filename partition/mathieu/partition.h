@@ -17,6 +17,7 @@ system("display ./img.jpg 2> /dev/null");
 
 void creer_partition(int tab[2][NB_ELT_MAX]);
 void afficher_partition(int tab[2][NB_ELT_MAX]);
+void fusion(int part[2][NB_ELT_MAX], int x, int y);
 
 int recuperer_classe(int tab[2][NB_ELT_MAX], int elt);
 
