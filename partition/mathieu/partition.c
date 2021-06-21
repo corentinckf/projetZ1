@@ -1,6 +1,5 @@
 #include "partition.h"
 
-
 int main_partition()
 {
     int partition[2][NB_ELT_MAX];
@@ -10,7 +9,7 @@ int main_partition()
 
     creer_partition_arbo(partition, hauteur);
 
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     //printf("%d\n", recuperer_classe(partition, 5));
     //afficher_partition(partition);
@@ -20,56 +19,56 @@ int main_partition()
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 2;
     y = 3;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 10;
     y = 3;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 5;
     y = 9;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 4;
     y = 6;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 8;
     y = 7;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 7;
     y = 9;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     x = 6;
     y = 8;
     printf("Fusion de %d et %d\n", x, y);
     fusion_arbo(partition, hauteur, x, y);
     //afficher_partition(partition);
-    graphviz_affiche(partition);
+    graphviz_affiche_arbo(partition);
 
     //printf("nb_elt %d\n", lister_classe(partition, 3, classe));
 
@@ -77,7 +76,6 @@ int main_partition()
 
     return 0;
 }
-
 
 void afficher_partition(int part[2][NB_ELT_MAX])
 {
@@ -125,7 +123,7 @@ int recuperer_classe(int part[2][NB_ELT_MAX], int indice)
 void fusion(int part[2][NB_ELT_MAX], int x, int y)
 {
     if (x < NB_ELT_MAX && y < NB_ELT_MAX)
-        part[1][y] = recuperer_classe(part, x);
+        part[1][MAX(x, y)] = recuperer_classe(part, MIN(y, x));
     else
         printf("Erreur d'indice x=%d, i=%d et NB_ELT_MAX=%d\n", x, y, NB_ELT_MAX);
 }
