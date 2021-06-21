@@ -25,6 +25,10 @@ int main()
         printf("Element : %d \n", list_class[i]);
     }
 
-    lister_partition(partition, 11);
+    visualiser_graph(partition, 11);
+    system("dot -Tjpg graph_partition.dot -o img.jpg");
+    system("display ./img.jpg 2> /dev/null");
+
+    //lister_partition(partition, 11);
     return 0;
 }

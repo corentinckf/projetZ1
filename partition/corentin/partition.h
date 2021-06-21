@@ -17,3 +17,5 @@ int * lister_classe(int **, int, int);
     /*prend en entrée une étiquette de classe, et renvoie les éléments de cette classe,*/
 void lister_partition(int **, int);
     /*renvoie la liste des classes*/
+
+void visualiser_graph(int **, int);

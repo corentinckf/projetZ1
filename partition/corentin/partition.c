@@ -103,4 +103,24 @@ void lister_partition(int ** partition, int taille_partition)
         printf("\n");
     }
 }
+
+void visualiser_graph(int ** partition, int taille_classes)
+{
+    FILE * fichier = NULL;
+    fichier = fopen("graph_partition.dot", "w");
+    if(fichier == NULL)
+        exit(EXIT_FAILURE);
+    
+
+    fprintf(fichier, "digraph {\n");
+
+    for(int i = 0;i <taille_classes;++i)
+    {
+        fprintf(fichier, "\n\t%d->%d", partition[0][i], partition[1][i]);
+    }
+
+    fprintf(fichier, "\n}");
+
+    fclose(fichier);
+}
     
