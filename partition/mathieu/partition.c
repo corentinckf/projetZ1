@@ -3,19 +3,24 @@
 int main()
 {
     int partition[2][NB_ELT_MAX];
+    int hauteur[NB_ELT_MAX];
     int classe[NB_ELT_MAX];
-    int n = 11;
+
     creer_partition(partition);
     printf("%d\n", recuperer_classe(partition, 5));
     afficher_partition(partition);
 
-    printf("Fusion de %d et %d\n", 3, 7);
-    fusion(partition, 3, 7);
+    printf("Fusion de %d et %d\n", 7,3);
+    fusion_arbo(partition, hauteur, 7, 3);
     afficher_partition(partition);
 
     printf("nb_elt %d\n", lister_classe(partition, 3, classe));
 
-    lister_partition(partition);
+    //lister_partition(partition);
+
+    fichier_graphviz(partition);
+    system("dot -Tjpg graph_tas.dot -o img.jpg");
+    system("display ./img.jpg 2> /dev/null");
 
     return 0;
 }
@@ -42,6 +47,15 @@ void creer_partition(int part[2][NB_ELT_MAX])
         part[1][i] = i;
     }
 }
+void creer_partition_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX])
+{
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        hauteur[i] = 0;
+        part[0][i] = i;
+        part[1][i] = i;
+    }
+}
 
 //Renvoi -1 si elt en dehors de la taille, et sinon la classe associee
 int recuperer_classe(int part[2][NB_ELT_MAX], int indice)
@@ -60,6 +74,11 @@ void fusion(int part[2][NB_ELT_MAX], int x, int y)
         part[1][y] = recuperer_classe(part, x);
     else
         printf("Erreur d'indice x=%d, i=%d et NB_ELT_MAX=%d\n", x, y, NB_ELT_MAX);
+}
+
+void fusion_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX],int x, int y)
+{
+//a faire
 }
 
 int lister_classe_a_partir_elt(int part[2][NB_ELT_MAX], int elt, int classe[NB_ELT_MAX])
@@ -98,7 +117,7 @@ int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX]
 
 void lister_partition(int part[2][NB_ELT_MAX])
 {
-    cellule_t **classe = malloc(sizeof(cellule_t)*NB_ELT_MAX);
+    cellule_t **classe = malloc(sizeof(cellule_t) * NB_ELT_MAX);
     cellule_t *cel;
     //cellule_t *classe[50];
 
@@ -118,7 +137,7 @@ void lister_partition(int part[2][NB_ELT_MAX])
     }
 }
 
-void fichier_graphviz(int *tas)
+void fichier_graphviz(int part[2][NB_ELT_MAX])
 {
     FILE *fichier = NULL;
     fichier = fopen("graph_tas.dot", "w");
@@ -126,18 +145,15 @@ void fichier_graphviz(int *tas)
         exit(EXIT_FAILURE);
 
     int k = 1;
-    /*
-    fprintf(fichier, "graph { ");
-    while (k <= tas[0])
-    {
-        if (tas[k] > 0 && tas[f_g(k)] > 0 && f_g(k) <= tas[0])
-            fprintf(fichier, "\n\t%d--%d", tas[k], tas[f_g(k)]);
 
-        if (tas[k] > 0 && tas[f_d(k)] > 0 && f_d(k) <= tas[0])
-            fprintf(fichier, "\n\t%d--%d", tas[k], tas[f_d(k)]);
+    fprintf(fichier, "digraph { ");
+    while (k < NB_ELT_MAX)
+    {
+       // if (part[0][k] != part[1][k])
+            fprintf(fichier, "\n\t%d->%d", part[0][k], part[1][k]);
         k++;
     }
     fprintf(fichier, "\n} ");
-*/
+
     fclose(fichier);
 }
