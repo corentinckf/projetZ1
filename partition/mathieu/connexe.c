@@ -1,6 +1,6 @@
 #include "connexe.h"
 
-int main()
+int main_connexe()
 {
     srand(48);
 
@@ -178,4 +178,10 @@ void graphviz_affiche_graph_couple(graph_couple_t *graph)
     fichier_graphviz_graph_couple(graph);
     system("dot -Tjpg graph.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
+}
+
+void liberer_graph_couple(graph_couple_t *graph)
+{
+    free(graph->liste_couple);
+    free(graph);
 }

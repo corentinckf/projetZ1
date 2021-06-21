@@ -20,6 +20,8 @@ system("display ./img.jpg 2> /dev/null");
 
 #define NB_ELT_MAX 20
 
+int main_partition();
+
 void creer_partition(int tab[2][NB_ELT_MAX]);
 void creer_partition_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX]);
 

@@ -19,9 +19,11 @@ typedef struct graph_couple
     couple_t *liste_couple;
 } graph_couple_t;
 
-#define N 20
+#define N NB_ELT_MAX //def dans partition.h
 #define NB_LIGNE_MAT N
 #define NB_COLONNE_MAT N
+
+int main_connexe();
 
 void afficher_matrice(int mat[NB_LIGNE_MAT][NB_COLONNE_MAT]);
 
@@ -36,5 +38,7 @@ void connexe_graph_couple(int part_connexe[2][N], int hauteur_part[N], graph_cou
 
 void fichier_graphviz_graph_couple(graph_couple_t *graph);
 void graphviz_affiche_graph_couple(graph_couple_t *graph);
+
+void liberer_graph_couple(graph_couple_t *graph);
 
 #endif

@@ -1,7 +1,7 @@
 #include "partition.h"
 
-/*
-int main()
+
+int main_partition()
 {
     int partition[2][NB_ELT_MAX];
     int hauteur[NB_ELT_MAX];
@@ -77,7 +77,7 @@ int main()
 
     return 0;
 }
-*/
+
 
 void afficher_partition(int part[2][NB_ELT_MAX])
 {
