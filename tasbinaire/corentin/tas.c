@@ -15,11 +15,27 @@ int right(tas_t * tas, int el_indice)
     return (2*el_indice)+2;
 }
 
-void init_tas(tas_t * t)
+void echanger(int * a, int * b)
 {
-    
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
+void init_tas(tas_t * t, int * liste, int taille)
+{
+    int i;
+    t->contenu = (int *) malloc(taille * sizeof(int));
+    if(t->contenu)
+    {
+        for(i = 0; liste[i] != '\0')
+        {
+            t->contenu[i] = liste[i];
+            ++t->nb_courant;
+        }
+    }
+    
+}
 
 void inserer_tas(tas_t * t, int el)
 {
@@ -33,16 +49,11 @@ void inserer_tas(tas_t * t, int el)
     pere = parent(t,i);
     while(i > 0 && t->contenu[pere] < t->contenu[i])
     {
-        tmp = t->contenu[pere];
-        t->contenu[pere] = t->contenu[i];
-        t->contenu[i] = tmp;
+        echanger(&t->contenu[i], &t->contenu[pere]);
         i = pere;
         pere = parent(t,i);
     }
 }
 
-void supprimer_tas(tas_t * t)
-{
-
-}
+//void supprimer_tas(tas_t * t){}
 
