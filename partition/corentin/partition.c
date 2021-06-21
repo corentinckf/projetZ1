@@ -13,8 +13,9 @@ void afficher_partition(int ** partition, int taille_ligne, int taille_colonne)
         fprintf(stdout, "\n");
     }
 }
-
-int ** creer(int * ensemble, int taille_ensemble)
+/*crée à partir d'un ensemble E
+    la partition où chaque élément est seul dans sa classe*/
+int ** creer(int taille_ensemble)
 {
     int         ** partition = (int **) malloc(2 * sizeof(int *));
     int            i = 0, j;
@@ -33,23 +34,27 @@ int ** creer(int * ensemble, int taille_ensemble)
         /*Remplissage partition de base*/
         for(i = 0; i < taille_ensemble;++i)
         {
-            partition[0][i] = ensemble[i];
-            partition[1][i] = ensemble[i];
+            partition[0][i] = i;
+            partition[1][i] = i;
         }
     }
     
     return partition;
 
 }
-    /*crée à partir d'un ensemble E
-    la partition où chaque élément est seul dans sa classe*/
+
+/*prend en entrée un élément x∈E et renvoie un identifiant unique de la classe à laquelle appartient x
+    */
 int recuperer_classe(int ** partition, int element)
 {
-
+    return partition[1][element];
 }
-    /*prend en entrée un élément x∈E et renvoie un identifiant unique de la classe à laquelle appartient x
-    */
-/*void fusion();*/
+    
+void fusion(int ** partition, int a, int b)
+{
+    int classe = recuperer_classe(partition,a);
+    partition[1][b] = classe;
+}
     /*prend deux éléments x,y de E en entrée et fusionne les classes de x et de y
     dans la partition*/
 /*void lister_classe();*/
