@@ -3,15 +3,21 @@
 int main()
 {
     int partition[2][NB_ELT_MAX];
+    int classe[NB_ELT_MAX];
     int n = 11;
     creer_partition(partition);
     printf("%d\n", recuperer_classe(partition, 5));
     afficher_partition(partition);
 
-    printf("Fusion de %d et %d\n", 3,7);
-    fusion(partition, 3,7);
+    printf("Fusion de %d et %d\n", 3, 7);
+    fusion(partition, 3, 7);
     afficher_partition(partition);
-    
+
+    printf("nb_elt %d\n", lister_classe(partition, 3, classe));
+
+    lister_partition(partition);
+
+    return 0;
 }
 
 void afficher_partition(int part[2][NB_ELT_MAX])
@@ -54,6 +60,46 @@ void fusion(int part[2][NB_ELT_MAX], int x, int y)
         part[1][y] = recuperer_classe(part, x);
     else
         printf("Erreur d'indice x=%d, i=%d et NB_ELT_MAX=%d\n", x, y, NB_ELT_MAX);
+}
+
+int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX])
+{
+    int nb_elt = 0;
+    int v_classe = recuperer_classe(part, etiquette);
+    printf("Classe %d : ", v_classe);
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        if (part[1][i] == v_classe)
+        {
+            classe[nb_elt] = part[0][i];
+            printf("| %d ", classe[i]);
+            nb_elt++;
+        }
+    }
+    printf("|\n");
+    return nb_elt;
+}
+
+void lister_partition(int part[2][NB_ELT_MAX])
+{
+    cellule_t **classe = malloc(sizeof(cellule_t)*NB_ELT_MAX);
+    cellule_t *cel;
+    //cellule_t *classe[50];
+
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        classe[i] = NULL;
+    }
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        cel = creer_cellule(part[0][i]);
+        ADJ_LCH(cel, &classe[part[1][i]]);
+    }
+
+    for (int i = 0; i < NB_ELT_MAX; i++)
+    {
+        afficher_lch(&classe[i]);
+    }
 }
 
 void fichier_graphviz(int *tas)
