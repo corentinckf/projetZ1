@@ -6,7 +6,7 @@ int main()
     //int t2[] = {1, 84, 700, 26, 44, 2, 72, 98, 10, 245, 631, 214, 578, 11, 99, 945};
     //int tab_bis[]= {912, 4, 3, 5, 44, 54, 21, 34, 67, 14};
     //init_tab(tab_v);
-    /*
+
     int tab_v[11];
 
     tab_v[0] = 48;
@@ -20,8 +20,7 @@ int main()
     tab_v[7] = 6;
     tab_v[8] = 100;
     tab_v[9] = 41;
-*/
-    /*
+
     //remplir_tab(tab_v);
     printf("taille du tableau %ld\n", sizeof(tab_v) / sizeof(int));
     affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
@@ -33,31 +32,31 @@ int main()
     printf("\ntas cree\n");
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
-*/
+    system("display ./img.jpg 2> /dev/null");
+
     /*
     ajouter_elt(tas, 4);
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
     printf("\n\n fin ajout 4\n");
 
     ajouter_elt(tas, 999);
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
     printf("\n\n fin ajout 999\n");
 
     ajouter_elt(tas, 60);
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
     printf("\n\n fin ajout 60\n");
 
     ajouter_elt(tas, 10);
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
     printf("\n\n fin ajout 10\n");
 */
 
@@ -66,13 +65,13 @@ int main()
     printf("valeur retiree %d\n", retirer_elt(tas));
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
 */
 
     /*
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
 */
     /*
     printf("valeur modifie tas[%d]=%d -> %d\n", 4, tas[4], 10);
@@ -80,14 +79,14 @@ int main()
 
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
 
     printf("valeur modifie tas[%d]=%d, et nouvelle valeur %d\n", 3, tas[3], 2);
     diminuer_cle(tas, 3, 2);
 
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
-    system("eog ./img.jpg 2> /dev/null");
+    system("display ./img.jpg 2> /dev/null");
 */
     //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
     time_t debut;
@@ -95,8 +94,8 @@ int main()
     time_t tps_tri_tas_min;
     time_t tps_qsort;
 
-    int * t1 = malloc(sizeof(int)*NB_ELT_MAX);
-    int * t2 = malloc(sizeof(int)*NB_ELT_MAX);
+    int *t1 = malloc(sizeof(int) * NB_ELT_MAX);
+    int *t2 = malloc(sizeof(int) * NB_ELT_MAX);
 
     init_tab(t1);
     init_tab(t2);
@@ -120,7 +119,6 @@ int main()
     tps_qsort = fin - debut;
 
     printf("temps : tri_tas_min=%ld s, qsort=%ld s\n", tps_tri_tas_min, tps_qsort);
-
 
     return 0;
 }
@@ -222,27 +220,23 @@ void entasser(int *tas, int i)
 {
     int l = f_g(i);
     int r = f_d(i);
-    int max = i;
+    int min = i;
     //printf("tas[i]=%d, tas[l]=%d, tas[r]=%d\n", tas[i], tas[l], tas[r]);
-    if (tas[r] == 0 || tas[l] < tas[r])
-    {
 
-        if (l <= tas[0] && tas[l] < tas[i])
-        {
-            max = l;
-        }
-    }
-    else
+    if (l <= tas[0] && tas[l] < tas[i])
     {
-        if (r <= tas[0] && tas[r] < tas[i])
-        {
-            max = r;
-        }
+        min = l;
     }
-    if (max != i)
+
+    if (r <= tas[0] && tas[r] < tas[min])
     {
-        permute_a_b(&(tas[i]), &(tas[max]));
-        entasser(tas, max);
+        min = r;
+    }
+
+    if (min != i)
+    {
+        permute_a_b(&(tas[i]), &(tas[min]));
+        entasser(tas, min);
     }
 }
 

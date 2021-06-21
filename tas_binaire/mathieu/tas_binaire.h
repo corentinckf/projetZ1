@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NB_ELT_MAX 1000000
+#define NB_ELT_MAX 100
 
 /* Strucutre du tas binaire min
 tableaa avec case 0 = nb elt
@@ -19,7 +19,7 @@ dot -Tjpg graph_tas.dot -o img.jpg
 
 fichier_graphiz(tas);
 system("dot -Tjpg graph_tas.dot -o img.jpg");
-system("eog ./img.jpg 2> /dev/null");
+system("display ./img.jpg 2> /dev/null");
 
 */
 
