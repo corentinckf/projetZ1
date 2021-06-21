@@ -1,5 +1,6 @@
 #include "partition.h"
 
+/*
 int main()
 {
     int partition[2][NB_ELT_MAX];
@@ -76,6 +77,7 @@ int main()
 
     return 0;
 }
+*/
 
 void afficher_partition(int part[2][NB_ELT_MAX])
 {
@@ -130,18 +132,18 @@ void fusion(int part[2][NB_ELT_MAX], int x, int y)
 
 int recuperer_classe_arbo(int part[2][NB_ELT_MAX], int x)
 {
-    if (x != part[1][x])
-        return recuperer_classe_arbo(part, part[1][x]);
-    else
+    if (x == part[1][x])
         return part[1][x];
+    else
+        return recuperer_classe_arbo(part, part[1][x]);
 }
 
 void fusion_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX], int x, int y)
 {
     int c_x = recuperer_classe_arbo(part, x);
     int c_y = recuperer_classe_arbo(part, y);
-    printf("c_x=%d, x=%d, hauteur=%d\n", c_x,x,hauteur[x]);
-    printf("c_y=%d, y=%d, hauteur=%d\n", c_y,y,hauteur[y]);
+    //printf("c_x=%d, x=%d, hauteur=%d\n", c_x, x, hauteur[x]);
+    //printf("c_y=%d, y=%d, hauteur=%d\n", c_y, y, hauteur[y]);
     if (c_x != c_y)
     {
         if (hauteur[c_x] > hauteur[c_y])
@@ -155,9 +157,9 @@ void fusion_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX], int x, int y)
         else
         {
             part[1][c_y] = c_x;
-            hauteur[c_x] +=1;
-            printf("hauteur de c_x=%d\n", hauteur[c_x]);
+            hauteur[c_x] += 1;
         }
+        //afficher_partition(part);
     }
 }
 
@@ -218,7 +220,7 @@ void lister_partition(int part[2][NB_ELT_MAX])
     }
 }
 
-void fichier_graphviz(int part[2][NB_ELT_MAX])
+void fichier_graphviz_arbo(int part[2][NB_ELT_MAX])
 {
     FILE *fichier = NULL;
     system("rm graph.dot");
@@ -231,7 +233,6 @@ void fichier_graphviz(int part[2][NB_ELT_MAX])
     fprintf(fichier, "digraph { ");
     while (k < NB_ELT_MAX)
     {
-        // if (part[0][k] != part[1][k])
         fprintf(fichier, "\n\t%d->%d", part[0][k], part[1][k]);
         k++;
     }
@@ -240,9 +241,9 @@ void fichier_graphviz(int part[2][NB_ELT_MAX])
     fclose(fichier);
 }
 
-void graphviz_affiche(int part[2][NB_ELT_MAX])
+void graphviz_affiche_arbo(int part[2][NB_ELT_MAX])
 {
-    fichier_graphviz(part);
+    fichier_graphviz_arbo(part);
     system("dot -Tjpg graph.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
 }

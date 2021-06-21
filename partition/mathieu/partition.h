@@ -3,6 +3,7 @@
 
 //gcc partition.c -o partition -Wall -Wextra
 /*
+
 fichier_graphviz(tas);
 system("dot -Tjpg graph_tas.dot -o img.jpg");
 system("display ./img.jpg 2> /dev/null");
@@ -17,7 +18,7 @@ system("display ./img.jpg 2> /dev/null");
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
-#define NB_ELT_MAX 11
+#define NB_ELT_MAX 20
 
 void creer_partition(int tab[2][NB_ELT_MAX]);
 void creer_partition_arbo(int part[2][NB_ELT_MAX], int hauteur[NB_ELT_MAX]);
@@ -36,7 +37,7 @@ int lister_classe(int part[2][NB_ELT_MAX], int etiquette, int classe[NB_ELT_MAX]
 
 void lister_partition(int part[2][NB_ELT_MAX]);
 
-void fichier_graphviz(int part[2][NB_ELT_MAX]);
-void graphviz_affiche(int part[2][NB_ELT_MAX]);
+void fichier_graphviz_arbo(int part[2][NB_ELT_MAX]);
+void graphviz_affiche_arbo(int part[2][NB_ELT_MAX]);
 
 #endif
