@@ -82,8 +82,8 @@ void fusion(int ** partition, int a, int b)
 
 void fusion_arbo(int ** partition,int * hauteurs, int a, int b)
 {
-    int classeA = recuperer_classe(partition, a);
-    int classeB = recuperer_classe(partition, b);
+    int classeA = recuperer_classe_arbo(partition, a);
+    int classeB = recuperer_classe_arbo(partition, b);
 
     if(classeA != classeB)
     {

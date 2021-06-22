@@ -8,12 +8,12 @@
 int main()
 {
     srand(17091999);
-    //graphe_t * graphe = init_graphe_labyrinth(4, 5);
-    graphe_t * graphe = initialiser_graphe(10);
-    afficher_graphe(graphe);
-    //fisher_yates_shuffle(graphe);
+    graphe_t * graphe = init_graphe_labyrinth(10, 10);
+    //graphe_t * graphe = initialiser_graphe(10);
+    //afficher_graphe(graphe);
+    fisher_yates_shuffle(graphe);
     /*afficher_graphe(graphe);*/
-    /*graphe_t * foret = kruskal(graphe);
-    afficher_graphe(foret);*/
+    graphe_t * foret = kruskal(graphe);
+    afficher_graphe(foret);
     return 0;
 }
