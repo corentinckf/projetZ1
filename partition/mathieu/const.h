@@ -4,12 +4,12 @@
 #define HAUTEUR_FENETRE 800
 #define LARGEUR_FENETRE 1000
 
-#define NB_LIGNE_LABY 4
-#define NB_COLONNE_LABY 5
+#define NB_LIGNE_LABY 10
+#define NB_COLONNE_LABY 10
 
-#define NB_ELT_MAX (NB_LIGNE_LABY *NB_COLONNE_LABY)
+#define NB_ELT_MAX (NB_LIGNE_LABY * NB_COLONNE_LABY)
 
-#define N NB_ELT_MAX //def dans partition.h
+#define N NB_ELT_MAX 
 #define NB_LIGNE_MAT N
 #define NB_COLONNE_MAT N
 

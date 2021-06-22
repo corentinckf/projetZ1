@@ -11,11 +11,11 @@
 
 enum murs
 {
-    rien,          //0
-    mur_est,       //1
-    mur_nord,      //2
+    rien = 0,      //0
+    mur_est = 1,   //1
+    mur_nord = 2,  //2
     mur_ouest = 4, //4
-    mur_sud = 8,
+    mur_sud = 8    //8
 };
 
 int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);

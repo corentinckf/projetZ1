@@ -39,6 +39,5 @@ void graphviz_affiche_graph_couple(graph_couple_t *graph);
 
 void liberer_graph_couple(graph_couple_t *graph);
 
-int sont_voisins(int i, int j);
 
 #endif

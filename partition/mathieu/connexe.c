@@ -180,44 +180,6 @@ graph_couple_t *init_graph_couple_alea()
     return graph_couple;
 }
 
-//inutile
-int sont_voisins(int a, int b)
-{
-    int res = 0;
-    int i_a = a / NB_COLONNE_LABY;
-    int j_a = a % NB_COLONNE_LABY;
-    int i_b = b / NB_COLONNE_LABY;
-    int j_b = b % NB_COLONNE_LABY;
-    printf("a=%d : i,j=%d,%d\n", a, i_a, j_a);
-    printf("b=%d : i,j=%d,%d\n", b, i_b, j_b);
-    if (j_a == j_b)
-    {
-        if (i_b - i_a == 1)
-            res = 1; //a mur droite
-        else if (i_b - i_a == -1)
-            res = 4; //a mur gauche
-    }
-    else
-    {
-        if (i_b == i_a)
-        {
-            if (j_b - j_a == 5)
-                res = 8; //a mur bas
-            else if (j_b - j_a == -5)
-                res = 2; //a mur haut
-        }
-    }
-
-    /*
-    if (abs(a - b) == 1 && (a + b + 1 % NB_COLONNE_LABY) != 0)
-        res = 1;
-    if (abs(a - b) == NB_COLONNE_LABY)
-        res = 1;
-    //printf("a=%d, b=%d, abs(a-b)=%d,  (a + b + 1 % NB_COLONNE_LABY)=%d, abs(a - b) \% NB_COLONNE_LABY=%d,  res=%d\n", a, b, abs(a - b), (a + b + 1 % NB_COLONNE_LABY), abs(a - b) % NB_COLONNE_LABY, res);
-    */
-    return res;
-}
-
 void connexe_graph_couple(int part_connexe[2][N], int hauteur_part[N], graph_couple_t *graph)
 {
     for (int i = 0; i < graph->nb_arete; i++)
