@@ -2,6 +2,9 @@
 
 int main()
 {
+
+    srand(48);
+    //srand(time(NULL));
     //main_kruskal();
 
     //generation graph couple
@@ -11,16 +14,24 @@ int main()
 
     melange_fisher_yates_arete(graph);
 
+/*
     //en calculer une forêt couvrante de poids minimal
     graph_couple_t *arbre_couvrant = NULL;
     arbre_couvrant = calcul_foret_couvrant(graph);
     graphviz_affiche_graph_couple(arbre_couvrant);
+*/
+
+    float p = 0.1;
+
+    graph_couple_t *quasi_arbre = NULL;
+    quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
+    graphviz_affiche_graph_couple(quasi_arbre);
 
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
-    construire_map(map, arbre_couvrant);
+    construire_map(map, quasi_arbre);
 
     liberer_graph_couple(graph);
-    liberer_graph_couple(arbre_couvrant);
+    liberer_graph_couple(quasi_arbre);
 
     main_labyrinthe(map);
 
@@ -60,7 +71,7 @@ int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-    /**
+/*
  * 
  * 
  * 
@@ -85,7 +96,7 @@ void permute_a_b(int *a, int *b)
 
 void melange_fisher_yates_arete(graph_couple_t *graph)
 {
-    srand(48);
+    //srand(48);
     //srand(time(NULL));
 
     int j;
@@ -222,8 +233,8 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIG
     int offset_x = source.w / 12;
     int offset_y = source.h / 8;
 
-    float zoom_x = 1;
-    float zoom_y = 1;
+    //float zoom_x = 1;
+    //float zoom_y = 1;
 
     state.x = 0;
     state.y = 3 * offset_y;
