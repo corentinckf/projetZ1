@@ -57,10 +57,15 @@ void arbre_couvrant(int *nouv_aretes, int *nb_aretes, int *aretes, int *nb_eleme
     {
         int sommet1 = aretes[i];
         int sommet2 = aretes[i+1];
+        printf("couple: %d %d\n", sommet1, sommet2);
 
         if (classes[sommet1] != classes[sommet2])
         {
+            printf("classes avant : %d %d\n",classes[sommet1],classes[sommet2]);
+            printf("hauteurs avant : %d %d\n",hauteurs[sommet1],hauteurs[sommet2]);
             fusion(sommet1,sommet2,classes,hauteurs);
+            printf("hauteurs apres : %d %d\n",hauteurs[sommet1],hauteurs[sommet2]);
+            printf("classes apres : %d %d\n\n",classes[sommet1],classes[sommet2]);
             nouv_aretes[k] = sommet1;
             nouv_aretes[k+1] = sommet2;
             //attention si taille insuffisante : appeler fonction ajouter

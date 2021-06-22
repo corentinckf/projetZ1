@@ -1,7 +1,7 @@
 #ifndef __arborescence_h__
 #define __arborescence_h__
 
-#define LIGNES 16
+#define LIGNES 12
 #define COLONNES LIGNES
 #define TAILLE LIGNES
 

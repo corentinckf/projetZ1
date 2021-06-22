@@ -7,10 +7,10 @@ EXEC = connexe kruskal
 all: connexe kruskal
 
 connexe : arborescence.c arborescence.h connexe.c connexe.h
-	$(CC) arborescence.c connexe.c $(OPT) $(LDFLAGS) $(SDL2) -o  $@
+	$(CC) arborescence.c connexe.c $(OPT) -lm $(LDFLAGS) $(SDL2) -o  $@
 
 kruskal : kruskal.c kruskal.h arborescence.c arborescence.h
-	$(CC) arborescence.c kruskal.c $(OPT) $(LDFLAGS) $(SDL2) -o  $@
+	$(CC) arborescence.c kruskal.c $(OPT) -lm $(LDFLAGS) $(SDL2) -o  $@
 
 clear :
 	rm -rf $(EXEC)

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "arborescence.h"
 
 void creer(int *classes, int *hauteurs)
@@ -13,12 +14,11 @@ void creer(int *classes, int *hauteurs)
 
 void fusion(int i, int j, int *classes, int *hauteurs)
 {
-    int hauteur1 = hauteurs[i];
-    int hauteur2 = hauteurs[j];
+    int hauteur1 = hauteurs[classes[i]];
+    int hauteur2 = hauteurs[classes[j]];
 
     if (hauteur1 < hauteur2)
     {
-        hauteurs[classes[i]] = hauteur2;        //on ne modifie que la hauteur de la racine
         for (int k=0;k<TAILLE;k++)
         {
             if (classes[k] == classes[i])
@@ -26,10 +26,10 @@ void fusion(int i, int j, int *classes, int *hauteurs)
                 classes[k] = classes[j];     //relier la racine
             }
         }
+        hauteurs[classes[i]] = hauteur2;        //on ne modifie que la hauteur de la racine
     }
     else if (hauteur1 > hauteur2)
     {
-        hauteurs[classes[j]] = hauteur1;
         for (int k=0;k<TAILLE;k++)
         {
             if (classes[k] == classes[j])
@@ -37,18 +37,21 @@ void fusion(int i, int j, int *classes, int *hauteurs)
                 classes[k] = classes[i];
             }
         }
+        hauteurs[classes[j]] = hauteur1;
     }
     else    //egalite des hauteurs
     {
-        hauteurs[classes[i]] = hauteur1 + 1;
-        hauteurs[j] = hauteurs[i];
+        int min = fmin(classes[i],classes[j]);
+        int max = fmax(classes[i],classes[j]);
         for (int k=0;k<TAILLE;k++)
         {
-            if (classes[k] == classes[j])
+            if (classes[k] == max)
             {
-                classes[k] = classes[i];
+                classes[k] = min;
             }
         }
+        hauteurs[classes[i]] = hauteur1 + 1;
+        hauteurs[classes[j]] = hauteurs[classes[i]];
     }
 }
 
