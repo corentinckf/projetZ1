@@ -9,5 +9,6 @@
 
 graphe_t *  kruskal(graphe_t *);
 void afficher_liste_arrete(arrete_t *, int);
+void fisher_yates_shuffle(graphe_t*);
 
 #endif
