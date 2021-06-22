@@ -2,7 +2,7 @@
 #include "connexe.h"
 #include "graphe.h"
 #include "kruskal.h"
-//#include "labyrinth.h"
+#include "labyrinth.h"
 #include <time.h>
 
 int main()
@@ -13,7 +13,7 @@ int main()
     afficher_graphe(graphe);
     //fisher_yates_shuffle(graphe);
     /*afficher_graphe(graphe);*/
-    graphe_t * foret = kruskal(graphe);
-    afficher_graphe(foret);
+    /*graphe_t * foret = kruskal(graphe);
+    afficher_graphe(foret);*/
     return 0;
 }
