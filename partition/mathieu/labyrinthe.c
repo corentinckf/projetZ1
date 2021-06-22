@@ -19,7 +19,6 @@ int main()
     liberer_graph_couple(graph);
     liberer_graph_couple(arbre_couvrant);
 
-
     return 0;
 }
 
@@ -87,6 +86,21 @@ void melange_fisher_yates_arete(graph_couple_t *graph)
         j = rand() % i + 1;
         permute_a_b(&graph->liste_couple[i].a, &graph->liste_couple[j].a);
         permute_a_b(&graph->liste_couple[i].b, &graph->liste_couple[j].b);
+    }
+}
+
+void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_couple_t *graph)
+{
+    int i, j;
+    for (int i = 0; i < NB_LIGNE_LABY; ++i)
+        for (int j = 0; j < NB_COLONNE_LABY; ++j)
+            map[i][j] = 0;
+
+    for (int k = 0; k < graph->nb_arete; ++k)
+    {
+        i = graph->liste_couple[i].a;
+        j = graph->liste_couple[i].b;
+        //map[] 
     }
 }
 
