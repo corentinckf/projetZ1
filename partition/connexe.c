@@ -164,11 +164,12 @@ int main()
 
     int classes[TAILLE];
     int hauteurs[TAILLE];
-    //srand(time(NULL));
-    srand(42);
-
+    srand(time(NULL));
+ 
     int noeuds[TAILLE];
     int aretes[4*TAILLE];    //s'assurer que le nombre de cases est pair (couple d'entiers)
+    int taille = 2*TAILLE;
+    int nb_elements = 0;
 
     //initialisation
     for (int i=0;i<TAILLE;i++)
@@ -176,19 +177,17 @@ int main()
         noeuds[i] = i;
     }
 
-        int taille = 2*TAILLE;
-        int nb_elements = 0;
-        for (int i=0;i<TAILLE;i++)
-        {   
-            for (int j=i+1;j<TAILLE;j++)
+    for (int i=0;i<TAILLE;i++)
+    {   
+        for (int j=i+1;j<TAILLE;j++)
+        {
+            int valeur = rand()%2;
+            if (valeur)
             {
-                int valeur = rand()%2;
-                if (valeur)
-                {
-                    ajouter(aretes,&taille,&nb_elements,i,j);
-                }
+                ajouter(aretes,&taille,&nb_elements,i,j);
             }
         }
+    }
 
     FILE *fichier = NULL;
     fichier = fopen("graph.dot","w");
