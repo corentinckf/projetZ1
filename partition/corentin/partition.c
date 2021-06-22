@@ -64,6 +64,14 @@ int recuperer_classe(int ** partition, int element)
     return partition[1][element];
 }
 
+int recuperer_classe_arbo(int ** partition, int element)
+{
+    if(element == partition[1][element])
+        return partition[1][element];
+    else
+        return recuperer_classe_arbo(partition, partition[1][element]);
+}
+
 /*prend deux éléments x,y de E en entrée et fusionne les classes de x et de y
     dans la partition*/ 
 void fusion(int ** partition, int a, int b)

@@ -15,6 +15,7 @@ int ** creer(int, int **);
     /*crée à partir d'un ensemble E
     la partition où chaque élément est seul dans sa classe*/
 int recuperer_classe(int**, int);
+int recuperer_classe_arbo(int**, int);
     /*prend en entrée un élément x∈E et renvoie un identifiant unique de la classe à laquelle appartient x
     */
 void fusion(int **, int, int);

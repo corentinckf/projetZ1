@@ -22,8 +22,8 @@ graphe_t * kruskal(graphe_t * graphe)
             sommet a = graphe->liste_arrete[i].a;
             sommet b = graphe->liste_arrete[i].b;
 
-            int classe_a = recuperer_classe(partition, a);
-            int classe_b = recuperer_classe(partition, b);
+            int classe_a = recuperer_classe_arbo(partition, a);
+            int classe_b = recuperer_classe_arbo(partition, b);
 
             
             if(classe_a != classe_b)
