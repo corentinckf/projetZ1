@@ -75,3 +75,9 @@ void visualiser_matrice(int ** matrice, int size_l, int size_c)
     system("dot -Tjpg matrice_graphe.dot -o img2.jpg");
     system("display ./img2.jpg 2> /dev/null");
 }
+
+void connexe_graph2(int ** partition, int * hauteurs, graphe_t * graphe)
+{
+    for (int i = 0; i < graphe->n_arrete; i++)
+        fusion_arbo(partition,hauteurs, graphe->liste_arrete[i].a, graphe->liste_arrete[i].b);
+}
