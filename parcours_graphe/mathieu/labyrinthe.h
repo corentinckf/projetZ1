@@ -1,13 +1,9 @@
 #ifndef __LABYRINTHE_H__
 #define __LABYRINTHE_H__
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
 #include "const.h"
-#include "connexe.h"
-#include "partition.h"
-#include "kruskal.h"
+
 
 enum murs
 {
@@ -18,7 +14,7 @@ enum murs
     mur_sud = 8    //8
 };
 
-int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
+int main_labyrinthe();
 
 void permute_a_b(int *a, int *b);
 void melange_fisher_yates_arete(graph_couple_t *graph);

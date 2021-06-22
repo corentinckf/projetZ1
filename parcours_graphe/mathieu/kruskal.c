@@ -89,6 +89,7 @@ graph_couple_t *calcul_quasi_foret_couvrant(graph_couple_t *graph, float p)
         {
             a = graph->liste_couple[i].a;
             b = graph->liste_couple[i].b;
+            
             printf("alpha=%f\n", alpha);
             alpha = (float)(rand() % 100) / (float)100;
             if (recuperer_classe_arbo(part, a) != recuperer_classe_arbo(part, b))

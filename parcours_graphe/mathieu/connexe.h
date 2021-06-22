@@ -7,10 +7,12 @@
 #include "const.h"
 #include "partition.h"
 
+/*
 typedef struct couple
 {
     int a;
     int b;
+    int poids;
 } couple_t;
 
 typedef struct graph_couple
@@ -19,6 +21,7 @@ typedef struct graph_couple
     int nb_arete;
     couple_t *liste_couple;
 } graph_couple_t;
+*/
 
 int main_connexe();
 

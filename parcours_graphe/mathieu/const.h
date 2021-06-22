@@ -22,8 +22,35 @@
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 #define ALEA_GEN 10
+#define GRAINE 48
 
 #define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
 #define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
+
+
+typedef struct couple
+{
+    int a;
+    int b;
+    int poids;
+} couple_t;
+
+typedef struct graph_couple
+{
+    int nb_noeud;
+    int nb_arete;
+    couple_t *liste_couple;
+} graph_couple_t;
+
+
+
+
+
+#include "liste_chainee.h"
+#include "partition.h"
+#include "connexe.h"
+#include "labyrinthe.h"
+#include "kruskal.h"
+#include "parcours_graphe.h"
 
 #endif

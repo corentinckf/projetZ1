@@ -1,6 +1,6 @@
 #include "labyrinthe.h"
 
-int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
+int main_labyrinthe()
 {
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
@@ -65,7 +65,7 @@ int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
 
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
-    
+
     play_texture_mur(window, renderer, map);
     SDL_RenderPresent(renderer);
 
@@ -93,6 +93,7 @@ void melange_fisher_yates_arete(graph_couple_t *graph)
         j = rand() % i + 1;
         permute_a_b(&graph->liste_couple[i].a, &graph->liste_couple[j].a);
         permute_a_b(&graph->liste_couple[i].b, &graph->liste_couple[j].b);
+        permute_a_b(&graph->liste_couple[i].poids, &graph->liste_couple[j].poids);
     }
 }
 

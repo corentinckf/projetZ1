@@ -126,20 +126,21 @@ graph_couple_t *init_graph_couple_en_grille()
             {
                 couple_tmp[graph_couple->nb_arete].a = i;
                 couple_tmp[graph_couple->nb_arete].b = i + 1;
+                couple_tmp[graph_couple->nb_arete].poids = 1;
                 graph_couple->nb_arete++;
             }
             if (i + NB_COLONNE_LABY < graph_couple->nb_noeud)
             {
                 couple_tmp[graph_couple->nb_arete].a = i;
                 couple_tmp[graph_couple->nb_arete].b = i + NB_COLONNE_LABY;
+                couple_tmp[graph_couple->nb_arete].poids = 1;
                 graph_couple->nb_arete++;
             }
         }
         graph_couple->liste_couple = (couple_t *)malloc(sizeof(couple_t) * graph_couple->nb_arete);
         for (int k = 0; k < graph_couple->nb_arete; k++)
         {
-            graph_couple->liste_couple[k].a = couple_tmp[k].a;
-            graph_couple->liste_couple[k].b = couple_tmp[k].b;
+            graph_couple->liste_couple[k] = couple_tmp[k];
         }
         free(couple_tmp);
     }
@@ -154,13 +155,13 @@ graph_couple_t *init_graph_couple_alea()
         graph_couple->nb_arete = 0;
         couple_t *couple_tmp = malloc(sizeof(couple_t) * 2 * graph_couple->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
         int v;
-        
+
         for (int i = 0; i < N; i++)
         {
             for (int j = i + 1; j < N; j++)
             {
                 v = rand() % ALEA_GEN;
-                if (v == 1 )
+                if (v == 1)
                 {
                     couple_tmp[graph_couple->nb_arete].a = i;
                     couple_tmp[graph_couple->nb_arete].b = j;
@@ -168,7 +169,7 @@ graph_couple_t *init_graph_couple_alea()
                 }
             }
         }
-        
+
         graph_couple->liste_couple = (couple_t *)malloc(sizeof(couple_t) * graph_couple->nb_arete);
         for (int k = 0; k < graph_couple->nb_arete; k++)
         {
@@ -200,7 +201,7 @@ void fichier_graphviz_graph_couple(graph_couple_t *graph)
     for (int i = 0; i < graph->nb_arete; i++)
     {
         //printf("i=%d\n", i);
-        fprintf(fichier, "\n\t%d--%d", graph->liste_couple[i].a, graph->liste_couple[i].b);
+        fprintf(fichier, "\n\t%d--%d [taillabel = \"%d\"]", graph->liste_couple[i].a, graph->liste_couple[i].b, graph->liste_couple[i].poids);
     }
     for (int i = 0; i < graph->nb_noeud; i++)
         fprintf(fichier, "\n\t%d", i);
