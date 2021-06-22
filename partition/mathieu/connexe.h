@@ -20,7 +20,6 @@ typedef struct graph_couple
     couple_t *liste_couple;
 } graph_couple_t;
 
-
 int main_connexe();
 
 void afficher_matrice(int mat[NB_LIGNE_MAT][NB_COLONNE_MAT]);
@@ -38,5 +37,7 @@ void fichier_graphviz_graph_couple(graph_couple_t *graph);
 void graphviz_affiche_graph_couple(graph_couple_t *graph);
 
 void liberer_graph_couple(graph_couple_t *graph);
+
+int sont_voisins(int i, int j);
 
 #endif

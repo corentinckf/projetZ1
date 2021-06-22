@@ -124,8 +124,8 @@ graph_couple_t *init_graph_couple_alea()
         {
             for (int j = i + 1; j < N; j++)
             {
-                v = rand() % 15;
-                if (v == 1)
+                v = rand() % ALEA_GEN;
+                if (v == 1 && sont_voisins(i, j))
                 {
                     couple_tmp[graph_couple->nb_arete].a = i;
                     couple_tmp[graph_couple->nb_arete].b = j;
@@ -142,6 +142,18 @@ graph_couple_t *init_graph_couple_alea()
         free(couple_tmp);
     }
     return graph_couple;
+}
+
+//renvoie 1 si les point sont voisins dans le graphe
+int sont_voisins(int a, int b)
+{
+    int res = 0;
+    if (abs(a - b) == 1 && (a + b + 1 % NB_COLONNE_LABY) != 0)
+        res = 1;
+    if (abs(a - b) == NB_COLONNE_LABY)
+        res = 1;
+    printf("a=%d, b=%d, abs(a-b)=%d,  (a + b + 1 % NB_COLONNE_LABY)=%d, abs(a - b) \% NB_COLONNE_LABY=%d,  res=%d\n", a, b, abs(a - b), (a + b + 1 % NB_COLONNE_LABY), abs(a - b) % NB_COLONNE_LABY, res);
+    return res;
 }
 
 void connexe_graph_couple(int part_connexe[2][N], int hauteur_part[N], graph_couple_t *graph)

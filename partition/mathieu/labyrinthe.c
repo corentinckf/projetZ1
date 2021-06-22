@@ -19,7 +19,6 @@ int main()
     liberer_graph_couple(graph);
     liberer_graph_couple(arbre_couvrant);
 
-    int tab[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     return 0;
 }
@@ -79,8 +78,8 @@ void permute_a_b(int *a, int *b)
 
 void melange_fisher_yates_arete(graph_couple_t *graph)
 {
-    //srand(48);
-    srand(time(NULL));
+    srand(48);
+    //srand(time(NULL));
 
     int j;
     for (int i = graph->nb_arete - 1; i >= 1; --i)

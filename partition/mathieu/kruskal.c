@@ -47,14 +47,14 @@ graph_couple_t *calcul_foret_couvrant(graph_couple_t *graph)
         {
             a = graph->liste_couple[i].a;
             b = graph->liste_couple[i].b;
-            printf("(a,b)=(%d,%d)\n", a,b);
-            printf("classe cl(a)=%d, cl(b)=%d\n", recuperer_classe(part, a), recuperer_classe(part, b));
+            //printf("(a,b)=(%d,%d)\n", a,b);
+            //printf("classe cl(a)=%d, cl(b)=%d\n", recuperer_classe(part, a), recuperer_classe(part, b));
             if (recuperer_classe_arbo(part, a) != recuperer_classe_arbo(part, b))
             {
                 fusion_arbo(part, hauteur, b, a);
                 couple_tmp[arbre->nb_arete] = graph->liste_couple[i];
                 arbre->nb_arete++;
-                printf("arete ajoutee = %d\n", arbre->nb_arete);
+                //printf("arete ajoutee = %d\n", arbre->nb_arete);
                 //printf("\n");
                 //afficher_partition(part);
             }
