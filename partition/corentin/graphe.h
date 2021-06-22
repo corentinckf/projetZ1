@@ -20,7 +20,6 @@ typedef struct graphe
 }graphe_t;
 
 /*Prototypes*/
-void initialiser_arrete(arrete_t*,sommet, sommet);
 graphe_t * initialiser_graphe(int);
 /*void ajouter_arrete(arrete_t *, graphe_t*);
 void supprimer_arrete(int, graphe_t*);*/

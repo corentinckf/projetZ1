@@ -81,10 +81,10 @@ void fusion_arbo(int ** partition,int * hauteurs, int a, int b)
     {
         if(hauteurs[classeA] > hauteurs[classeB])
         {
-            partition[1][classeA] = classeB;
+            partition[1][classeB] = classeA;
         }else if(hauteurs[classeA] < hauteurs[classeB])
         {   
-            partition[1][classeB] = classeA;
+            partition[1][classeA] = classeB;
         }else
         {
             partition[1][classeB] = classeA;

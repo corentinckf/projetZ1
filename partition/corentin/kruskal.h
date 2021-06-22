@@ -7,6 +7,7 @@
 #include "partition.h"
 #include "graphe.h"
 
-void kruskal(graphe_t *);
+graphe_t *  kruskal(graphe_t *);
+void afficher_liste_arrete(arrete_t *, int);
 
 #endif
