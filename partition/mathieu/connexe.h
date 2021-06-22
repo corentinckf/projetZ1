@@ -26,6 +26,7 @@ void afficher_matrice(int mat[NB_LIGNE_MAT][NB_COLONNE_MAT]);
 
 void init_mat_alea(int mat[NB_LIGNE_MAT][NB_COLONNE_MAT]);
 graph_couple_t *init_graph_couple_alea();
+graph_couple_t *init_graph_couple_en_grille();
 
 void fichier_graphviz_graph_mat(int mat[NB_LIGNE_MAT][NB_COLONNE_MAT]);
 void graphviz_affiche_graph_mat(int mat[NB_LIGNE_MAT][NB_COLONNE_MAT]);

@@ -111,26 +111,29 @@ void connexe_graph_mat(int part[2][N], int hauteur[N], int mat[N][N])
     }
 }
 
-graph_couple_t *init_graph_couple_alea()
+graph_couple_t *init_graph_couple_en_grille()
 {
     graph_couple_t *graph_couple = (graph_couple_t *)malloc(sizeof(graph_couple_t));
     if (graph_couple)
     {
         graph_couple->nb_noeud = N;
         graph_couple->nb_arete = 0;
-        couple_t *couple_tmp = malloc(sizeof(couple_t) * graph_couple->nb_noeud * graph_couple->nb_noeud / 2);
+        couple_t *couple_tmp = malloc(sizeof(couple_t) * 2 * graph_couple->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
         int v;
-        for (int i = 0; i < N; i++)
+        //On genere le graph avec toutes les aretes sur la grille en tenant compte des voisins
+        for (int i = 0; i < graph_couple->nb_noeud; i++)
         {
-            for (int j = i + 1; j < N; j++)
+            if ((i + 1) % NB_COLONNE_LABY != 0)
             {
-                v = rand() % ALEA_GEN;
-                if (v == 1 && sont_voisins(i, j))
-                {
-                    couple_tmp[graph_couple->nb_arete].a = i;
-                    couple_tmp[graph_couple->nb_arete].b = j;
-                    graph_couple->nb_arete++;
-                }
+                couple_tmp[graph_couple->nb_arete].a = i;
+                couple_tmp[graph_couple->nb_arete].b = i + 1;
+                graph_couple->nb_arete++;
+            }
+            if (i + NB_COLONNE_LABY < graph_couple->nb_noeud)
+            {
+                couple_tmp[graph_couple->nb_arete].a = i;
+                couple_tmp[graph_couple->nb_arete].b = i + NB_COLONNE_LABY;
+                graph_couple->nb_arete++;
             }
         }
         graph_couple->liste_couple = (couple_t *)malloc(sizeof(couple_t) * graph_couple->nb_arete);
@@ -143,16 +146,52 @@ graph_couple_t *init_graph_couple_alea()
     }
     return graph_couple;
 }
+graph_couple_t *init_graph_couple_alea()
+{
+    graph_couple_t *graph_couple = (graph_couple_t *)malloc(sizeof(graph_couple_t));
+    if (graph_couple)
+    {
+        graph_couple->nb_noeud = N;
+        graph_couple->nb_arete = 0;
+        couple_t *couple_tmp = malloc(sizeof(couple_t) * 2 * graph_couple->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
+        int v;
+        
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = i + 1; j < N; j++)
+            {
+                v = rand() % ALEA_GEN;
+                if (v == 1 )
+                {
+                    couple_tmp[graph_couple->nb_arete].a = i;
+                    couple_tmp[graph_couple->nb_arete].b = j;
+                    graph_couple->nb_arete++;
+                }
+            }
+        }
+        
+        graph_couple->liste_couple = (couple_t *)malloc(sizeof(couple_t) * graph_couple->nb_arete);
+        for (int k = 0; k < graph_couple->nb_arete; k++)
+        {
+            graph_couple->liste_couple[k].a = couple_tmp[k].a;
+            graph_couple->liste_couple[k].b = couple_tmp[k].b;
+        }
+        free(couple_tmp);
+    }
+    return graph_couple;
+}
 
-//renvoie 1 si les point sont voisins dans le graphe
+//inutile
 int sont_voisins(int a, int b)
 {
     int res = 0;
-    int i_a = a % NB_COLONNE_LABY;
-    int j_a = a % NB_LIGNE_LABY;
-    int i_b = b % NB_COLONNE_LABY;
-    int j_b = b % NB_LIGNE_LABY;
-    if (j_a = j_b)
+    int i_a = a / NB_COLONNE_LABY;
+    int j_a = a % NB_COLONNE_LABY;
+    int i_b = b / NB_COLONNE_LABY;
+    int j_b = b % NB_COLONNE_LABY;
+    printf("a=%d : i,j=%d,%d\n", a, i_a, j_a);
+    printf("b=%d : i,j=%d,%d\n", b, i_b, j_b);
+    if (j_a == j_b)
     {
         if (i_b - i_a == 1)
             res = 1; //a mur droite
@@ -161,7 +200,7 @@ int sont_voisins(int a, int b)
     }
     else
     {
-        if (i_b = i_a)
+        if (i_b == i_a)
         {
             if (j_b - j_a == 5)
                 res = 8; //a mur bas
@@ -175,7 +214,7 @@ int sont_voisins(int a, int b)
         res = 1;
     if (abs(a - b) == NB_COLONNE_LABY)
         res = 1;
-    printf("a=%d, b=%d, abs(a-b)=%d,  (a + b + 1 % NB_COLONNE_LABY)=%d, abs(a - b) \% NB_COLONNE_LABY=%d,  res=%d\n", a, b, abs(a - b), (a + b + 1 % NB_COLONNE_LABY), abs(a - b) % NB_COLONNE_LABY, res);
+    //printf("a=%d, b=%d, abs(a-b)=%d,  (a + b + 1 % NB_COLONNE_LABY)=%d, abs(a - b) \% NB_COLONNE_LABY=%d,  res=%d\n", a, b, abs(a - b), (a + b + 1 % NB_COLONNE_LABY), abs(a - b) % NB_COLONNE_LABY, res);
     */
     return res;
 }

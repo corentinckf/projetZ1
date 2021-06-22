@@ -6,7 +6,7 @@ int main()
 
     //generation graph couple
     graph_couple_t *graph = NULL;
-    graph = init_graph_couple_alea();
+    graph = init_graph_couple_en_grille();
     graphviz_affiche_graph_couple(graph);
 
     melange_fisher_yates_arete(graph);
@@ -91,17 +91,71 @@ void melange_fisher_yates_arete(graph_couple_t *graph)
 
 void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_couple_t *graph)
 {
-    int i, j;
+    int a, b;
+    int i_a, j_a;
+    int i_b, j_b;
+
     for (int i = 0; i < NB_LIGNE_LABY; ++i)
         for (int j = 0; j < NB_COLONNE_LABY; ++j)
-            map[i][j] = 0;
+            map[i][j] = 15; //full mur
 
     for (int k = 0; k < graph->nb_arete; ++k)
     {
-        i = graph->liste_couple[i].a;
-        j = graph->liste_couple[i].b;
-        //map[] 
+        a = graph->liste_couple[k].a;
+        b = graph->liste_couple[k].b;
+
+        i_a = a / NB_COLONNE_LABY;
+        j_a = a % NB_COLONNE_LABY;
+        i_b = b / NB_COLONNE_LABY;
+        j_b = b % NB_COLONNE_LABY;
+        switch (a - b)
+        {
+        case -1:                //arete a--b
+            map[i_a][j_a] -= 1; //a mur droite
+            map[i_b][j_b] -= 4; //b mur gauche
+            break;
+        case 1:                 //arete b--a
+            map[i_a][j_a] -= 4; //a mur gauche
+            map[i_b][j_b] -= 1; //b mur droite
+            break;
+        case -NB_COLONNE_LABY:  //a -|- b
+            map[i_a][j_a] -= 8; //a mur bas
+            map[i_b][j_b] -= 2; //b mur haut
+            break;
+        case NB_COLONNE_LABY:   //b -|- a
+            map[i_a][j_a] -= 2; //a mur haut
+            map[i_b][j_b] -= 8; //b mur bas
+            break;
+        default:
+            printf("bizarre tu devrais pas aller ici\n");
+            break;
+        }
     }
+}
+
+void dessiner(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
+{
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
+    SDL_Rect rectangle;
+    rectangle.x = 0;
+    rectangle.y = 0;
+    rectangle.w = 400;
+    rectangle.h = 400;
+
+    SDL_RenderFillRect(renderer, &rectangle);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer,
+                       0, 0,      // x,y du point de la première extrémité
+                       400, 400); // x,y seconde extrémité
+
+    for (int i = 0; i < NB_COLONNE_LABY; ++i)
+        for (int j = 0; j < NB_LIGNE_LABY; ++j)
+            trace_mur(window, renderer,map, i, j);
+}
+
+void trace_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int i, int j)
+{
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)
