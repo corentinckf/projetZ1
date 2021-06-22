@@ -3,8 +3,14 @@
 
 #include "arborescence.h"
 
+int noeud_entier(int i);
+void draw_graph(int *noeuds, int aretes[4*TAILLE], FILE *fichier, int nb_elements);
+void composantes_connexes(int *aretes, int nb_elements, int *classes, int *hauteurs);
+
+/*
 void matrice_adjacence(int mat[LIGNES][COLONNES]);
 void graph_matrice(FILE *fichier, int mat[LIGNES][COLONNES]);
 void composantes_connexes(int mat[LIGNES][COLONNES], int *classes, int *hauteurs);
+*/
 
 #endif
