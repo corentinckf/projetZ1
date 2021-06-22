@@ -30,7 +30,11 @@ graphe_t * initialiser_graphe(int nb_noeuds)
 
         graphe->liste_arrete = (arrete_t *) malloc(graphe->n_sommet * sizeof(arrete_t));
         for(int i = 0; i < graphe->n_sommet;++i)
+        {
             initialiser_arrete(&graphe->liste_arrete[i], liste_arrete[i].a, liste_arrete[i].b);
+            ++graphe->n_arrete;
+        }
+            
         
         free(liste_arrete);
     }
