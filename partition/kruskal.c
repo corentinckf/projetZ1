@@ -50,30 +50,25 @@ void draw_graph(int *noeuds, int aretes[4*TAILLE], FILE *fichier, int nb_element
     fprintf(fichier,"}");
 }
 
-void arbre_couvrant(int *nouv_aretes, int *nb_aretes, int *aretes, int *nb_elements, int *classes, int *hauteurs, FILE *fichier)
+void arbre_couvrant(int *nouv_aretes, int *nb_aretes, int *aretes, int *nb_elements, int *classes, int *hauteurs)
 {
-    int k = 0;
-    int i = 0;
-    while (k < *nb_elements)
+    int i = 0, k = 0;
+    while (i < *nb_elements)
     {
-        while (i < *nb_aretes)
+        int sommet1 = aretes[i];
+        int sommet2 = aretes[i+1];
+
+        if (classes[sommet1] != classes[sommet2])
         {
-            if (aretes[k] != nouv_aretes[i] || aretes[k+1] != nouv_aretes[i+1])
-            {
-                nouv_aretes[i] = aretes[k];
-                nouv_aretes[i+1] = aretes[k+1];
-                fusion(nouv_aretes[i],nouv_aretes[i+1],classes,hauteurs);
-                *nb_aretes += 2;
-            }
-            i += 2;
+            fusion(sommet1,sommet2,classes,hauteurs);
+            nouv_aretes[k] = sommet1;
+            nouv_aretes[k+1] = sommet2;
+            //attention si taille insuffisante : appeler fonction ajouter
+            *nb_aretes += 2;
+            k += 2;
         }
-        nouv_aretes[i] = aretes[k];
-        nouv_aretes[i+1] = aretes[k+1];
-        fusion(nouv_aretes[i],nouv_aretes[i+1],classes,hauteurs);
-        *nb_aretes += 2;
-        k += 2;
+        i+= 2;
     }
-    graph_partition(fichier,classes);
 }
 
 int main()
@@ -85,11 +80,12 @@ int main()
 
     int noeuds[TAILLE];
     int aretes[4*TAILLE];    //s'assurer que le nombre de cases est pair (couple d'entiers)
-    int taille = 2*TAILLE;
+    int taille = 4*TAILLE;
     int nb_elements = 0;
 
     int nouv_aretes[4*TAILLE];
     int nb_aretes = 0;
+    int nouv_taille = 4*TAILLE;
 
     //initialisation
     for (int i=0;i<TAILLE;i++)
@@ -119,8 +115,10 @@ int main()
         //printf("ok\n");
         draw_graph(noeuds, aretes,fichier,nb_elements);
         creer(classes,hauteurs);
-        arbre_couvrant(nouv_aretes,&nb_aretes,aretes,&nb_elements,classes,hauteurs,foret);
+        arbre_couvrant(nouv_aretes,&nb_aretes,aretes,&nb_elements,classes,hauteurs);
+        draw_graph(noeuds,nouv_aretes,foret,nb_aretes);
         system("dot -Tjpg graph.dot -o graph.jpg");
+        system("dot -Tjpg foret.dot -o foret.jpg");
         fclose(fichier);
     }
 }
