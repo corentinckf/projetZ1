@@ -66,7 +66,8 @@ int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
  * 
  * 
  */
-    dessiner(window, renderer, map);
+    //dessiner(window, renderer, map);
+    play_texture_mur(window, renderer, map);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(5000);
@@ -167,7 +168,7 @@ void trace_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY
     if (mur & mur_est)
     {
         y = i * HAUTEUR_CASE;
-        x = j * LARGEUR_CASE + LARGEUR_CASE-1;
+        x = j * LARGEUR_CASE + LARGEUR_CASE - 1;
         x_dest = x;
         y_dest = y + HAUTEUR_CASE;
         SDL_RenderDrawLine(renderer, x, y, x_dest, y_dest);
@@ -192,12 +193,125 @@ void trace_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY
     }
     if (mur & (unsigned)mur_sud)
     {
-        y = i * HAUTEUR_CASE + HAUTEUR_CASE -1;
+        y = i * HAUTEUR_CASE + HAUTEUR_CASE - 1;
         x = j * LARGEUR_CASE;
         x_dest = x + LARGEUR_CASE;
         y_dest = y;
         SDL_RenderDrawLine(renderer, x, y, x_dest, y_dest);
     }
+}
+
+void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
+{
+
+    SDL_Texture *my_texture;
+    my_texture = IMG_LoadTexture(renderer, PATH_IMG_MUR);
+    if (my_texture == NULL)
+        end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};             // Rectangle de la vignette en cours dans la planche
+
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
+
+    //int nb_images = 8;
+    int offset_x = source.w / 12;
+    int offset_y = source.h / 8;
+
+    float zoom_x = 1;
+    float zoom_y = 1;
+
+    state.x = 0;
+    state.y = 3 * offset_y;
+    state.w = offset_x; // Largeur de la vignette
+    state.h = offset_y; // Hauteur de la vignette
+
+    destination.w = LARGEUR_CASE; // Largeur du sprite à l'écran
+    destination.h = HAUTEUR_CASE; // Hauteur du sprite à l'écran
+
+    for (int i = 0; i < NB_LIGNE_LABY; ++i)
+    {
+        for (int j = 0; j < NB_COLONNE_LABY; ++j)
+        {
+            destination.x = j * destination.w;
+            destination.y = i * destination.h;
+
+            switch (map[i][j])
+            {
+            case 14:
+                state.x = 8 * offset_x;
+                state.y = 3 * offset_y;
+                break;
+            case 13:
+                state.x = 9 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 12:
+                state.x = 1 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 11:
+                state.x = 9 * offset_x;
+                state.y = 3 * offset_y;
+                break;
+            case 10:
+                state.x = 0 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 9:
+                state.x = 2 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 8:
+                state.x = 4 * offset_x;
+                state.y = 3 * offset_y;
+                break;
+            case 7:
+                state.x = 8 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+
+            case 6:
+                state.x = 1 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 5:
+                state.x = 0 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 4:
+                state.x = 4 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 3:
+                state.x = 2 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 2:
+                state.x = 5 * offset_x;
+                state.y = 3 * offset_y;
+                break;
+            case 1:
+                state.x = 5 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 0:
+                state.x = 9 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            default:
+                printf("tes pas censé etre la!\n");
+                break;
+            }
+            SDL_RenderCopy(renderer, my_texture, &state, &destination);
+        }
+    }
+
+    SDL_DestroyTexture(my_texture);
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)
