@@ -119,7 +119,6 @@ graph_couple_t *init_graph_couple_en_grille()
         graph_couple->nb_noeud = N;
         graph_couple->nb_arete = 0;
         couple_t *couple_tmp = malloc(sizeof(couple_t) * 2 * graph_couple->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
-        int v;
         //On genere le graph avec toutes les aretes sur la grille en tenant compte des voisins
         for (int i = 0; i < graph_couple->nb_noeud; i++)
         {

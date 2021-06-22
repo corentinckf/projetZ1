@@ -9,7 +9,16 @@
 #include "partition.h"
 #include "kruskal.h"
 
-int main_labyrinthe();
+enum murs
+{
+    rien,          //0
+    mur_est,       //1
+    mur_nord,      //2
+    mur_ouest = 4, //4
+    mur_sud = 8,
+};
+
+int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
 
 void permute_a_b(int *a, int *b);
 void melange_fisher_yates_arete(graph_couple_t *graph);

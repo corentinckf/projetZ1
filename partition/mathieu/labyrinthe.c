@@ -16,13 +16,18 @@ int main()
     arbre_couvrant = calcul_foret_couvrant(graph);
     graphviz_affiche_graph_couple(arbre_couvrant);
 
+    int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
+    construire_map(map, arbre_couvrant);
+
     liberer_graph_couple(graph);
     liberer_graph_couple(arbre_couvrant);
+
+    main_labyrinthe(map);
 
     return 0;
 }
 
-int main_labyrinthe()
+int main_labyrinthe(int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
 {
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
@@ -61,8 +66,10 @@ int main_labyrinthe()
  * 
  * 
  */
+    dessiner(window, renderer, map);
+    SDL_RenderPresent(renderer);
 
-    SDL_Delay(2000);
+    SDL_Delay(10000);
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;
@@ -135,6 +142,7 @@ void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_couple_t *gra
 
 void dessiner(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
 {
+    /*
     SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
     SDL_Rect rectangle;
     rectangle.x = 0;
@@ -143,19 +151,53 @@ void dessiner(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY]
     rectangle.h = 400;
 
     SDL_RenderFillRect(renderer, &rectangle);
+    */
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer,
-                       0, 0,      // x,y du point de la première extrémité
-                       400, 400); // x,y seconde extrémité
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
 
     for (int i = 0; i < NB_COLONNE_LABY; ++i)
         for (int j = 0; j < NB_LIGNE_LABY; ++j)
-            trace_mur(window, renderer,map, i, j);
+            trace_mur(window, renderer, map, i, j);
 }
 
 void trace_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int i, int j)
 {
+    unsigned mur = map[i][j];
+    int x, y, x_dest, y_dest;
+    if (mur & mur_est)
+    {
+        y = i * HAUTEUR_CASE;
+        x = j * LARGEUR_CASE + LARGEUR_CASE;
+        x_dest = x;
+        y_dest = y + HAUTEUR_CASE;
+        SDL_RenderDrawLine(renderer, x, y, x_dest, y_dest);
+    }
+
+    if (mur & mur_ouest)
+    {
+        y = i * HAUTEUR_CASE;
+        x = j * LARGEUR_CASE;
+        x_dest = x;
+        y_dest = y + HAUTEUR_CASE;
+        SDL_RenderDrawLine(renderer, x, y, x_dest, y_dest);
+    }
+
+    if (mur & mur_nord)
+    {
+        y = i * HAUTEUR_CASE;
+        x = j * LARGEUR_CASE;
+        x_dest = x + LARGEUR_CASE;
+        y_dest = y;
+        SDL_RenderDrawLine(renderer, x, y, x_dest, y_dest);
+    }
+    if (mur & mur_sud)
+    {
+        y = i * HAUTEUR_CASE + HAUTEUR_CASE;
+        x = j * LARGEUR_CASE;
+        x_dest = x + LARGEUR_CASE;
+        y_dest = y;
+        SDL_RenderDrawLine(renderer, x, y, x_dest, y_dest);
+    }
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)
