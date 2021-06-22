@@ -18,7 +18,7 @@ void fusion(int i, int j, int *classes, int *hauteurs)
 
     if (hauteur1 < hauteur2)
     {
-        hauteurs[i] = hauteur2;
+        hauteurs[classes[i]] = hauteur2;        //on ne modifie que la hauteur de la racine
         for (int k=0;k<TAILLE;k++)
         {
             if (classes[k] == classes[i])
@@ -29,7 +29,7 @@ void fusion(int i, int j, int *classes, int *hauteurs)
     }
     else if (hauteur1 > hauteur2)
     {
-        hauteurs[j] = hauteur1;
+        hauteurs[classes[j]] = hauteur1;
         for (int k=0;k<TAILLE;k++)
         {
             if (classes[k] == classes[j])
@@ -40,7 +40,7 @@ void fusion(int i, int j, int *classes, int *hauteurs)
     }
     else    //egalite des hauteurs
     {
-        hauteurs[i] = hauteur1 + 1;
+        hauteurs[classes[i]] = hauteur1 + 1;
         hauteurs[j] = hauteurs[i];
         for (int k=0;k<TAILLE;k++)
         {
