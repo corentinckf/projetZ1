@@ -2,7 +2,7 @@ CC= gcc
 OPT  = -c -Wextra -Wall -g
 SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
 
-prog : labyrinthe.o kruskal.o connexe.o partition.o  liste_chainee.o 
+prog : labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o 
 	$(CC) labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o  $(SDL2) -o prog
 
 

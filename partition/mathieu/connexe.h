@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "const.h"
 #include "partition.h"
 
 typedef struct couple
@@ -19,9 +20,6 @@ typedef struct graph_couple
     couple_t *liste_couple;
 } graph_couple_t;
 
-#define N NB_ELT_MAX //def dans partition.h
-#define NB_LIGNE_MAT N
-#define NB_COLONNE_MAT N
 
 int main_connexe();
 

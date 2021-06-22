@@ -2,6 +2,30 @@
 
 int main()
 {
+    //main_kruskal();
+
+    //generation graph couple
+    graph_couple_t *graph = NULL;
+    graph = init_graph_couple_alea();
+    graphviz_affiche_graph_couple(graph);
+
+    melange_fisher_yates_arete(graph);
+
+    //en calculer une forêt couvrante de poids minimal
+    graph_couple_t *arbre_couvrant = NULL;
+    arbre_couvrant = calcul_foret_couvrant(graph);
+    graphviz_affiche_graph_couple(arbre_couvrant);
+
+    liberer_graph_couple(graph);
+    liberer_graph_couple(arbre_couvrant);
+
+    int tab[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    return 0;
+}
+
+int main_labyrinthe()
+{
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -55,7 +79,9 @@ void permute_a_b(int *a, int *b)
 
 void melange_fisher_yates_arete(graph_couple_t *graph)
 {
-    srand(48);
+    //srand(48);
+    srand(time(NULL));
+
     int j;
     for (int i = graph->nb_arete - 1; i >= 1; --i)
     {

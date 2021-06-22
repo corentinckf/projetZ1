@@ -13,12 +13,9 @@ system("display ./img.jpg 2> /dev/null");
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "const.h"
 #include "liste_chainee.h"
 
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-
-#define NB_ELT_MAX 20
 
 int main_partition();
 
