@@ -4,7 +4,7 @@ int main_kruskal()
 {
     //generation graph couple
     graph_couple_t *graph = NULL;
-    graph = init_graph_couple_alea();
+    graph = init_graph_couple_en_grille();
     graphviz_affiche_graph_couple(graph);
 
     /* //réer une partition dont les éléments sont les nœuds du graphe
