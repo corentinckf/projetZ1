@@ -99,29 +99,51 @@ void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LI
                        int chemin_list[N], int taille_chemin)
 {
     SDL_Rect rectangle;
+    SDL_Rect rect_sourc;
+    SDL_Rect rect_dest;
+
     int i_k, j_k;
-    int k = 0;
+    int k;
     int i = 0;
     rectangle.w = LARGEUR_CASE - 2;
     rectangle.h = HAUTEUR_CASE - 2;
+
+    rect_dest.w = rectangle.w;
+    rect_dest.h = rectangle.h;
+    rect_sourc.w = rectangle.w;
+    rect_sourc.h = rectangle.h;
+
+    rect_dest.x = (chemin_list[0] % NB_COLONNE_LABY) * LARGEUR_CASE + 1;
+    rect_dest.y = (chemin_list[0] / NB_COLONNE_LABY) * HAUTEUR_CASE + 1;
+
+    rect_sourc.x = (chemin_list[taille_chemin-1 ] % NB_COLONNE_LABY) * LARGEUR_CASE + 1;
+    rect_sourc.y = (chemin_list[taille_chemin -1] / NB_COLONNE_LABY) * HAUTEUR_CASE + 1;
+
     while (i < taille_chemin)
     {
         k = chemin_list[taille_chemin - 1 - i];
         i++;
         dessiner(window, renderer, map);
+
         i_k = k / NB_COLONNE_LABY;
         j_k = k % NB_COLONNE_LABY;
         //printf("k=%d, i=%d,  j=%d\n", k, i_k, j_k);
-        SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
         rectangle.x = j_k * LARGEUR_CASE + 1;
         rectangle.y = i_k * HAUTEUR_CASE + 1;
 
         //printf("x=%d, y=%d\n", rectangle.x, rectangle.y);
 
-        SDL_RenderFillRect(renderer, &rectangle);
 
+        SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rect_sourc);
+        SDL_SetRenderDrawColor(renderer, 0, 250, 0, 255);
+        SDL_RenderFillRect(renderer, &rect_dest);
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
+        SDL_RenderFillRect(renderer, &rectangle);
+        
         SDL_RenderPresent(renderer);
-        SDL_Delay(100);
+        SDL_Delay(500);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
@@ -143,9 +165,10 @@ int chemin(graph_l_arete_t *graph, int sourc, int dest, int chemin_list[N])
         k = parent[k];
         taille_chemin++;
     }
-    //printf("taille_chemin=%d  chemin_l[]=\n", taille_chemin);
-    //affficher_tab(chemin_list, taille_chemin);
     chemin_list[taille_chemin] = sourc;
-    //printf("Chemin de %d a %d de taille %d\n", sourc, dest, taille_chemin);
+    taille_chemin++;
+    printf("Chemin de %d a %d de taille %d\n", sourc, dest, taille_chemin);
+    printf("taille_chemin=%d  chemin_l[]=\n", taille_chemin);
+    affficher_tab(chemin_list, taille_chemin);
     return taille_chemin;
 }

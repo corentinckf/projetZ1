@@ -3,11 +3,12 @@
 int main()
 {
 
-    srand( time( NULL ) );
-    
- 
-    //srand(GRAINE);
-
+    //srand(time(NULL));
+    srand(5);
+    /*
+    for (int i = 0; i < 10; ++i)
+        printf("%d\n", rand() % N);
+*/
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -64,15 +65,17 @@ int main()
     int taille_chemin;
     int compt = 0;
     int alea;
-    while (compt < 25)
+    while (compt < 5)
     {
         sourc = dest;
-        alea=rand() % N;
+        alea = rand() % quasi_arbre->nb_noeud;
         printf("alea=%d\n", alea);
         dest = alea;
-        //printf("sourc=%d, dest=%d\n", sourc, dest);
         taille_chemin = chemin(quasi_arbre, sourc, dest, chemin_list);
+
+        //printf("sourc=%d, dest=%d\n", sourc, dest);
         //affficher_tab(chemin_list, taille_chemin);
+
         dessiner_dijkstra(window, renderer, map, chemin_list, taille_chemin);
         ++compt;
     }
@@ -80,8 +83,8 @@ int main()
     //play_texture_mur(window, renderer, map);
 
     dessiner(window, renderer, map);
-    SDL_RenderPresent(renderer);
     SDL_Delay(2000);
+    SDL_RenderPresent(renderer);
 
     liberer_graph_arete(graph);
     liberer_graph_arete(quasi_arbre);
