@@ -24,28 +24,20 @@ void init_tab(int tab[N])
 }
 
 //Creer le tas a partir d'un tableau de valeur, 1 si reussi, 0 sinon
-int *creer_tas_b()
+tas_binaire_t *creer_tas_b(couple_t val_couple)
 {
     tas_binaire_t *tas = NULL;
-    tas = (tas_binaire_t *)malloc(sizeof(tas_binaire_t) * N);
-
-    init_tab(tas);
+    tas = (tas_binaire_t *)malloc(sizeof(tas_binaire_t));
 
     if (tas != NULL)
     {
-
-        tas->nb_elt = 0;
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < N; ++i)
         {
-            tas[i + 1] = tab_v[i];
-            tas[0] += (tab_v[i] != 0);
+            tas->indice_tas[i] = -1;
+            //tas->info_n[i]=???;
         }
-
-        for (int i = (tas[0] / 2); i > 0; i--)
-        {
-            //printf("tas[%d]=%d\n", i, tas[i]);
-            entasser(tas, i);
-        }
+        tas->nb_elt = 1;
+        tas->tas[tas->nb_elt] = val_couple;
     }
     return tas;
 }
@@ -63,70 +55,82 @@ int pere(int i)
     return (i - 1) / 2;
 }
 
-void permute_a_b(int *a, int *b)
+void ajouter_elt(tas_binaire_t *tas, couple_t val)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void ajouter_elt(int *tas, int val)
-{
-    if (tas[0] < NB_ELT_MAX)
+    if (tas->nb_elt < N)
     {
-        tas[0]++;
-        tas[tas[0]] = val;
-        detasser(tas, tas[0]);
+        tas->tas[tas->nb_elt] = val;
+        detasser(tas, tas->nb_elt);
+        tas->nb_elt++;
     }
     else
-        printf("plus de place dans le tas");
+        printf("ERREUR, plus de place dans le tas");
 }
 
-int retirer_elt(int *tas)
+couple_t retirer_elt(tas_binaire_t *tas)
 {
-    int rac = 0;
-    if (tas[0] > 0)
+    couple_t rac;
+    rac.d = -1;
+    rac.n = -1;
+    if (tas->nb_elt > 0)
     {
-        rac = tas[1];
-        tas[1] = tas[tas[0]];
-        tas[0]--;
-        entasser(tas, 1);
+        rac = tas->tas[0];
+        tas->tas[0] = tas->tas[tas->nb_elt];
+        tas->nb_elt--;
+        entasser(tas, 0);
     }
     else
     {
-        printf("plus rien a retirer\n");
+        printf("ERREUR, plus rien a retirer\n");
     }
     return rac;
 }
 
-void entasser(int *tas, int i)
+void entasser(tas_binaire_t *tas, int i)
 {
     int l = f_g(i);
     int r = f_d(i);
     int min = i;
     //printf("tas[i]=%d, tas[l]=%d, tas[r]=%d\n", tas[i], tas[l], tas[r]);
 
-    if (l <= tas[0] && tas[l] < tas[i])
+    if (l <= tas->nb_elt && tas->tas[l].d < tas->tas[i].d)
     {
         min = l;
     }
-    void fichier_graphiz(int *tas)
 
-        int max = i;
+    if (r <= tas->nb_elt && tas->tas[r].d < tas->tas[min].d)
+    {
+        min = r;
+    }
 
-    if (p > 1 && tas[p] > tas[i])
+    if (min != i)
+    {
+        permute_a_b(&tas->tas[i].d, &tas->tas[min].d);
+        permute_a_b(&tas->tas[i].n, &tas->tas[min].n);
+        entasser(tas, min);
+    }
+}
+
+void detasser(tas_binaire_t *tas, int i)
+{
+    int p = pere(i);
+
+    int max = i;
+
+    if (p > 0 && tas->tas[p].d > tas->tas[i].d)
     {
         max = p;
     }
 
     if (max != i)
     {
-        permute_a_b(&(tas[i]), &(tas[max]));
+        permute_a_b(&tas->tas[i].d, &tas->tas[p].d);
+        permute_a_b(&tas->tas[i].n, &tas->tas[p].n);
         detasser(tas, max);
     }
 }
 
-void fichier_graphiz(int *tas)
+void fichier_graphiz(tas_binaire_t * tas)
 {
     FILE *fichier = NULL;
     fichier = fopen("graph_tas.dot", "w");
@@ -136,13 +140,13 @@ void fichier_graphiz(int *tas)
     int k = 1;
 
     fprintf(fichier, "graph { ");
-    while (k <= tas[0])
+    while (k <= tas->nb_elt)
     {
-        if (tas[k] > 0 && tas[f_g(k)] > 0 && f_g(k) <= tas[0])
-            fprintf(fichier, "\n\t%d--%d", tas[k], tas[f_g(k)]);
+        if (tas->tas[k].n > 0 && tas->tas[f_g(k)].n > 0 && f_g(k) <= tas->nb_elt)
+            fprintf(fichier, "\n\t%d--%d", tas->tas[k].n, tas->tas[f_g(k)].n);
 
-        if (tas[k] > 0 && tas[f_d(k)] > 0 && f_d(k) <= tas[0])
-            fprintf(fichier, "\n\t%d--%d", tas[k], tas[f_d(k)]);
+        if (tas->tas[k].n > 0 && tas->tas[f_d(k)].n > 0 && f_d(k) <= tas->nb_elt)
+            fprintf(fichier, "\n\t%d--%d", tas->tas[k].n, tas->tas[f_d(k)].n);
         k++;
     }
     fprintf(fichier, "\n} ");
@@ -150,12 +154,12 @@ void fichier_graphiz(int *tas)
     fclose(fichier);
 }
 
-void modifier_cle(int *tas, int indice, int val_ajoutee)
+void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
 {
-    if (indice < tas[0])
+    if (indice < tas->nb_elt)
     {
-        printf("cle modifie : %d + %d = %d\n", tas[indice], val_ajoutee, tas[indice] + val_ajoutee);
-        tas[indice] += val_ajoutee;
+        printf("cle modifie : %d + %d = %d\n", tas->tas[indice].d, val_ajoutee, tas->tas[indice].d + val_ajoutee);
+        tas->tas[indice].d += val_ajoutee;
         if (val_ajoutee < 0)
             detasser(tas, indice);
         else
@@ -168,16 +172,17 @@ void modifier_cle(int *tas, int indice, int val_ajoutee)
         printf("modification impossible : indice trop petit\n");
 }
 
-void diminuer_cle(int *tas, int indice, int nouv_key)
+void diminuer_cle(tas_binaire_t *tas, int indice, int nouv_key)
 {
-    if (indice <= tas[0])
+    if (indice <= tas->nb_elt)
     {
-        tas[indice] = nouv_key;
+        tas->tas[indice].d = nouv_key;
         int i = indice;
         int p_i = pere(i);
-        while (i > 1 && tas[p_i] > tas[i])
+        while (i > 0 && tas->tas[p_i].d > tas->tas[i].d)
         {
-            permute_a_b(&tas[i], &tas[p_i]);
+            permute_a_b(&tas->tas[i].d, &tas->tas[p_i].d);
+            permute_a_b(&tas->tas[i].n, &tas->tas[p_i].n);
             i = p_i;
             p_i = pere(i);
         }
@@ -186,7 +191,8 @@ void diminuer_cle(int *tas, int indice, int nouv_key)
         printf("modification impossible : indice trop petit\n");
 }
 
-int *tri_tas_min(int *tab_valeur, int nb_elt)
+/*
+int *tri_tas_min(tas_binaire_t *tab_valeur)
 {
     int *tas = NULL;
     tas = creer_tas_b(tab_valeur, nb_elt);
@@ -194,7 +200,7 @@ int *tri_tas_min(int *tab_valeur, int nb_elt)
 
     if (tas != NULL)
     {
-        int nb_elt = tas[0];
+        int nb_elt = tas->nb_elt;
         for (int i = 0; i < nb_elt; i++)
         {
             tab_valeur[i] = retirer_elt(tas);
@@ -206,15 +212,18 @@ int *tri_tas_min(int *tab_valeur, int nb_elt)
     }
     return tab_valeur;
 }
+*/
 
-/* fonction utilisateur de comparaison fournie a qsort() */
+// fonction utilisateur de comparaison fournie a qsort() 
+/*
 static int compare(void const *a, void const *b)
 {
-    /* definir des pointeurs type's et initialise's
-      avec les parametres */
+    // definir des pointeurs type's et initialise's
+      avec les parametres 
     int const *pa = a;
     int const *pb = b;
 
-    /* evaluer et retourner l'etat de l'evaluation (tri croissant) */
+    // evaluer et retourner l'etat de l'evaluation (tri croissant) 
     return *pa - *pb;
 }
+*/

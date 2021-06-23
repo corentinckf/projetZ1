@@ -29,8 +29,10 @@ void relachement(graph_l_arete_t *graph, int i_arc, int distance[N], int parent[
     }
 }
 
-
-void dijkstra(graph_l_arete_t*graph, int n_d)
+void dijkstra(graph_l_arete_t *graph, int r, int parent[N], int distance[N])
 {
+
+    dijkstra_init(r,distance,parent);
+
 
 }

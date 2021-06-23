@@ -3,11 +3,6 @@
 
 #include "const.h"
 
-#define NB_ELT_MAX 100
-
-/* Strucutre du tas binaire min
-tableaa avec case 0 = nb elt
-*/
 
 /*
 
@@ -23,41 +18,42 @@ system("display ./img.jpg 2> /dev/null");
 
 
 
-struct tas_binaire
+typedef struct tas_binaire
 {
-    int tas[N];
+    couple_t tas[N];
     int nb_elt;
     int info_n[N];
-    int indice_tas[N]
-}tas_binaire_t;
-
+    int indice_tas[N];
+} tas_binaire_t;
 
 int main_tas_binaire();
 
+/*
 void affficher_tab(int *tab, int nb_elt);
 void remplir_tab(int tab[NB_ELT_MAX]);
 void init_tab(int tab[NB_ELT_MAX]);
+*/
 
-int *creer_tas_b(int *tab, int nb_elt);
+tas_binaire_t *creer_tas_b(couple_t val_couple);
 
 int f_d(int i);
 int f_g(int i);
 int pere(int i);
 
-void ajouter_elt(int *, int);
-int retirer_elt(int *);
+void ajouter_elt(tas_binaire_t *, couple_t);
+couple_t retirer_elt(tas_binaire_t *);
 
-void permute_a_b(int *a, int *b);
+//void permute_a_b(int *a, int *b);
 
-void entasser(int *tas, int i);
-void detasser(int *tas, int i);
+void entasser(tas_binaire_t *tas, int i);
+void detasser(tas_binaire_t *tas, int i);
 
-void modifier_cle(int *tas, int indice, int val_ajoutee);
-void diminuer_cle(int *tas, int indice, int val_ajoutee);
+void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
+void diminuer_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
 
-void fichier_graphiz(int *tas);
+void fichier_graphiz(tas_binaire_t *tas);
 
-int *tri_tas_min(int *tab_valeur, int nb_elt);
+int *tri_tas_min(tas_binaire_t *tab_valeur);
 
 static int compare(void const *a, void const *b);
 

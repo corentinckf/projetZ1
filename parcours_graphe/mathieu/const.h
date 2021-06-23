@@ -27,6 +27,11 @@
 #define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
 #define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
 
+typedef struct couple
+{
+    int d;
+    int n;
+} couple_t;
 
 typedef struct arete
 {
@@ -41,8 +46,6 @@ typedef struct graph_l_arete
     int nb_arete;
     arete_t *liste_arete;
 } graph_l_arete_t;
-
-
 
 
 
