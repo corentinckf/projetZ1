@@ -140,7 +140,7 @@ void detasser(tas_binaire_t *tas, int i)
     }
 }
 
-/*void fichier_graphiz(tas_binaire_t *tas)
+void fichier_graphiz(tas_binaire_t *tas)
 {
     FILE *fichier = NULL;
     fichier = fopen("tas.dot", "w");
@@ -152,11 +152,13 @@ void detasser(tas_binaire_t *tas, int i)
     fprintf(fichier, "graph { ");
     while (k < tas->nb_elt - 1)
     {
-        if (tas->arbre[k] > 0 && tas->arbre[f_g(k)] > 0 && f_g(k) < tas->nb_elt)
-            fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_g(k)]);
+        if (tas->arbre[k].a > 0 && tas->arbre[f_g(k)].a > 0 && f_g(k) < tas->nb_elt)
+            fprintf(fichier, "\n\t%d--%d", tas->arbre[k].a, tas->arbre[f_g(k)].a);
 
-        if (tas->arbre[k] > 0 && tas->arbre[f_d(k)] > 0 && f_d(k) < tas->nb_elt)
-            fprintf(fichier, "\n\t%d--%d", tas->arbre[k], tas->arbre[f_d(k)]);
+        if (tas->arbre[k].b > 0 && tas->arbre[f_d(k)].b > 0 && f_d(k) < tas->nb_elt)
+            fprintf(fichier, "\n\t%d--%d", tas->arbre[k].b, tas->arbre[f_d(k)].b);
+        //fprintf(fichier, "\n\t%d--%d", tas->arbre[k].a, tas->arbre[k].b);
+
         k++;
     }
     fprintf(fichier, "\n} ");
@@ -165,7 +167,7 @@ void detasser(tas_binaire_t *tas, int i)
 
     system("dot -Tjpg tas.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
-}*/
+}
 
 /*void diminuer_cle(tas_binaire_t *tas, int indice, int nouv_key)
 {

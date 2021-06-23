@@ -3,6 +3,8 @@
 int main()
 {
     graphe_t * graphe = init_graphe_labyrinth(C_LABY, L_LABY);
+    fisher_yates_shuffle(graphe);
+    graphe = kruskal(graphe);
     tas_binaire_t * tas = NULL;
     int *distance = NULL, *parent = NULL,*visite;
     int code_retour = alloc_tableaux(N_SOMMET,&distance,&parent,&visite);
@@ -17,8 +19,8 @@ int main()
         {
             printf("%d : d %d p %d v %d\n",i,distance[i], parent[i], visite[i]);
         }
-        /*FIN INITIALISATION TABLEAUX*/
-        //fichier_graphiz(tas);
+
+        /*FIN INITIALISATION TABLEAUX*/;
 
     }else
         printf("Erreur alloc tableaux !\n");

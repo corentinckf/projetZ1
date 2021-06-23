@@ -13,31 +13,19 @@ int alloc_tableaux(int n_sommet,int** distance,int** parent,int**visite)
 void initialiser_tableaux(int sommet_depart, graphe_t * graphe,int* distance,int* parent,int* visite, tas_binaire_t ** tas)
 {
     *tas = (tas_binaire_t*) malloc(sizeof(tas_binaire_t));
-    int liste_temp[graphe->n_sommet];
     if(tas)
     {
         for(int i = 0; i < graphe->n_sommet;++i)
         {
             
             parent[i] = AUCUN;
+            visite[i] = 0;
+            distance[i] = INFINI;
             if(i==sommet_depart)
             {
                 visite[i] = 1;
                 distance[i] = 0;
-            }else
-            {
-                visite[i] = 0;
-                distance[i] = INFINI;
-            }
-                
-        }
-
-        for(int i = 0; i < graphe->n_arrete;++i)
-        {
-            if(i==sommet_depart)
-            {
-                ajouter_arr(*tas, graphe->liste_arrete[i]);
-            }
+            } 
         }
 
     }

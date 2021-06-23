@@ -24,6 +24,7 @@ graphe_t * init_graphe_labyrinth(int c_laby, int l_laby)
                     l_a[graphe->n_arrete].b = i + c_laby;
                     ++graphe->n_arrete;
                 }
+                
             }
         }
 
@@ -32,6 +33,7 @@ graphe_t * init_graphe_labyrinth(int c_laby, int l_laby)
         {
             graphe->liste_arrete[i].a = l_a[i].a;
             graphe->liste_arrete[i].b = l_a[i].b;
+            graphe->liste_arrete[i].poids = 1;
         }
         free(l_a);
     }

@@ -11,7 +11,7 @@
 #include "tas_binaire_struct.h"
 
 
-#define N_SOMMET 10
+#define N_SOMMET (C_LABY) * (L_LABY)
 #define C_LABY 4
 #define L_LABY 4
 

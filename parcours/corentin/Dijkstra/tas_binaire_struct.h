@@ -35,6 +35,6 @@ void detasser(tas_binaire_t *tas, int i);
 
 //void diminuer_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
 
-//void fichier_graphiz(tas_binaire_t *tas);
+void fichier_graphiz(tas_binaire_t *tas);
 
 #endif
