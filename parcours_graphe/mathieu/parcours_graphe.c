@@ -66,7 +66,7 @@ void dijkstra(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r, int distance[N], i
             relachement(pt_tas->n, pt_tas->n + 1, 1, distance, parent, file);
             // printf("%d,%d\n", pt_tas->n, pt_tas->n + 1);
         }
-        if (pt_tas->n - 1 > 0 &&  !(mur & (unsigned)mur_ouest))
+        if (pt_tas->n - 1 > 0 && !(mur & (unsigned)mur_ouest))
         {
             relachement(pt_tas->n, pt_tas->n - 1, 1, distance, parent, file);
             // printf("%d,%d et mur %d et murOuest %d\n", pt_tas->n, pt_tas->n - 1, mur, mur_ouest);
@@ -82,8 +82,8 @@ void dijkstra(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r, int distance[N], i
             // printf("%d,%d\n", pt_tas->n, pt_tas->n + NB_COLONNE_LABY);
         }
 
-        /*
-        for (int k = 0; k < graph_copie->nb_arete; ++k)
+        /* cherche les voisins en parcourant toute la liste des aretes
+        for (int a = 0; k < graph_copie->nb_arete; ++k)
         {
             u = graph_copie->liste_arete[k].a;
             v = graph_copie->liste_arete[k].b;
@@ -123,7 +123,7 @@ graph_l_arete_t *copie_graph(graph_l_arete_t *graph)
     return copie;
 }
 
-void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
+void dessiner_chemin(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
                        int chemin_list[N], int taille_chemin)
 {
     SDL_Rect rectangle;
@@ -177,7 +177,7 @@ void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LI
     }
 }
 
-int chemin(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int sourc, int dest, int chemin_list[N])
+int chemin_dijkstra(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int sourc, int dest, int chemin_list[N])
 {
     int distance[N];
     int parent[N];
@@ -186,7 +186,190 @@ int chemin(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int sourc, int dest, int che
     int k = dest;
     dijkstra(map, sourc, distance, parent);
     //affficher_tab(parent, N);
-    while ( k != sourc)
+    while (k != sourc)
+    {
+        chemin_list[taille_chemin] = k;
+        k = parent[k];
+        taille_chemin++;
+    }
+    chemin_list[taille_chemin] = sourc;
+    taille_chemin++;
+    // printf("Chemin de %d a %d de taille %d\n", sourc, dest, taille_chemin);
+    // printf("taille_chemin=%d  chemin_l[]=\n", taille_chemin);
+    // affficher_tab(chemin_list, taille_chemin);
+    return taille_chemin;
+}
+
+void promenade_labyrinthe_dijkstra(SDL_Window *window, SDL_Renderer *renderer)
+{
+    float p = 0.01;
+    //generation graph arete
+    graph_l_arete_t *graph = NULL;
+    graph = init_graph_arete_en_grille();
+    graphviz_affiche_graph_arete(graph);
+    melange_fisher_yates_arete(graph);
+    //Generation quasi arbre
+    graph_l_arete_t *quasi_arbre = NULL;
+    quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
+    graphviz_affiche_graph_arete(quasi_arbre);
+    liberer_graph_arete(graph);
+
+    int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
+    construire_map(map, quasi_arbre);
+    /*
+    int parent[N];
+    int distance[N];
+
+    dijkstra(map, 0, distance, parent);
+    printf("parent : "); affficher_tab(parent,N);
+    printf("distance : "); affficher_tab(distance,N);
+*/
+    int sourc = 0;
+    int dest = 0;
+
+    int chemin_list[N];
+    int taille_chemin;
+    int compt = 0;
+    int alea;
+    while (compt < 10)
+    {
+        sourc = dest;
+        alea = rand() % quasi_arbre->nb_noeud;
+        printf("alea=%d\n", alea);
+        dest = alea;
+        taille_chemin = chemin_dijkstra(map, sourc, dest, chemin_list);
+
+        dessiner_chemin(window, renderer, map, chemin_list, taille_chemin);
+        ++compt;
+    }
+    SDL_Delay(1000);
+    SDL_RenderPresent(renderer);
+    liberer_graph_arete(quasi_arbre);
+}
+
+int d_euclidienne(int a, int b)
+{
+    int i_a = a / NB_COLONNE_LABY;
+    int j_a = a % NB_COLONNE_LABY;
+    int i_b = b / NB_COLONNE_LABY;
+    int j_b = b % NB_COLONNE_LABY;
+    int d = (i_a - i_b) * (i_a - i_b) + (j_a - j_b) * (j_a - j_b);
+    d = (int)sqrt((double)d);
+    return d;
+}
+
+int d_tchebychev(int a, int b)
+{
+    int i_a = a / NB_COLONNE_LABY;
+    int j_a = a % NB_COLONNE_LABY;
+    int i_b = b / NB_COLONNE_LABY;
+    int j_b = b % NB_COLONNE_LABY;
+    return MAX(abs(i_a - i_b), abs(j_a - j_b));
+}
+
+int d_manattan(int a, int b)
+{
+    int i_a = a / NB_COLONNE_LABY;
+    int j_a = a % NB_COLONNE_LABY;
+    int i_b = b / NB_COLONNE_LABY;
+    int j_b = b % NB_COLONNE_LABY;
+    int d = abs(i_a - i_b) + abs(j_a - j_b);
+    return d;
+}
+
+void A_etoile(int (*fct_distance)(const int, const int), int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r, int distance[N], int parent[N])
+{
+    dijkstra_init(r, distance, parent);
+    tas_binaire_t *file;
+    couple_t *pt_tas = (couple_t *)malloc(sizeof(couple_t));
+    pt_tas->d = 0;
+    pt_tas->n = r;
+    file = creer_tas_b(*pt_tas);
+
+    int i_pt_tas, j_pt_tas;
+    int d_u_v;
+    unsigned mur;
+
+    while (file->nb_elt != 0)
+    {
+        pt_tas = retirer_elt(file);
+        i_pt_tas = pt_tas->n / NB_COLONNE_LABY;
+        j_pt_tas = pt_tas->n % NB_COLONNE_LABY;
+
+        mur = (unsigned)map[i_pt_tas][j_pt_tas];
+
+        if ((pt_tas->n + 1) % NB_COLONNE_LABY != 0 && !(mur & (unsigned)mur_est))
+        {
+            d_u_v = fct_distance(pt_tas->n, pt_tas->n + 1);
+            relachement(pt_tas->n, pt_tas->n + 1, d_u_v, distance, parent, file);
+        }
+        if (pt_tas->n - 1 > 0 && !(mur & (unsigned)mur_ouest))
+        {
+            d_u_v = fct_distance(pt_tas->n, pt_tas->n - 1);
+            relachement(pt_tas->n, pt_tas->n - 1, d_u_v, distance, parent, file);
+        }
+        if (pt_tas->n - NB_COLONNE_LABY > 0 && !(mur & (unsigned)mur_nord))
+        {
+            d_u_v = fct_distance(pt_tas->n, pt_tas->n - NB_COLONNE_LABY);
+            relachement(pt_tas->n, pt_tas->n - NB_COLONNE_LABY, d_u_v, distance, parent, file);
+        }
+        if (pt_tas->n + NB_COLONNE_LABY < N && !(mur & (unsigned)mur_sud))
+        {
+            d_u_v = fct_distance(pt_tas->n, pt_tas->n + NB_COLONNE_LABY);
+            relachement(pt_tas->n, pt_tas->n + NB_COLONNE_LABY, d_u_v, distance, parent, file);
+        }
+    }
+}
+
+void promenade_labyrinthe_a_etoile(SDL_Window *window, SDL_Renderer *renderer)
+{
+    float p = 0.01;
+    //generation graph arete
+    graph_l_arete_t *graph = NULL;
+    graph = init_graph_arete_en_grille();
+    graphviz_affiche_graph_arete(graph);
+    melange_fisher_yates_arete(graph);
+    //Generation quasi arbre
+    graph_l_arete_t *quasi_arbre = NULL;
+    quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
+    graphviz_affiche_graph_arete(quasi_arbre);
+    liberer_graph_arete(graph);
+
+    int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
+    construire_map(map, quasi_arbre);
+
+    int sourc = 0;
+    int dest = 0;
+
+    int chemin_list[N];
+    int taille_chemin;
+    int compt = 0;
+    int alea;
+    while (compt < 10)
+    {
+        sourc = dest;
+        alea = rand() % quasi_arbre->nb_noeud;
+        printf("alea=%d\n", alea);
+        dest = alea;
+        taille_chemin = chemin_a_etoile(d_euclidienne, map, sourc, dest, chemin_list);
+
+        dessiner_chemin(window, renderer, map, chemin_list, taille_chemin);
+        ++compt;
+    }
+    SDL_Delay(1000);
+    SDL_RenderPresent(renderer);
+    liberer_graph_arete(quasi_arbre);
+}
+
+int chemin_a_etoile(int (*fct_distance)(const int, const int), int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int sourc, int dest, int chemin_list[N])
+{
+    int distance[N];
+    int parent[N];
+
+    int taille_chemin = 0;
+    int k = dest;
+    A_etoile(fct_distance, map, sourc, distance, parent);
+    while (k != sourc)
     {
         chemin_list[taille_chemin] = k;
         k = parent[k];

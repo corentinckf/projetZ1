@@ -40,63 +40,8 @@ int main()
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-    //generation graph arete
-    graph_l_arete_t *graph = NULL;
-    graph = init_graph_arete_en_grille();
-    graphviz_affiche_graph_arete(graph);
-
-    melange_fisher_yates_arete(graph);
-
-    float p = 0.01;
-
-    graph_l_arete_t *quasi_arbre = NULL;
-    quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
-    graphviz_affiche_graph_arete(quasi_arbre);
-    
-    liberer_graph_arete(graph);
-
-    int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
-    construire_map(map, quasi_arbre);
-
-/*
-    int parent[N];
-    int distance[N];
-
-    dijkstra(map, 0, distance, parent);
-    printf("parent : "); affficher_tab(parent,N);
-    printf("distance : "); affficher_tab(distance,N);
-*/
-    //main_labyrinthe(map);
-    //dessiner(window, renderer, map);
-    int sourc = 0;
-    int dest = 0;
-
-    int chemin_list[N];
-    int taille_chemin;
-    int compt = 0;
-    int alea;
-    while (compt < 10)
-    {
-        sourc = dest;
-        alea = rand() % quasi_arbre->nb_noeud;
-        printf("alea=%d\n", alea);
-        dest = alea;
-        taille_chemin = chemin(map, sourc, dest, chemin_list);
-
-        //printf("sourc=%d, dest=%d\n", sourc, dest);
-        //affficher_tab(chemin_list, taille_chemin);
-
-        dessiner_dijkstra(window, renderer, map, chemin_list, taille_chemin);
-        ++compt;
-    }
-
-    //play_texture_mur(window, renderer, map);
-
-    dessiner(window, renderer, map);
-    SDL_Delay(2000);
-    SDL_RenderPresent(renderer);
-
-    liberer_graph_arete(quasi_arbre);
+    //promenade_labyrinthe_dijkstra(window, renderer);
+    promenade_labyrinthe_a_etoile(window, renderer);
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;
