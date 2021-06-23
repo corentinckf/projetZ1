@@ -10,5 +10,6 @@ void relachement(int u, int v, int p_u_v, int distance[N], int parent[N], tas_bi
 void dijkstra(graph_l_arete_t *graph, int r, int distance[N], int parent[N]);
 
 graph_l_arete_t *copie_graph(graph_l_arete_t *graph);
-
+void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int distance[N], int parent[N], int sourc, int dest);
+int chemin(graph_l_arete_t *graph, int sour, int dest);
 #endif

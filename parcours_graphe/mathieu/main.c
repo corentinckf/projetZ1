@@ -54,15 +54,13 @@ int main()
 
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
-
+    int sourc = 0;
+    int dest = 22;
     int distance[N];
     int parent[N];
 
-    dijkstra(quasi_arbre, 0, distance, parent);
+    dijkstra(quasi_arbre, sourc, distance, parent);
 
-    dessiner(window, renderer, map);
-    //play_texture_mur(window, renderer, map);
-    SDL_RenderPresent(renderer);
 
     printf("parent : ");
     affficher_tab(parent, N);
@@ -70,10 +68,18 @@ int main()
     affficher_tab(distance, N);
     printf("\n");
 
+
+
+
+    //dessiner(window, renderer, map);
+    //play_texture_mur(window, renderer, map);
+    dessiner_dijkstra(window, renderer,map, distance, parent, sourc, dest);
+    SDL_RenderPresent(renderer);
+
+    SDL_Delay(2000);
+
     liberer_graph_arete(graph);
     liberer_graph_arete(quasi_arbre);
-
-    SDL_Delay(5000);
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;

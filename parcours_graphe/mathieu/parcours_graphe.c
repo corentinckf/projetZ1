@@ -94,19 +94,36 @@ graph_l_arete_t *copie_graph(graph_l_arete_t *graph)
     }
     return copie;
 }
-/*
-void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int distance[N], int parent[N])
+
+void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int distance[N], int parent[N], int sourc, int dest)
 {
+    SDL_Rect rectangle;
+    int i_k, j_k;
+    int k = dest;
+    int fin = 0;
+    rectangle.w = LARGEUR_CASE - 2;
+    rectangle.h = HAUTEUR_CASE - 2;
 
-    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
-    rectangle.x = 0;
-    rectangle.y = 0;
-    rectangle.w = 400;
-    rectangle.h = 400;
+    while (k != sourc)
+    {
+        k = parent[k];
 
-    SDL_RenderFillRect(renderer, &rectangle);
+        dessiner(window, renderer, map);
+        i_k = k / NB_COLONNE_LABY;
+        j_k = k % NB_COLONNE_LABY;
+        //printf("k=%d, i=%d,  j=%d\n", k, i_k, j_k);
+        SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
+        rectangle.x = j_k * LARGEUR_CASE + 1;
+        rectangle.y = i_k * HAUTEUR_CASE + 1;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer, 0, 0, 400, 400);
+        //printf("x=%d, y=%d\n", rectangle.x, rectangle.y);
+
+        SDL_RenderFillRect(renderer, &rectangle);
+
+        SDL_RenderPresent(renderer);
+        SDL_Delay(500);
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+    }
 }
-*/
