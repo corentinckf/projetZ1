@@ -48,7 +48,7 @@ typedef struct graph_l_arete
 } graph_l_arete_t;
 
 
-
+#include "tas_binaire.h"
 #include "liste_chainee.h"
 #include "partition.h"
 #include "connexe.h"

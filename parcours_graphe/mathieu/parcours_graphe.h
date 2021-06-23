@@ -6,7 +6,7 @@
 int main_parcours_graphe();
 
 void dijkstra_init(int r, int distance[N], int parent[N]);
-void relachement(graph_l_arete_t *graph, int i_arc, int distance[N], int parent[N]);
+void relachement(graph_l_arete_t *graph, int i_arc, int distance[N], int parent[N], tas_binaire_t *tas);
 void dijkstra(graph_l_arete_t *graph, int r, int parent[N], int distance[N]);
 
 #endif

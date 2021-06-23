@@ -3,7 +3,6 @@
 
 #include "const.h"
 
-
 /*
 
 gcc tas_binaire.c -o tas_binaire -Wall -Wextra
@@ -15,8 +14,6 @@ system("dot -Tjpg graph_tas.dot -o img.jpg");
 system("display ./img.jpg 2> /dev/null");
 
 */
-
-
 
 typedef struct tas_binaire
 {
@@ -49,11 +46,11 @@ void entasser(tas_binaire_t *tas, int i);
 void detasser(tas_binaire_t *tas, int i);
 
 void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
-void diminuer_cle(tas_binaire_t *tas, int indice, int val_ajoutee);
+void diminuer_cle(tas_binaire_t *tas, couple_t *val_couple);
 
 void fichier_graphiz(tas_binaire_t *tas);
 
-int *tri_tas_min(tas_binaire_t *tab_valeur);
+//int *tri_tas_min(tas_binaire_t *tab_valeur);
 
 static int compare(void const *a, void const *b);
 

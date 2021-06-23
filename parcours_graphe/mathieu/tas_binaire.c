@@ -172,11 +172,13 @@ void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
         printf("modification impossible : indice trop petit\n");
 }
 
-void diminuer_cle(tas_binaire_t *tas, int indice, int nouv_key)
+void diminuer_cle(tas_binaire_t *tas, couple_t val_couple)
 {
+    indice = tas->indice_tas[couple.n];
+
     if (indice <= tas->nb_elt)
     {
-        tas->tas[indice].d = nouv_key;
+        tas->tas[indice].d = val_couple.d;
         int i = indice;
         int p_i = pere(i);
         while (i > 0 && tas->tas[p_i].d > tas->tas[i].d)
