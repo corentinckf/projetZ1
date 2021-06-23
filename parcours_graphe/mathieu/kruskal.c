@@ -34,7 +34,7 @@ graph_l_arete_t *calcul_foret_couvrant(graph_l_arete_t *graph)
     int part[2][N];
     int hauteur[N];
     creer_partition_arbo(part, hauteur);
-    afficher_partition(part);
+    //afficher_partition(part);
     if (arbre)
     {
         arbre->nb_noeud = N;
@@ -73,7 +73,7 @@ graph_l_arete_t *calcul_quasi_foret_couvrant(graph_l_arete_t *graph, float p)
     int part[2][N];
     int hauteur[N];
     creer_partition_arbo(part, hauteur);
-    afficher_partition(part);
+    //afficher_partition(part);
     if (arbre)
     {
         arbre->nb_noeud = N;
@@ -86,7 +86,7 @@ graph_l_arete_t *calcul_quasi_foret_couvrant(graph_l_arete_t *graph, float p)
             a = graph->liste_arete[i].a;
             b = graph->liste_arete[i].b;
             
-            printf("alpha=%f\n", alpha);
+            //printf("alpha=%f\n", alpha);
             alpha = (float)(rand() % 100) / (float)100;
             if (recuperer_classe_arbo(part, a) != recuperer_classe_arbo(part, b))
             {

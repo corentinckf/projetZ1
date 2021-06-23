@@ -4,6 +4,7 @@ int main()
 {
     srand(GRAINE);
 
+
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -35,11 +36,10 @@ int main()
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-    /*
-    //generation graph couple
+    //generation graph arete
     graph_l_arete_t *graph = NULL;
-    graph = init_graph_couple_en_grille();
-    graphviz_affiche_graph_couple(graph);
+    graph = init_graph_arete_en_grille();
+    graphviz_affiche_graph_arete(graph);
 
     melange_fisher_yates_arete(graph);
 
@@ -47,22 +47,31 @@ int main()
 
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
-    graphviz_affiche_graph_couple(quasi_arbre);
+    graphviz_affiche_graph_arete(quasi_arbre);
 
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
     construire_map(map, quasi_arbre);
 
-    liberer_graph_couple(graph);
-    liberer_graph_couple(quasi_arbre);
-
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
 
+    int distance[N];
+    int parent[N];
+
+    dijkstra(quasi_arbre, 0, distance, parent);
+
     play_texture_mur(window, renderer, map);
     SDL_RenderPresent(renderer);
-*/
 
-    main_parcours_graphe();
+    printf("parent : ");
+    affficher_tab(parent, N);
+    printf("\n");
+    printf("distance : ");
+    affficher_tab(distance, N);
+    printf("\n");
+
+    liberer_graph_arete(graph);
+    liberer_graph_arete(quasi_arbre);
 
     SDL_Delay(2000);
 

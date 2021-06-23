@@ -6,9 +6,9 @@ int main_tas_binaire()
     return 0;
 }
 
-void affficher_tab(int *tab)
+void affficher_tab(int *tab, int nb_elt)
 {
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < nb_elt; i++)
     {
         printf("%d ", tab[i]);
     }
@@ -36,8 +36,9 @@ tas_binaire_t *creer_tas_b(couple_t val_couple)
             tas->indice_tas[i] = -1;
             //tas->info_n[i]=???;
         }
+        tas->tas[0] = val_couple;
         tas->nb_elt = 1;
-        tas->tas[tas->nb_elt] = val_couple;
+        //printf("tas %d %d\n", tas->tas[0].d,tas->tas[0].n);
     }
     return tas;
 }
@@ -60,29 +61,38 @@ void ajouter_elt(tas_binaire_t *tas, couple_t val)
     if (tas->nb_elt < N)
     {
         tas->tas[tas->nb_elt] = val;
-        detasser(tas, tas->nb_elt);
+        tas->indice_tas[val.n] = tas->nb_elt;
         tas->nb_elt++;
+        detasser(tas, tas->nb_elt);
     }
     else
         printf("ERREUR, plus de place dans le tas");
 }
 
-couple_t retirer_elt(tas_binaire_t *tas)
+couple_t *retirer_elt(tas_binaire_t *tas)
 {
-    couple_t rac;
-    rac.d = -1;
-    rac.n = -1;
-    if (tas->nb_elt > 0)
+    couple_t *rac = malloc(sizeof(couple_t));
+    rac->d = -1;
+    rac->n = -1;
+    if (tas->nb_elt > 1)
     {
-        rac = tas->tas[0];
-        tas->tas[0] = tas->tas[tas->nb_elt];
+        rac = &tas->tas[0];
         tas->nb_elt--;
+        tas->tas[0] = tas->tas[tas->nb_elt];
+        tas->indice_tas[tas->tas[0].n] = 0;
         entasser(tas, 0);
+    }
+    else if (tas->nb_elt == 1)
+    {
+        rac = &tas->tas[0];
+        tas->nb_elt--;
+        printf("Plus rien a retirer apres\n");
     }
     else
     {
         printf("ERREUR, plus rien a retirer\n");
     }
+
     return rac;
 }
 
@@ -91,20 +101,20 @@ void entasser(tas_binaire_t *tas, int i)
     int l = f_g(i);
     int r = f_d(i);
     int min = i;
-    //printf("tas[i]=%d, tas[l]=%d, tas[r]=%d\n", tas[i], tas[l], tas[r]);
 
-    if (l <= tas->nb_elt && tas->tas[l].d < tas->tas[i].d)
+    if (l <= tas->nb_elt && tas->tas[l].d < tas->tas[i].d && tas->indice_tas[tas->tas[l].n] >=0 )
     {
         min = l;
     }
 
-    if (r <= tas->nb_elt && tas->tas[r].d < tas->tas[min].d)
+    if (r <= tas->nb_elt && tas->tas[r].d < tas->tas[min].d && tas->indice_tas[tas->tas[r].n] >=0)
     {
         min = r;
     }
 
     if (min != i)
     {
+        permute_a_b(&tas->indice_tas[tas->tas[i].n], &tas->indice_tas[tas->tas[min].n]);
         permute_a_b(&tas->tas[i].d, &tas->tas[min].d);
         permute_a_b(&tas->tas[i].n, &tas->tas[min].n);
         entasser(tas, min);
@@ -124,8 +134,10 @@ void detasser(tas_binaire_t *tas, int i)
 
     if (max != i)
     {
+        permute_a_b(&tas->indice_tas[tas->tas[i].n], &tas->indice_tas[tas->tas[p].n]);
         permute_a_b(&tas->tas[i].d, &tas->tas[p].d);
         permute_a_b(&tas->tas[i].n, &tas->tas[p].n);
+
         detasser(tas, max);
     }
 }
@@ -140,7 +152,7 @@ void fichier_graphiz(tas_binaire_t *tas)
     int k = 1;
 
     fprintf(fichier, "graph { ");
-    while (k <= tas->nb_elt)
+    while (k < tas->nb_elt)
     {
         if (tas->tas[k].n > 0 && tas->tas[f_g(k)].n > 0 && f_g(k) <= tas->nb_elt)
             fprintf(fichier, "\n\t%d--%d", tas->tas[k].n, tas->tas[f_g(k)].n);
@@ -176,18 +188,22 @@ void diminuer_cle(tas_binaire_t *tas, couple_t val_couple)
 {
     int indice = tas->indice_tas[val_couple.n];
 
-    if (indice <= tas->nb_elt)
+    if (indice < tas->nb_elt)
     {
         tas->tas[indice].d = val_couple.d;
         int i = indice;
         int p_i = pere(i);
+        /*
         while (i > 0 && tas->tas[p_i].d > tas->tas[i].d)
         {
+            permute_a_b(&tas->indice_tas[tas->tas[i].n], &tas->indice_tas[tas->tas[p_i].n]);
             permute_a_b(&tas->tas[i].d, &tas->tas[p_i].d);
             permute_a_b(&tas->tas[i].n, &tas->tas[p_i].n);
             i = p_i;
             p_i = pere(i);
         }
+        */
+        detasser(tas, indice);
     }
     else
         printf("modification impossible : indice trop petit\n");

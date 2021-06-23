@@ -27,8 +27,8 @@ typedef struct tas_binaire
 
 int main_tas_binaire();
 
-/*
 void affficher_tab(int *tab, int nb_elt);
+/*
 void remplir_tab(int tab[NB_ELT_MAX]);
 void init_tab(int tab[NB_ELT_MAX]);
 */
@@ -40,7 +40,7 @@ int f_g(int i);
 int pere(int i);
 
 void ajouter_elt(tas_binaire_t *, couple_t);
-couple_t retirer_elt(tas_binaire_t *);
+couple_t* retirer_elt(tas_binaire_t *);
 
 //void permute_a_b(int *a, int *b);
 
