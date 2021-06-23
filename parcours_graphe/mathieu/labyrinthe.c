@@ -37,31 +37,31 @@ int main_labyrinthe()
     //srand(time(NULL));
     //main_kruskal();
 
-    //generation graph couple
-    graph_couple_t *graph = NULL;
-    graph = init_graph_couple_en_grille();
-    graphviz_affiche_graph_couple(graph);
+    //generation graph arete
+    graph_l_arete_t *graph = NULL;
+    graph = init_graph_arete_en_grille();
+    graphviz_affiche_graph_arete(graph);
 
     melange_fisher_yates_arete(graph);
 
 /*
     //en calculer une forêt couvrante de poids minimal
-    graph_couple_t *arbre_couvrant = NULL;
+    graph_l_arete_t *arbre_couvrant = NULL;
     arbre_couvrant = calcul_foret_couvrant(graph);
-    graphviz_affiche_graph_couple(arbre_couvrant);
+    graphviz_affiche_graph_arete(arbre_couvrant);
 */
 
     float p = 0.05;
 
-    graph_couple_t *quasi_arbre = NULL;
+    graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
-    graphviz_affiche_graph_couple(quasi_arbre);
+    graphviz_affiche_graph_arete(quasi_arbre);
 
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
     construire_map(map, quasi_arbre);
 
-    liberer_graph_couple(graph);
-    liberer_graph_couple(quasi_arbre);
+    liberer_graph_arete(graph);
+    liberer_graph_arete(quasi_arbre);
 
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
@@ -82,7 +82,7 @@ void permute_a_b(int *a, int *b)
     *b = temp;
 }
 
-void melange_fisher_yates_arete(graph_couple_t *graph)
+void melange_fisher_yates_arete(graph_l_arete_t *graph)
 {
     //srand(48);
     //srand(time(NULL));
@@ -91,13 +91,13 @@ void melange_fisher_yates_arete(graph_couple_t *graph)
     for (int i = graph->nb_arete - 1; i >= 1; --i)
     {
         j = rand() % i + 1;
-        permute_a_b(&graph->liste_couple[i].a, &graph->liste_couple[j].a);
-        permute_a_b(&graph->liste_couple[i].b, &graph->liste_couple[j].b);
-        permute_a_b(&graph->liste_couple[i].poids, &graph->liste_couple[j].poids);
+        permute_a_b(&graph->liste_arete[i].a, &graph->liste_arete[j].a);
+        permute_a_b(&graph->liste_arete[i].b, &graph->liste_arete[j].b);
+        permute_a_b(&graph->liste_arete[i].poids, &graph->liste_arete[j].poids);
     }
 }
 
-void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_couple_t *graph)
+void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_l_arete_t *graph)
 {
     int a, b;
     int i_a, j_a;
@@ -109,8 +109,8 @@ void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_couple_t *gra
 
     for (int k = 0; k < graph->nb_arete; ++k)
     {
-        a = graph->liste_couple[k].a;
-        b = graph->liste_couple[k].b;
+        a = graph->liste_arete[k].a;
+        b = graph->liste_arete[k].b;
 
         i_a = a / NB_COLONNE_LABY;
         j_a = a % NB_COLONNE_LABY;

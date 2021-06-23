@@ -3,7 +3,7 @@ OPT  = -c -Wextra -Wall -g
 SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
 
 prog : main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o 
-	$(CC) labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o  $(SDL2) -o prog
+	$(CC) main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o  $(SDL2) -o prog
 
 main.o : main.c const.h
 	$(CC) $(OPT) -o main.o -c main.c

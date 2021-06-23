@@ -18,16 +18,16 @@ int main_connexe()
     graphviz_affiche_arbo(part_connexe);
 */
 
-    graph_couple_t *graph = init_graph_couple_alea();
+    graph_l_arete_t *graph = init_graph_arete_alea();
 
-    graphviz_affiche_graph_couple(graph);
+    graphviz_affiche_graph_arete(graph);
 
     int part_connexe[2][N];
     int hauteur_part[N];
     creer_partition_arbo(part_connexe, hauteur_part);
-    connexe_graph_couple(part_connexe, hauteur_part, graph);
+    connexe_graph_arete(part_connexe, hauteur_part, graph);
     graphviz_affiche_arbo(part_connexe);
-    liberer_graph_couple(graph);
+    liberer_graph_arete(graph);
 
     return 0;
 }
@@ -111,49 +111,49 @@ void connexe_graph_mat(int part[2][N], int hauteur[N], int mat[N][N])
     }
 }
 
-graph_couple_t *init_graph_couple_en_grille()
+graph_l_arete_t *init_graph_arete_en_grille()
 {
-    graph_couple_t *graph_couple = (graph_couple_t *)malloc(sizeof(graph_couple_t));
-    if (graph_couple)
+    graph_l_arete_t *graph_arete = (graph_l_arete_t *)malloc(sizeof(graph_l_arete_t));
+    if (graph_arete)
     {
-        graph_couple->nb_noeud = N;
-        graph_couple->nb_arete = 0;
-        couple_t *couple_tmp = malloc(sizeof(couple_t) * 2 * graph_couple->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
+        graph_arete->nb_noeud = N;
+        graph_arete->nb_arete = 0;
+        arete_t *arete_tmp = malloc(sizeof(arete_t) * 2 * graph_arete->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
         //On genere le graph avec toutes les aretes sur la grille en tenant compte des voisins
-        for (int i = 0; i < graph_couple->nb_noeud; i++)
+        for (int i = 0; i < graph_arete->nb_noeud; i++)
         {
             if ((i + 1) % NB_COLONNE_LABY != 0)
             {
-                couple_tmp[graph_couple->nb_arete].a = i;
-                couple_tmp[graph_couple->nb_arete].b = i + 1;
-                couple_tmp[graph_couple->nb_arete].poids = 1;
-                graph_couple->nb_arete++;
+                arete_tmp[graph_arete->nb_arete].a = i;
+                arete_tmp[graph_arete->nb_arete].b = i + 1;
+                arete_tmp[graph_arete->nb_arete].poids = 1;
+                graph_arete->nb_arete++;
             }
-            if (i + NB_COLONNE_LABY < graph_couple->nb_noeud)
+            if (i + NB_COLONNE_LABY < graph_arete->nb_noeud)
             {
-                couple_tmp[graph_couple->nb_arete].a = i;
-                couple_tmp[graph_couple->nb_arete].b = i + NB_COLONNE_LABY;
-                couple_tmp[graph_couple->nb_arete].poids = 1;
-                graph_couple->nb_arete++;
+                arete_tmp[graph_arete->nb_arete].a = i;
+                arete_tmp[graph_arete->nb_arete].b = i + NB_COLONNE_LABY;
+                arete_tmp[graph_arete->nb_arete].poids = 1;
+                graph_arete->nb_arete++;
             }
         }
-        graph_couple->liste_couple = (couple_t *)malloc(sizeof(couple_t) * graph_couple->nb_arete);
-        for (int k = 0; k < graph_couple->nb_arete; k++)
+        graph_arete->liste_arete = (arete_t *)malloc(sizeof(arete_t) * graph_arete->nb_arete);
+        for (int k = 0; k < graph_arete->nb_arete; k++)
         {
-            graph_couple->liste_couple[k] = couple_tmp[k];
+            graph_arete->liste_arete[k] = arete_tmp[k];
         }
-        free(couple_tmp);
+        free(arete_tmp);
     }
-    return graph_couple;
+    return graph_arete;
 }
-graph_couple_t *init_graph_couple_alea()
+graph_l_arete_t *init_graph_arete_alea()
 {
-    graph_couple_t *graph_couple = (graph_couple_t *)malloc(sizeof(graph_couple_t));
-    if (graph_couple)
+    graph_l_arete_t *graph_arete = (graph_l_arete_t *)malloc(sizeof(graph_l_arete_t));
+    if (graph_arete)
     {
-        graph_couple->nb_noeud = N;
-        graph_couple->nb_arete = 0;
-        couple_t *couple_tmp = malloc(sizeof(couple_t) * 2 * graph_couple->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
+        graph_arete->nb_noeud = N;
+        graph_arete->nb_arete = 0;
+        arete_t *arete_tmp = malloc(sizeof(arete_t) * 2 * graph_arete->nb_noeud - NB_COLONNE_LABY - NB_LIGNE_LABY);
         int v;
 
         for (int i = 0; i < N; i++)
@@ -163,33 +163,33 @@ graph_couple_t *init_graph_couple_alea()
                 v = rand() % ALEA_GEN;
                 if (v == 1)
                 {
-                    couple_tmp[graph_couple->nb_arete].a = i;
-                    couple_tmp[graph_couple->nb_arete].b = j;
-                    graph_couple->nb_arete++;
+                    arete_tmp[graph_arete->nb_arete].a = i;
+                    arete_tmp[graph_arete->nb_arete].b = j;
+                    graph_arete->nb_arete++;
                 }
             }
         }
 
-        graph_couple->liste_couple = (couple_t *)malloc(sizeof(couple_t) * graph_couple->nb_arete);
-        for (int k = 0; k < graph_couple->nb_arete; k++)
+        graph_arete->liste_arete = (arete_t *)malloc(sizeof(arete_t) * graph_arete->nb_arete);
+        for (int k = 0; k < graph_arete->nb_arete; k++)
         {
-            graph_couple->liste_couple[k].a = couple_tmp[k].a;
-            graph_couple->liste_couple[k].b = couple_tmp[k].b;
+            graph_arete->liste_arete[k].a = arete_tmp[k].a;
+            graph_arete->liste_arete[k].b = arete_tmp[k].b;
         }
-        free(couple_tmp);
+        free(arete_tmp);
     }
-    return graph_couple;
+    return graph_arete;
 }
 
-void connexe_graph_couple(int part_connexe[2][N], int hauteur_part[N], graph_couple_t *graph)
+void connexe_graph_arete(int part_connexe[2][N], int hauteur_part[N], graph_l_arete_t *graph)
 {
     for (int i = 0; i < graph->nb_arete; i++)
     {
-        fusion_arbo(part_connexe, hauteur_part, graph->liste_couple[i].a, graph->liste_couple[i].b);
+        fusion_arbo(part_connexe, hauteur_part, graph->liste_arete[i].a, graph->liste_arete[i].b);
     }
 }
 
-void fichier_graphviz_graph_couple(graph_couple_t *graph)
+void fichier_graphviz_graph_arete(graph_l_arete_t *graph)
 {
     FILE *fichier = NULL;
     //system("rm graph.dot");
@@ -201,7 +201,7 @@ void fichier_graphviz_graph_couple(graph_couple_t *graph)
     for (int i = 0; i < graph->nb_arete; i++)
     {
         //printf("i=%d\n", i);
-        fprintf(fichier, "\n\t%d--%d [taillabel = \"%d\"]", graph->liste_couple[i].a, graph->liste_couple[i].b, graph->liste_couple[i].poids);
+        fprintf(fichier, "\n\t%d--%d [taillabel = \"%d\"]", graph->liste_arete[i].a, graph->liste_arete[i].b, graph->liste_arete[i].poids);
     }
     for (int i = 0; i < graph->nb_noeud; i++)
         fprintf(fichier, "\n\t%d", i);
@@ -211,15 +211,15 @@ void fichier_graphviz_graph_couple(graph_couple_t *graph)
     fclose(fichier);
 }
 
-void graphviz_affiche_graph_couple(graph_couple_t *graph)
+void graphviz_affiche_graph_arete(graph_l_arete_t *graph)
 {
-    fichier_graphviz_graph_couple(graph);
+    fichier_graphviz_graph_arete(graph);
     system("dot -Tjpg graph.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
 }
 
-void liberer_graph_couple(graph_couple_t *graph)
+void liberer_graph_arete(graph_l_arete_t *graph)
 {
-    free(graph->liste_couple);
+    free(graph->liste_arete);
     free(graph);
 }

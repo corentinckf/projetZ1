@@ -37,7 +37,7 @@ int main()
 
     /*
     //generation graph couple
-    graph_couple_t *graph = NULL;
+    graph_l_arete_t *graph = NULL;
     graph = init_graph_couple_en_grille();
     graphviz_affiche_graph_couple(graph);
 
@@ -45,7 +45,7 @@ int main()
 
     float p = 0.05;
 
-    graph_couple_t *quasi_arbre = NULL;
+    graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
     graphviz_affiche_graph_couple(quasi_arbre);
 
@@ -64,7 +64,7 @@ int main()
 
     main_parcours_graphe();
 
-    SDL_Delay(5000);
+    SDL_Delay(2000);
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;

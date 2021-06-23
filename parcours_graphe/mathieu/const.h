@@ -28,19 +28,19 @@
 #define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
 
 
-typedef struct couple
+typedef struct arete
 {
     int a;
     int b;
     int poids;
-} couple_t;
+} arete_t;
 
-typedef struct graph_couple
+typedef struct graph_l_arete
 {
     int nb_noeud;
     int nb_arete;
-    couple_t *liste_couple;
-} graph_couple_t;
+    arete_t *liste_arete;
+} graph_l_arete_t;
 
 
 
