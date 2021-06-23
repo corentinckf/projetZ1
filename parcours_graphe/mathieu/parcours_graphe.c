@@ -36,28 +36,55 @@ void relachement(int u, int v, int p_u_v, int distance[N], int parent[N], tas_bi
     }
 }
 
-void dijkstra(graph_l_arete_t *graph, int r, int distance[N], int parent[N])
+//void dijkstra(graph_l_arete_t *graph,  int r, int distance[N], int parent[N])
+void dijkstra(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r, int distance[N], int parent[N])
 {
+    /*
+    graph_l_arete_t *graph_copie;
+    graph_copie = copie_graph(graph);
+*/
     dijkstra_init(r, distance, parent);
     tas_binaire_t *file;
     couple_t *pt_tas = (couple_t *)malloc(sizeof(couple_t));
     pt_tas->d = 0;
     pt_tas->n = r;
-    graph_l_arete_t *graph_copie;
-    graph_copie = copie_graph(graph);
-
     file = creer_tas_b(*pt_tas);
 
-    int u;
-    int v;
-    int p_u_v;
+    int i_pt_tas, j_pt_tas;
+    unsigned mur;
 
     while (file->nb_elt != 0)
     {
         pt_tas = retirer_elt(file);
+        i_pt_tas = pt_tas->n / NB_COLONNE_LABY;
+        j_pt_tas = pt_tas->n % NB_COLONNE_LABY;
+
+        mur = (unsigned)map[i_pt_tas][j_pt_tas];
+
+        if ((pt_tas->n + 1) % NB_COLONNE_LABY != 0 && !(mur & (unsigned)mur_est))
+        {
+            relachement(pt_tas->n, pt_tas->n + 1, 1, distance, parent, file);
+            // printf("%d,%d\n", pt_tas->n, pt_tas->n + 1);
+        }
+        if (pt_tas->n - 1 > 0 &&  !(mur & (unsigned)mur_ouest))
+        {
+            relachement(pt_tas->n, pt_tas->n - 1, 1, distance, parent, file);
+            // printf("%d,%d et mur %d et murOuest %d\n", pt_tas->n, pt_tas->n - 1, mur, mur_ouest);
+        }
+        if (pt_tas->n - NB_COLONNE_LABY > 0 && !(mur & (unsigned)mur_nord))
+        {
+            relachement(pt_tas->n, pt_tas->n - NB_COLONNE_LABY, 1, distance, parent, file);
+            // printf("%d,%d\n", pt_tas->n, pt_tas->n - NB_COLONNE_LABY);
+        }
+        if (pt_tas->n + NB_COLONNE_LABY < N && !(mur & (unsigned)mur_sud))
+        {
+            relachement(pt_tas->n, pt_tas->n + NB_COLONNE_LABY, 1, distance, parent, file);
+            // printf("%d,%d\n", pt_tas->n, pt_tas->n + NB_COLONNE_LABY);
+        }
+
+        /*
         for (int k = 0; k < graph_copie->nb_arete; ++k)
         {
-
             u = graph_copie->liste_arete[k].a;
             v = graph_copie->liste_arete[k].b;
             p_u_v = graph_copie->liste_arete[k].poids;
@@ -73,6 +100,7 @@ void dijkstra(graph_l_arete_t *graph, int r, int distance[N], int parent[N])
                 //graph_copie->nb_arete--;
             }
         }
+        */
     }
     //liberer_graph_arete(graph_copie);
 }
@@ -116,8 +144,8 @@ void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LI
     rect_dest.x = (chemin_list[0] % NB_COLONNE_LABY) * LARGEUR_CASE + 1;
     rect_dest.y = (chemin_list[0] / NB_COLONNE_LABY) * HAUTEUR_CASE + 1;
 
-    rect_sourc.x = (chemin_list[taille_chemin-1 ] % NB_COLONNE_LABY) * LARGEUR_CASE + 1;
-    rect_sourc.y = (chemin_list[taille_chemin -1] / NB_COLONNE_LABY) * HAUTEUR_CASE + 1;
+    rect_sourc.x = (chemin_list[taille_chemin - 1] % NB_COLONNE_LABY) * LARGEUR_CASE + 1;
+    rect_sourc.y = (chemin_list[taille_chemin - 1] / NB_COLONNE_LABY) * HAUTEUR_CASE + 1;
 
     while (i < taille_chemin)
     {
@@ -133,7 +161,6 @@ void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LI
 
         //printf("x=%d, y=%d\n", rectangle.x, rectangle.y);
 
-
         SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect_sourc);
         SDL_SetRenderDrawColor(renderer, 0, 250, 0, 255);
@@ -141,25 +168,25 @@ void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LI
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
         SDL_RenderFillRect(renderer, &rectangle);
-        
+
         SDL_RenderPresent(renderer);
-        SDL_Delay(500);
+        SDL_Delay(50);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
     }
 }
 
-int chemin(graph_l_arete_t *graph, int sourc, int dest, int chemin_list[N])
+int chemin(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int sourc, int dest, int chemin_list[N])
 {
     int distance[N];
     int parent[N];
 
     int taille_chemin = 0;
     int k = dest;
-    dijkstra(graph, sourc, distance, parent);
+    dijkstra(map, sourc, distance, parent);
     //affficher_tab(parent, N);
-    while (k != sourc)
+    while ( k != sourc)
     {
         chemin_list[taille_chemin] = k;
         k = parent[k];
@@ -167,8 +194,8 @@ int chemin(graph_l_arete_t *graph, int sourc, int dest, int chemin_list[N])
     }
     chemin_list[taille_chemin] = sourc;
     taille_chemin++;
-    printf("Chemin de %d a %d de taille %d\n", sourc, dest, taille_chemin);
-    printf("taille_chemin=%d  chemin_l[]=\n", taille_chemin);
-    affficher_tab(chemin_list, taille_chemin);
+    // printf("Chemin de %d a %d de taille %d\n", sourc, dest, taille_chemin);
+    // printf("taille_chemin=%d  chemin_l[]=\n", taille_chemin);
+    // affficher_tab(chemin_list, taille_chemin);
     return taille_chemin;
 }

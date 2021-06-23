@@ -87,7 +87,7 @@ graph_l_arete_t *calcul_quasi_foret_couvrant(graph_l_arete_t *graph, float p)
             b = graph->liste_arete[i].b;
             
             //printf("alpha=%f\n", alpha);
-            alpha = (float)(rand() % 100) / (float)100;
+            alpha = (float)(rand() % 1000) / (float)1000;
             if (recuperer_classe_arbo(part, a) != recuperer_classe_arbo(part, b))
             {
                 fusion_arbo(part, hauteur, b, a);

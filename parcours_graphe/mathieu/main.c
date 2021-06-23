@@ -4,7 +4,7 @@ int main()
 {
 
     //srand(time(NULL));
-    srand(5);
+    srand(48);
     /*
     for (int i = 0; i < 10; ++i)
         printf("%d\n", rand() % N);
@@ -52,10 +52,20 @@ int main()
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
     graphviz_affiche_graph_arete(quasi_arbre);
+    
+    liberer_graph_arete(graph);
 
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
     construire_map(map, quasi_arbre);
 
+/*
+    int parent[N];
+    int distance[N];
+
+    dijkstra(map, 0, distance, parent);
+    printf("parent : "); affficher_tab(parent,N);
+    printf("distance : "); affficher_tab(distance,N);
+*/
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
     int sourc = 0;
@@ -65,13 +75,13 @@ int main()
     int taille_chemin;
     int compt = 0;
     int alea;
-    while (compt < 5)
+    while (compt < 10)
     {
         sourc = dest;
         alea = rand() % quasi_arbre->nb_noeud;
         printf("alea=%d\n", alea);
         dest = alea;
-        taille_chemin = chemin(quasi_arbre, sourc, dest, chemin_list);
+        taille_chemin = chemin(map, sourc, dest, chemin_list);
 
         //printf("sourc=%d, dest=%d\n", sourc, dest);
         //affficher_tab(chemin_list, taille_chemin);
@@ -86,7 +96,6 @@ int main()
     SDL_Delay(2000);
     SDL_RenderPresent(renderer);
 
-    liberer_graph_arete(graph);
     liberer_graph_arete(quasi_arbre);
 
     end_sdl(1, "fin normal", window, renderer);

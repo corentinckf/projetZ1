@@ -1,28 +1,104 @@
 graph { 
 	0--1 [taillabel = "1"]
-	7--12 [taillabel = "1"]
-	21--22 [taillabel = "1"]
-	1--6 [taillabel = "1"]
-	6--11 [taillabel = "1"]
-	8--13 [taillabel = "1"]
-	17--22 [taillabel = "1"]
-	2--7 [taillabel = "1"]
-	7--8 [taillabel = "1"]
-	13--18 [taillabel = "1"]
+	75--85 [taillabel = "1"]
+	27--37 [taillabel = "1"]
+	33--34 [taillabel = "1"]
+	13--23 [taillabel = "1"]
+	19--29 [taillabel = "1"]
+	80--81 [taillabel = "1"]
+	24--25 [taillabel = "1"]
+	23--33 [taillabel = "1"]
+	47--48 [taillabel = "1"]
 	10--11 [taillabel = "1"]
-	19--24 [taillabel = "1"]
+	18--28 [taillabel = "1"]
+	61--62 [taillabel = "1"]
+	95--96 [taillabel = "1"]
+	70--80 [taillabel = "1"]
+	93--94 [taillabel = "1"]
+	30--40 [taillabel = "1"]
+	85--95 [taillabel = "1"]
+	1--2 [taillabel = "1"]
+	12--22 [taillabel = "1"]
+	87--97 [taillabel = "1"]
+	41--42 [taillabel = "1"]
+	4--14 [taillabel = "1"]
+	62--72 [taillabel = "1"]
+	40--41 [taillabel = "1"]
+	85--86 [taillabel = "1"]
+	20--21 [taillabel = "1"]
+	15--16 [taillabel = "1"]
+	11--21 [taillabel = "1"]
+	32--33 [taillabel = "1"]
+	67--77 [taillabel = "1"]
+	26--36 [taillabel = "1"]
+	83--93 [taillabel = "1"]
+	55--56 [taillabel = "1"]
+	38--39 [taillabel = "1"]
+	65--66 [taillabel = "1"]
+	89--99 [taillabel = "1"]
+	80--90 [taillabel = "1"]
+	21--31 [taillabel = "1"]
 	16--17 [taillabel = "1"]
-	5--10 [taillabel = "1"]
-	12--17 [taillabel = "1"]
-	9--14 [taillabel = "1"]
-	10--15 [taillabel = "1"]
-	13--14 [taillabel = "1"]
-	4--9 [taillabel = "1"]
-	22--23 [taillabel = "1"]
-	3--8 [taillabel = "1"]
+	91--92 [taillabel = "1"]
+	25--26 [taillabel = "1"]
+	32--42 [taillabel = "1"]
+	84--85 [taillabel = "1"]
+	5--6 [taillabel = "1"]
+	38--48 [taillabel = "1"]
+	7--8 [taillabel = "1"]
+	44--45 [taillabel = "1"]
+	66--76 [taillabel = "1"]
+	97--98 [taillabel = "1"]
+	16--26 [taillabel = "1"]
+	76--77 [taillabel = "1"]
+	54--55 [taillabel = "1"]
+	62--63 [taillabel = "1"]
 	23--24 [taillabel = "1"]
-	15--20 [taillabel = "1"]
-	11--16 [taillabel = "1"]
+	5--15 [taillabel = "1"]
+	83--84 [taillabel = "1"]
+	56--66 [taillabel = "1"]
+	12--13 [taillabel = "1"]
+	77--87 [taillabel = "1"]
+	96--97 [taillabel = "1"]
+	2--3 [taillabel = "1"]
+	53--63 [taillabel = "1"]
+	57--67 [taillabel = "1"]
+	4--5 [taillabel = "1"]
+	82--92 [taillabel = "1"]
+	34--44 [taillabel = "1"]
+	88--98 [taillabel = "1"]
+	51--52 [taillabel = "1"]
+	48--49 [taillabel = "1"]
+	17--27 [taillabel = "1"]
+	25--35 [taillabel = "1"]
+	90--91 [taillabel = "1"]
+	52--62 [taillabel = "1"]
+	58--59 [taillabel = "1"]
+	30--31 [taillabel = "1"]
+	64--74 [taillabel = "1"]
+	0--10 [taillabel = "1"]
+	64--65 [taillabel = "1"]
+	50--60 [taillabel = "1"]
+	7--17 [taillabel = "1"]
+	78--79 [taillabel = "1"]
+	36--46 [taillabel = "1"]
+	72--73 [taillabel = "1"]
+	69--79 [taillabel = "1"]
+	78--88 [taillabel = "1"]
+	42--52 [taillabel = "1"]
+	61--71 [taillabel = "1"]
+	8--9 [taillabel = "1"]
+	48--58 [taillabel = "1"]
+	8--18 [taillabel = "1"]
+	29--39 [taillabel = "1"]
+	82--83 [taillabel = "1"]
+	72--82 [taillabel = "1"]
+	50--51 [taillabel = "1"]
+	59--69 [taillabel = "1"]
+	67--68 [taillabel = "1"]
+	42--43 [taillabel = "1"]
+	88--89 [taillabel = "1"]
+	43--44 [taillabel = "1"]
 	0
 	1
 	2
@@ -48,4 +124,79 @@ graph {
 	22
 	23
 	24
+	25
+	26
+	27
+	28
+	29
+	30
+	31
+	32
+	33
+	34
+	35
+	36
+	37
+	38
+	39
+	40
+	41
+	42
+	43
+	44
+	45
+	46
+	47
+	48
+	49
+	50
+	51
+	52
+	53
+	54
+	55
+	56
+	57
+	58
+	59
+	60
+	61
+	62
+	63
+	64
+	65
+	66
+	67
+	68
+	69
+	70
+	71
+	72
+	73
+	74
+	75
+	76
+	77
+	78
+	79
+	80
+	81
+	82
+	83
+	84
+	85
+	86
+	87
+	88
+	89
+	90
+	91
+	92
+	93
+	94
+	95
+	96
+	97
+	98
+	99
 } 
