@@ -6,11 +6,11 @@
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 
-#define HAUTEUR_FENETRE 200
-#define LARGEUR_FENETRE 200
+#define HAUTEUR_FENETRE 800
+#define LARGEUR_FENETRE 1000
 
-#define NB_LIGNE_LABY 3
-#define NB_COLONNE_LABY 4
+#define NB_LIGNE_LABY 5
+#define NB_COLONNE_LABY 5
 
 #define NB_ELT_MAX NB_LIGNE_LABY * NB_COLONNE_LABY
 

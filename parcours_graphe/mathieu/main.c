@@ -43,7 +43,7 @@ int main()
 
     melange_fisher_yates_arete(graph);
 
-    float p = 0.05;
+    float p = 0.05 ;
 
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
@@ -60,12 +60,12 @@ int main()
 
     dijkstra(quasi_arbre, 0, distance, parent);
 
-    play_texture_mur(window, renderer, map);
+    dessiner(window, renderer, map);
+    //play_texture_mur(window, renderer, map);
     SDL_RenderPresent(renderer);
 
     printf("parent : ");
     affficher_tab(parent, N);
-    printf("\n");
     printf("distance : ");
     affficher_tab(distance, N);
     printf("\n");
@@ -73,7 +73,7 @@ int main()
     liberer_graph_arete(graph);
     liberer_graph_arete(quasi_arbre);
 
-    SDL_Delay(2000);
+    SDL_Delay(5000);
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;

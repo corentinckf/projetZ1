@@ -28,8 +28,10 @@ void relachement(int u, int v, int p_u_v, int distance[N], int parent[N], tas_bi
         val_couple.d = distance[v];
         val_couple.n = v;
         if (tas->indice_tas[v] == -1)
+        {
             ajouter_elt(tas, val_couple);
-        else
+        }
+        else if (tas->indice_tas[v] != -2)
             diminuer_cle(tas, val_couple);
     }
 }
@@ -53,7 +55,6 @@ void dijkstra(graph_l_arete_t *graph, int r, int distance[N], int parent[N])
     while (file->nb_elt != 0)
     {
         pt_tas = retirer_elt(file);
-        file->indice_tas[pt_tas->n] = -2;
         for (int k = 0; k < graph_copie->nb_arete; ++k)
         {
 
@@ -64,12 +65,10 @@ void dijkstra(graph_l_arete_t *graph, int r, int distance[N], int parent[N])
             if (pt_tas->n == u)
             {
                 relachement(u, v, p_u_v, distance, parent, file);
-                //relachement(v, u, p_u_v, distance, parent, file);
                 //graph_copie->nb_arete--;
             }
-            if (pt_tas->n == v)
+            else if (pt_tas->n == v)
             {
-                //relachement(u, v, p_u_v, distance, parent, file);
                 relachement(v, u, p_u_v, distance, parent, file);
                 //graph_copie->nb_arete--;
             }
@@ -95,3 +94,19 @@ graph_l_arete_t *copie_graph(graph_l_arete_t *graph)
     }
     return copie;
 }
+/*
+void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int distance[N], int parent[N])
+{
+
+    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
+    rectangle.x = 0;
+    rectangle.y = 0;
+    rectangle.w = 400;
+    rectangle.h = 400;
+
+    SDL_RenderFillRect(renderer, &rectangle);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer, 0, 0, 400, 400);
+}
+*/

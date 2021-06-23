@@ -14,6 +14,14 @@ void affficher_tab(int *tab, int nb_elt)
     }
     printf("\n");
 }
+void affficher_tas(couple_t *tab, int nb_elt)
+{
+    for (int i = 0; i < nb_elt; i++)
+    {
+        printf(" %d|d=%d,n=%d| ", i, tab[i].d, tab[i].n);
+    }
+    printf("\n");
+}
 
 void init_tab(int tab[N])
 {
@@ -58,15 +66,23 @@ int pere(int i)
 
 void ajouter_elt(tas_binaire_t *tas, couple_t val)
 {
-    if (tas->nb_elt < N)
+    if (tas->nb_elt == 0)
     {
-        tas->tas[tas->nb_elt] = val;
+        tas->tas[0] = val;
         tas->indice_tas[val.n] = tas->nb_elt;
         tas->nb_elt++;
+    }
+    else if (tas->nb_elt > 0 && tas->nb_elt < N)
+    {
+        tas->tas[tas->nb_elt].d = val.d;
+        tas->tas[tas->nb_elt].n = val.n;
+        tas->indice_tas[val.n] = tas->nb_elt;
         detasser(tas, tas->nb_elt);
+        tas->nb_elt++;
     }
     else
         printf("ERREUR, plus de place dans le tas");
+    //affficher_tas(tas->tas, tas->nb_elt);
 }
 
 couple_t *retirer_elt(tas_binaire_t *tas)
@@ -74,9 +90,13 @@ couple_t *retirer_elt(tas_binaire_t *tas)
     couple_t *rac = malloc(sizeof(couple_t));
     rac->d = -1;
     rac->n = -1;
+
+    //affficher_tas(tas->tas, tas->nb_elt);
     if (tas->nb_elt > 1)
     {
-        rac = &tas->tas[0];
+        rac->d = tas->tas[0].d;
+        rac->n = tas->tas[0].n;
+        tas->indice_tas[rac->n] = -2;
         tas->nb_elt--;
         tas->tas[0] = tas->tas[tas->nb_elt];
         tas->indice_tas[tas->tas[0].n] = 0;
@@ -84,15 +104,18 @@ couple_t *retirer_elt(tas_binaire_t *tas)
     }
     else if (tas->nb_elt == 1)
     {
-        rac = &tas->tas[0];
+        rac->d = tas->tas[0].d;
+        rac->n = tas->tas[0].n;
+        tas->indice_tas[rac->n] = -2;
         tas->nb_elt--;
-        printf("Plus rien a retirer apres\n");
+        //printf("Plus rien a retirer apres\n");
     }
     else
     {
         printf("ERREUR, plus rien a retirer\n");
     }
 
+    //printf("rac = %d,%d\n", rac->d, rac->n);
     return rac;
 }
 
@@ -102,12 +125,12 @@ void entasser(tas_binaire_t *tas, int i)
     int r = f_d(i);
     int min = i;
 
-    if (l <= tas->nb_elt && tas->tas[l].d < tas->tas[i].d && tas->indice_tas[tas->tas[l].n] >=0 )
+    if (l <= tas->nb_elt && tas->tas[l].d < tas->tas[i].d && tas->indice_tas[tas->tas[l].n] >= 0)
     {
         min = l;
     }
 
-    if (r <= tas->nb_elt && tas->tas[r].d < tas->tas[min].d && tas->indice_tas[tas->tas[r].n] >=0)
+    if (r <= tas->nb_elt && tas->tas[r].d < tas->tas[min].d && tas->indice_tas[tas->tas[r].n] >= 0)
     {
         min = r;
     }

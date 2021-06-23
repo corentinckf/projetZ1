@@ -41,6 +41,7 @@ int pere(int i);
 
 void ajouter_elt(tas_binaire_t *, couple_t);
 couple_t* retirer_elt(tas_binaire_t *);
+void affficher_tas(couple_t *tab, int nb_elt);
 
 //void permute_a_b(int *a, int *b);
 
