@@ -95,19 +95,20 @@ graph_l_arete_t *copie_graph(graph_l_arete_t *graph)
     return copie;
 }
 
-void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int distance[N], int parent[N], int sourc, int dest)
+void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
+                       int chemin_list[N], int taille_chemin)
 {
     SDL_Rect rectangle;
     int i_k, j_k;
-    int k = dest;
-    int fin = 0;
+    int k = 0;
+    int i = 0;
     rectangle.w = LARGEUR_CASE - 2;
     rectangle.h = HAUTEUR_CASE - 2;
 
-    while (k != sourc)
+    while (i < taille_chemin)
     {
-        k = parent[k];
-
+        k = chemin_list[taille_chemin - i];
+        i++;
         dessiner(window, renderer, map);
         i_k = k / NB_COLONNE_LABY;
         j_k = k % NB_COLONNE_LABY;
@@ -126,4 +127,24 @@ void dessiner_dijkstra(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LI
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
     }
+}
+
+int chemin(graph_l_arete_t *graph, int sourc, int dest, int chemin_list[N])
+{
+    int distance[N];
+    int parent[N];
+
+    int taille_chemin = 0;
+    int k = dest;
+    dijkstra(graph, sourc, distance, parent);
+    affficher_tab(parent, N);
+    while (k != sourc)
+    {
+        chemin_list[taille_chemin] = k;
+        //printf("k=%d  chemin_l[]=%d\n",k, chemin_list[taille_chemin]);
+        k = parent[k];
+        taille_chemin++;
+    }
+
+    return taille_chemin - 1;
 }

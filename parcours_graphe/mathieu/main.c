@@ -4,7 +4,6 @@ int main()
 {
     srand(GRAINE);
 
-
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -43,7 +42,7 @@ int main()
 
     melange_fisher_yates_arete(graph);
 
-    float p = 0.05 ;
+    float p = 0.05;
 
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
@@ -56,24 +55,16 @@ int main()
     //dessiner(window, renderer, map);
     int sourc = 0;
     int dest = 22;
-    int distance[N];
-    int parent[N];
 
-    dijkstra(quasi_arbre, sourc, distance, parent);
+    int chemin_list[N];
+    int taille_chemin;
 
-
-    printf("parent : ");
-    affficher_tab(parent, N);
-    printf("distance : ");
-    affficher_tab(distance, N);
-    printf("\n");
-
-
-
+    taille_chemin = chemin(quasi_arbre, sourc, dest, chemin_list);
+    affficher_tab(chemin_list, taille_chemin);
 
     //dessiner(window, renderer, map);
     //play_texture_mur(window, renderer, map);
-    dessiner_dijkstra(window, renderer,map, distance, parent, sourc, dest);
+    dessiner_dijkstra(window, renderer, map, chemin_list, taille_chemin);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(2000);
