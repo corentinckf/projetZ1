@@ -19,6 +19,7 @@ graphe_t * initialiser_graphe(int nb_noeuds)
                     {   
                         l_a[graphe->n_arrete].a = i;
                         l_a[graphe->n_arrete].b = j;
+                        l_a[graphe->n_arrete].poids = 1;
                         ++graphe->n_arrete;
                     }
                 }

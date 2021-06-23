@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall -Wextra
 LDFLAGS = -lm
-OBJFILES = main.o partition.o lch.o connexe.o kruskal.o graphe.o labyrinth.o dijsktra.o
+OBJFILES = main.o tas_binaire_struct.o partition.o lch.o connexe.o kruskal.o graphe.o labyrinth.o dijsktra.o
 SDL2FLAGS = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
 TARGET = prog
 
