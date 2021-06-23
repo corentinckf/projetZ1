@@ -27,7 +27,7 @@ void relachement(graph_l_arete_t *graph, int i_arc, int distance[N], int parent[
         distance[v] = distance[u] + p_u_v;
         parent[v] = u;
         couple_t val_couple;
-        val_couple.d = distance[d];
+        val_couple.d = distance[v];
         val_couple.n = v;
 
         if (tas->indice_tas[v] == -1) //noeud pas dans le tas
@@ -60,7 +60,7 @@ void dijkstra(graph_l_arete_t *graph, int r, int parent[N], int distance[N])
         u = retirer_elt(file);
         for (int k = 0; k < graph->nb_arete; k++)
         {
-            relachement(graph, k, distance, parent, tas);
+            relachement(graph, k, distance, parent, file);
         }
     }
 }

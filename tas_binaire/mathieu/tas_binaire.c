@@ -227,21 +227,21 @@ void entasser(int *tas, int i)
     {
         min = l;
     }
+}
 void fichier_graphiz(int *tas)
-
 
     int max = i;
 
-    if (p > 1 && tas[p] > tas[i])
-    {
-        max = p;
-    }
+if (p > 1 && tas[p] > tas[i])
+{
+    max = p;
+}
 
-    if (max != i)
-    {
-        permute_a_b(&(tas[i]), &(tas[max]));
-        detasser(tas, max);
-    }
+if (max != i)
+{
+    permute_a_b(&(tas[i]), &(tas[max]));
+    detasser(tas, max);
+}
 }
 
 void fichier_graphiz(int *tas)

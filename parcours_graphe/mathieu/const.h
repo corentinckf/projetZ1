@@ -47,6 +47,14 @@ typedef struct graph_l_arete
     arete_t *liste_arete;
 } graph_l_arete_t;
 
+typedef struct tas_binaire
+{
+    couple_t tas[N];
+    int nb_elt;
+    int info_n[N];
+    int indice_tas[N];
+} tas_binaire_t;
+
 
 #include "tas_binaire.h"
 #include "liste_chainee.h"

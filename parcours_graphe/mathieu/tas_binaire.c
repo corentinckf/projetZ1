@@ -130,7 +130,7 @@ void detasser(tas_binaire_t *tas, int i)
     }
 }
 
-void fichier_graphiz(tas_binaire_t * tas)
+void fichier_graphiz(tas_binaire_t *tas)
 {
     FILE *fichier = NULL;
     fichier = fopen("graph_tas.dot", "w");
@@ -174,7 +174,7 @@ void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
 
 void diminuer_cle(tas_binaire_t *tas, couple_t val_couple)
 {
-    indice = tas->indice_tas[couple.n];
+    int indice = tas->indice_tas[val_couple.n];
 
     if (indice <= tas->nb_elt)
     {
@@ -216,7 +216,7 @@ int *tri_tas_min(tas_binaire_t *tab_valeur)
 }
 */
 
-// fonction utilisateur de comparaison fournie a qsort() 
+// fonction utilisateur de comparaison fournie a qsort()
 /*
 static int compare(void const *a, void const *b)
 {
