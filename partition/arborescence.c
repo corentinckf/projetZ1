@@ -19,37 +19,69 @@ void fusion(int i, int j, int *classes, int *hauteurs)
 
     if (hauteur1 < hauteur2)
     {
-        for (int k=0;k<TAILLE;k++)
+        if (hauteur1 == 1)
         {
-            if (classes[k] == classes[i])
+            for (int k=0;k<TAILLE;k++)
             {
-                classes[k] = classes[j];     //relier la racine
+                if (classes[k] == classes[i])
+                {
+                    classes[k] = classes[j];     //relier la racine
+                }
             }
         }
+        else
+        {
+            classes[i] = classes[j];
+        }
+        
         hauteurs[classes[i]] = hauteur2;        //on ne modifie que la hauteur de la racine
     }
     else if (hauteur1 > hauteur2)
     {
-        for (int k=0;k<TAILLE;k++)
+        if (hauteur2 == 1)
         {
-            if (classes[k] == classes[j])
+            for (int k=0;k<TAILLE;k++)
             {
-                classes[k] = classes[i];
+                if (classes[k] == classes[j])
+                {
+                    classes[k] = classes[i];
+                }
             }
         }
+        else
+        {
+            classes[j] = classes[i];
+        }
+        
         hauteurs[classes[j]] = hauteur1;
     }
     else    //egalite des hauteurs
     {
         int min = fmin(classes[i],classes[j]);
         int max = fmax(classes[i],classes[j]);
-        for (int k=0;k<TAILLE;k++)
+        if (hauteur1 == 1)
         {
-            if (classes[k] == max)
+            for (int k=0;k<TAILLE;k++)
             {
-                classes[k] = min;
+                if (classes[k] == max)
+                {
+                    classes[k] = min;
+                }
             }
         }
+        else
+        {
+            if (max == classes[i])
+            {
+                classes[i] = min;
+            }
+            else
+            {
+                classes[j] = min;
+            }
+            
+        }
+        
         hauteurs[classes[i]] = hauteur1 + 1;
         hauteurs[classes[j]] = hauteurs[classes[i]];
     }
@@ -131,7 +163,7 @@ void graph_partition(FILE *fichier, int *classes)
     fprintf(fichier, "}");
 }
 
-int main_arborescence()
+int main()
 {
     int classes[TAILLE];
     int hauteurs[TAILLE];
@@ -158,14 +190,16 @@ int main_arborescence()
         creer(classes,hauteurs);
         fusion(2,3,classes,hauteurs);
         fusion(4,3,classes,hauteurs);
-        //fusion(5,6,classes,hauteurs);
-        //fusion(5,2,classes,hauteurs);
+        fusion(5,6,classes,hauteurs);
+        fusion(5,2,classes,hauteurs);
+        //fusion(7,2,classes,hauteurs);
         graph_partition(fichier,classes);
         resultat = recuperer_classe(3,classes);
         printf("elements de la classe 3 :\t");
         lister_classe(3,classes,elements_classe);
         afficher_elements(elements_classe);
         lister_partition(classes,liste_classes);
+        system("dot -Tjpg graph_partition.dot -o graph_partition.jpg");
         fclose(fichier);
     }
 
