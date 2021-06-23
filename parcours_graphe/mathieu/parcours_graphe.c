@@ -61,10 +61,16 @@ void dijkstra(graph_l_arete_t *graph, int r, int distance[N], int parent[N])
             v = graph_copie->liste_arete[k].b;
             p_u_v = graph_copie->liste_arete[k].poids;
 
-            if (pt_tas->n == u || pt_tas->n == v)
+            if (pt_tas->n == u)
             {
                 relachement(u, v, p_u_v, distance, parent, file);
                 //relachement(v, u, p_u_v, distance, parent, file);
+                //graph_copie->nb_arete--;
+            }
+            if (pt_tas->n == v)
+            {
+                //relachement(u, v, p_u_v, distance, parent, file);
+                relachement(v, u, p_u_v, distance, parent, file);
                 //graph_copie->nb_arete--;
             }
         }
