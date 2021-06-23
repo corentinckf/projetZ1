@@ -452,3 +452,40 @@ void DFS_run(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r,
     init_DFS(couleur, parent);
     DFS_rec(map, r, couleur, parent, debut, fin, &temps);
 }
+
+void utilisation_parcours_en_profondeur()
+{
+
+    float p = 0.01;
+    //generation graph arete
+    graph_l_arete_t *graph = NULL;
+    graph = init_graph_arete_en_grille();
+    graphviz_affiche_graph_arete(graph);
+    melange_fisher_yates_arete(graph);
+    //Generation quasi arbre
+    graph_l_arete_t *quasi_arbre = NULL;
+    quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
+    graphviz_affiche_graph_arete(quasi_arbre);
+    liberer_graph_arete(graph);
+
+    int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
+    construire_map(map, quasi_arbre);
+
+    int couleur[N];
+    int parent[N];
+    int debut[N];
+    int fin[N];
+
+    int r = 0;
+
+    DFS_run(map, r, couleur, parent, debut, fin);
+
+    printf("couleur : ");
+    affficher_tab(couleur, N);
+    printf("parent : ");
+    affficher_tab(parent, N);
+    printf("debut : ");
+    affficher_tab(debut, N);
+    printf("fin : ");
+    affficher_tab(fin, N);
+}
