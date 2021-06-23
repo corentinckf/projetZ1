@@ -124,7 +124,7 @@ graph_l_arete_t *copie_graph(graph_l_arete_t *graph)
 }
 
 void dessiner_chemin(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
-                       int chemin_list[N], int taille_chemin)
+                     int chemin_list[N], int taille_chemin)
 {
     SDL_Rect rectangle;
     SDL_Rect rect_sourc;
@@ -381,4 +381,74 @@ int chemin_a_etoile(int (*fct_distance)(const int, const int), int map[NB_LIGNE_
     // printf("taille_chemin=%d  chemin_l[]=\n", taille_chemin);
     // affficher_tab(chemin_list, taille_chemin);
     return taille_chemin;
+}
+
+void init_DFS(int couleur[N], int parent[N])
+{
+    for (int u = 0; u < N; ++u)
+    {
+        couleur[u] = 0; //Blanc
+        parent[u] = -1;
+    }
+}
+
+void DFS_rec(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int u,
+             int couleur[N], int parent[N],
+             int debut[N], int fin[N], int *temps)
+{
+
+    couleur[u] = 2; //gris
+    *temps = *temps + 1;
+    debut[u] = *temps;
+
+    int i_u = u / NB_COLONNE_LABY;
+    int j_u = u % NB_COLONNE_LABY;
+
+    unsigned mur = (unsigned)map[i_u][j_u];
+
+    if ((u + 1) % NB_COLONNE_LABY != 0 && !(mur & (unsigned)mur_est))
+        if (couleur[u + 1] == 0) //blanc
+        {
+            {
+                parent[u + 1] = u;
+                DFS_rec(map, u + 1, couleur, parent, debut, fin, temps);
+            }
+        }
+    if (u - 1 > 0 && !(mur & (unsigned)mur_ouest))
+    {
+        if (couleur[u - 1] == 0) //blanc
+        {
+            parent[u - 1] = u;
+            DFS_rec(map, u - 1, couleur, parent, debut, fin, temps);
+        }
+    }
+    if (u - NB_COLONNE_LABY > 0 && !(mur & (unsigned)mur_nord))
+    {
+        if (couleur[u - NB_COLONNE_LABY] == 0) //blanc
+        {
+            parent[u - NB_COLONNE_LABY] = u;
+            DFS_rec(map, u - NB_COLONNE_LABY, couleur, parent, debut, fin, temps);
+        }
+    }
+    if (u + NB_COLONNE_LABY < N && !(mur & (unsigned)mur_sud))
+    {
+        if (couleur[u + NB_COLONNE_LABY] == 0) //blanc
+        {
+            parent[u + NB_COLONNE_LABY] = u;
+            DFS_rec(map, u + NB_COLONNE_LABY, couleur, parent, debut, fin, temps);
+        }
+    }
+    couleur[u] = 1; //Noir
+    *temps = *temps + 1;
+    fin[u] = *temps;
+}
+
+void DFS_run(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r,
+             int couleur[N], int parent[N],
+             int debut[N], int fin[N])
+{
+    int temps = 0;
+
+    init_DFS(couleur, parent);
+    DFS_rec(map, r, couleur, parent, debut, fin, &temps);
 }
