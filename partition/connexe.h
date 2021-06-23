@@ -4,6 +4,8 @@
 #include "arborescence.h"
 
 int noeud_entier(int i);
+int *alloc(int *tab, int *taille);
+void ajouter(int *tab, int taille, int *nb_elements, int i, int j);
 void draw_graph(int *noeuds, int aretes[4*TAILLE], FILE *fichier, int nb_elements);
 void composantes_connexes(int *aretes, int nb_elements, int *classes, int *hauteurs);
 

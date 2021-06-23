@@ -77,6 +77,7 @@ int *alloc(int *tab, int *taille)
 {
     *taille *= 2;
     int *nouvtab = (int *) malloc((*taille) * sizeof(int));
+
     for (int k=0;k<(*taille)/2;k++)
     {
         nouvtab[k] = tab[k];
@@ -84,11 +85,11 @@ int *alloc(int *tab, int *taille)
     return nouvtab;
 }
 
-void ajouter(int *tab, int *taille, int *nb_elements, int i, int j)
+void ajouter(int *tab, int taille, int *nb_elements, int i, int j)
 {
-    if (*taille == nb_elements)
+    if (taille == *nb_elements)
     {
-        tab = alloc(tab,taille);
+        tab = alloc(tab,&taille);
     }
     tab[*nb_elements] = i;
     (*nb_elements)++;
@@ -96,7 +97,7 @@ void ajouter(int *tab, int *taille, int *nb_elements, int i, int j)
     (*nb_elements)++;
 }
 
-void draw_graph(int *noeuds, int aretes[4*TAILLE], FILE *fichier, int nb_elements)
+void draw_graph(int *noeuds, int *aretes, FILE *fichier, int nb_elements)
 {
     fprintf(fichier,"graph {\n");
     int k=0;
@@ -135,7 +136,7 @@ void composantes_connexes(int *aretes, int nb_elements, int *classes, int *haute
     }    
 }
 
-int main()
+int main_connexe()
 {
     /*
     int mat[LIGNES][COLONNES];
@@ -184,7 +185,7 @@ int main()
             int valeur = rand()%2;
             if (valeur)
             {
-                ajouter(aretes,&taille,&nb_elements,i,j);
+                ajouter(aretes,taille,&nb_elements,i,j);
             }
         }
     }
@@ -202,4 +203,5 @@ int main()
         system("dot -Tjpg composantes_connexes.dot -o composantes_connexes.jpg");
         fclose(fichier);
     }
+    return 0;
 }
