@@ -150,10 +150,6 @@ int main_connexe()
         printf("erreur d'ouverture du fichier\n");
         exit(EXIT_FAILURE);
     }
-
-    if (fichier)
-    {
-        creer(classes,hauteurs);nb_elements
     */
 
     int classes[TAILLE];

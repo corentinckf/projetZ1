@@ -1,9 +1,9 @@
 #ifndef __arborescence_h__
 #define __arborescence_h__
 
-#define LIGNES 18
-#define COLONNES LIGNES
-#define TAILLE LIGNES
+#define LIGNES 4
+#define COLONNES 5
+#define TAILLE LIGNES*COLONNES
 
 typedef struct cellule{
     int indice;
