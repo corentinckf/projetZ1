@@ -214,8 +214,8 @@ void diminuer_cle(tas_binaire_t *tas, couple_t val_couple)
     if (indice < tas->nb_elt)
     {
         tas->tas[indice].d = val_couple.d;
-        int i = indice;
-        int p_i = pere(i);
+        //int i = indice;
+        //int p_i = pere(i);
         /*
         while (i > 0 && tas->tas[p_i].d > tas->tas[i].d)
         {

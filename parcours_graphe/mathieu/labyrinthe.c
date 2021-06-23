@@ -33,7 +33,7 @@ int main_labyrinthe()
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-  srand(48);
+    //srand(48);
     //srand(time(NULL));
     //main_kruskal();
 

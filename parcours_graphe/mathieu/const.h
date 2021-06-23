@@ -3,14 +3,17 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 
 #define HAUTEUR_FENETRE 800
 #define LARGEUR_FENETRE 1000
 
-#define NB_LIGNE_LABY 5
-#define NB_COLONNE_LABY 5
+#define NB_LIGNE_LABY 20
+#define NB_COLONNE_LABY 20
 
 #define NB_ELT_MAX NB_LIGNE_LABY * NB_COLONNE_LABY
 
@@ -22,7 +25,7 @@
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 #define ALEA_GEN 10
-#define GRAINE 48
+#define GRAINE 10
 
 #define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
 #define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY

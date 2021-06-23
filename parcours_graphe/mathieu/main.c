@@ -2,7 +2,11 @@
 
 int main()
 {
-    srand(GRAINE);
+
+    srand( time( NULL ) );
+    
+ 
+    //srand(GRAINE);
 
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
@@ -42,7 +46,7 @@ int main()
 
     melange_fisher_yates_arete(graph);
 
-    float p = 0.05;
+    float p = 0.01;
 
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
@@ -54,19 +58,29 @@ int main()
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
     int sourc = 0;
-    int dest = 22;
+    int dest = 0;
 
     int chemin_list[N];
     int taille_chemin;
+    int compt = 0;
+    int alea;
+    while (compt < 25)
+    {
+        sourc = dest;
+        alea=rand() % N;
+        printf("alea=%d\n", alea);
+        dest = alea;
+        //printf("sourc=%d, dest=%d\n", sourc, dest);
+        taille_chemin = chemin(quasi_arbre, sourc, dest, chemin_list);
+        //affficher_tab(chemin_list, taille_chemin);
+        dessiner_dijkstra(window, renderer, map, chemin_list, taille_chemin);
+        ++compt;
+    }
 
-    taille_chemin = chemin(quasi_arbre, sourc, dest, chemin_list);
-    affficher_tab(chemin_list, taille_chemin);
-
-    //dessiner(window, renderer, map);
     //play_texture_mur(window, renderer, map);
-    dessiner_dijkstra(window, renderer, map, chemin_list, taille_chemin);
-    SDL_RenderPresent(renderer);
 
+    dessiner(window, renderer, map);
+    SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 
     liberer_graph_arete(graph);

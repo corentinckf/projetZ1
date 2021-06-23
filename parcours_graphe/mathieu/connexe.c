@@ -2,7 +2,7 @@
 
 int main_connexe()
 {
-    srand(48);
+    //srand(48);
 
     /*
     int graph_mat[NB_LIGNE_MAT][NB_COLONNE_MAT];
