@@ -10,15 +10,17 @@ void arbre_couvrant(int *nouv_aretes, int *nb_aretes, int *aretes, int *nb_eleme
     {
         int sommet1 = aretes[i];
         int sommet2 = aretes[i + 1];
+        int classe1 = recuperer_classe(sommet1,classes);
+        int classe2 = recuperer_classe(sommet2,classes);
         //printf("couple: %d %d\n", sommet1, sommet2);
 
-        if (classes[sommet1] != classes[sommet2])
+        if (classe1 != classe2)
         {
-            printf("classes avant : %d %d\n",classes[sommet1],classes[sommet2]);
+            //printf("classes avant : %d %d\n",classe1,classe2);
             //printf("hauteurs avant : %d %d\n",hauteurs[sommet1],hauteurs[sommet2]);
             fusion(sommet1, sommet2, classes, hauteurs);
             //printf("hauteurs apres : %d %d\n",hauteurs[sommet1],hauteurs[sommet2]);
-            printf("classes apres : %d %d\n\n",classes[sommet1],classes[sommet2]);
+            //printf("classes apres : %d %d\n\n",classe1,classe2);
             ajouter(&nouv_aretes, &nouv_taille, nb_aretes, sommet1, sommet2);
         }
         i += 2;
@@ -73,20 +75,12 @@ int main_kruskal()
         draw_graph(noeuds, aretes, fichier, nb_elements);
         //printf("taille : %d\t nb_elements : %d\n",taille,nb_elements);
         
-        /*
-        int k = 0;
-        while (k < nb_elements)
-        {
-            printf("couple : %d %d\n", aretes[k], aretes[k + 1]);
-            k += 2;
-        }
-        */
-
         creer(classes,hauteurs);
         arbre_couvrant(nouv_aretes,&nb_aretes,aretes,&nb_elements,classes,hauteurs,nouv_taille);
         draw_graph(noeuds,nouv_aretes,foret,nb_aretes);
-        system("dot -Tjpg graph.dot -o graph.jpg");
-        system("dot -Tjpg foret.dot -o foret.jpg");
+        //system("dot -Tjpg graph.dot -o graph.jpg");
+        //system("dot -Tjpg foret.dot -o foret.jpg");
         fclose(fichier);
     }
+    return EXIT_SUCCESS;
 }

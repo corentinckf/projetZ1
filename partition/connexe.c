@@ -188,8 +188,8 @@ int main_connexe()
         draw_graph(noeuds, aretes, fichier, nb_elements);
         creer(classes, hauteurs);
         composantes_connexes(aretes, nb_elements, classes, hauteurs);
-        system("dot -Tjpg graph.dot -o graph.jpg");
-        system("dot -Tjpg composantes_connexes.dot -o composantes_connexes.jpg");
+        //system("dot -Tjpg graph.dot -o graph.jpg");
+        //system("dot -Tjpg composantes_connexes.dot -o composantes_connexes.jpg");
         fclose(fichier);
     }
     return 0;

@@ -49,6 +49,7 @@ void creation_grille(int *aretes, int taille, int nb_elements)
 
 int main()
 {
+    //printf("coucou\n");
     /*
     if (SDL_Init(SDL_INIT_VIDEO) != 0) printf("erreur d'intialisation de la SDL\n");
 
@@ -124,8 +125,8 @@ int main()
         fisher_yates_shuffle(aretes,taille);
         arbre_couvrant(nouv_aretes,&nb_aretes,aretes,&nb_elements,classes,hauteurs,nouv_taille);
         draw_graph(noeuds,nouv_aretes,lab_arbre,nb_aretes);
-        system("dot -Tjpg labyrinthe.dot -o labyrinthe.jpg");
-        system("dot -Tjpg lab_arbre.dot -o lab_arbre.jpg");
+        //system("dot -Tjpg labyrinthe.dot -o labyrinthe.jpg");
+        //system("dot -Tjpg lab_arbre.dot -o lab_arbre.jpg");
         fclose(fichier);
     }
 

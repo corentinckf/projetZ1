@@ -89,28 +89,35 @@ void fusion(int i, int j, int *classes, int *hauteurs)
 
 int recuperer_classe(int i, int *classes)
 {
-    return classes[i];
+    int classe_avant = i;
+    int classe_apres = classes[i];
+
+    while (classe_avant != classe_apres)
+    {
+        classe_avant = classe_apres;
+        classe_apres = classes[classe_avant];
+    }
+    return classe_avant;
 }
 
-void lister_classe(int indice, int *classes, int *liste)
+void lister_classe(int classe, int *classes, int *liste, int *nb_elements)
 {
-    int i = 0;
     for (int k=0;k<TAILLE;k++)
     {
-        if (classes[k] == classes[indice])
+        int clas = recuperer_classe(k,classes);
+        if (clas == classe)
         {
-            liste[i] = k;
-            i++;
+            liste[*nb_elements] = k;
+            (*nb_elements)++;
         }
     }
-    liste[i] = '\0';
 }
 
-void afficher_elements(int *liste)
+void afficher_elements(int *liste, int nb_elements)
 {
     int i = 0;
     
-    while (liste[i] != '\0')
+    while (i < nb_elements)
     {
         fprintf(stdout,"%d\t",liste[i]);
         i++;
@@ -125,7 +132,7 @@ void lister_partition(int *classes, cellule_t *liste_classes[TAILLE])
 
     for (int k=0;k<TAILLE;k++)
     {
-        classe = classes[k];
+        classe = recuperer_classe(k,classes);
         tete = liste_classes[classe];
         ADJ_TETE(&tete,k);
         liste_classes[classe] = tete;
@@ -163,13 +170,14 @@ void graph_partition(FILE *fichier, int *classes)
     fprintf(fichier, "}");
 }
 
-int main()
+int main_arbo()
 {
     int classes[TAILLE];
     int hauteurs[TAILLE];
     int elements_classe[TAILLE];
     cellule_t *liste_classes[TAILLE];
     int resultat;
+    int nb_elements = 0;
 
     for (int k=0;k<TAILLE;k++)
     {
@@ -192,12 +200,13 @@ int main()
         fusion(4,3,classes,hauteurs);
         fusion(5,6,classes,hauteurs);
         fusion(5,2,classes,hauteurs);
-        //fusion(7,2,classes,hauteurs);
+        fusion(7,1,classes,hauteurs);
         graph_partition(fichier,classes);
-        resultat = recuperer_classe(3,classes);
-        printf("elements de la classe 3 :\t");
-        lister_classe(3,classes,elements_classe);
-        afficher_elements(elements_classe);
+        resultat = recuperer_classe(7,classes);
+        printf("classe de 7 : %d\n",resultat);
+        printf("elements de la classe 0 : ");
+        lister_classe(0,classes,elements_classe,&nb_elements);
+        afficher_elements(elements_classe,nb_elements);
         lister_partition(classes,liste_classes);
         system("dot -Tjpg graph_partition.dot -o graph_partition.jpg");
         fclose(fichier);
