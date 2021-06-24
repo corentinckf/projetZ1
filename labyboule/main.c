@@ -5,12 +5,14 @@ int main()
 
     //srand(time(NULL));
     srand(48);
+    Uint8 const *keystates;
 
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
-    int vitesse = 0;
+    int vertical = 0;
+    int horizontal = 0;
 
     SDL_Rect window_dimensions = {0};
 
@@ -78,6 +80,7 @@ int main()
                 case SDLK_q:        // 'q'
                     program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
                     break;
+                    /*
                 case SDLK_LEFT:
                     if (vitesse > VITESSE_MIN)
                         vitesse--;
@@ -86,6 +89,7 @@ int main()
                     if (vitesse < VITESSE_MAX)
                         vitesse++;
                     break;
+*/
                 default: // Une touche appuyée qu'on ne traite pas
                     break;
                 }
@@ -93,6 +97,16 @@ int main()
             default: // Les évènements qu'on n'a pas envisagé
                 break;
             }
+        }
+
+        /********** Regarde les touches de directions ************/
+        keystates = SDL_GetKeyboardState(NULL);
+        horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
+        vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
+        if (abs(horizontal - vertical))
+        {
+            vertical = 0;
+            horizontal = 0;
         }
 
         if (!paused)
