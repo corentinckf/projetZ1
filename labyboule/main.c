@@ -75,7 +75,7 @@ int main()
 
     creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boule[2], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[3], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, &liste_boule[3], PATH_IMG_BOULE);
     //////////////////////*****************************/////////////////////////////
 
     SDL_bool
@@ -139,7 +139,6 @@ int main()
                 //deplacement_perso(map, perso, vertical, horizontal);
 
                 //calcul boule
-                //printf("perso pos %d, boule_pos %d\n", perso->pos_cour, liste_boule[0]->pos_cour);
                 deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
                 delta_tps = 0;
             }
