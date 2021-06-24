@@ -11,6 +11,10 @@ int main()
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
+    int currentTime = SDL_GetTicks();
+    int lastTime = currentTime;
+    int delta_tps = 0;
+
     int vertical = 0;
     int horizontal = 0;
     int coll = 0;
@@ -55,7 +59,6 @@ int main()
 
     /********* initialisation perso **************/
     entite_t *perso = NULL;
-    bombe_t *bombe = NULL;
     creer_entite(window, renderer, 10 - 1, 10, 1, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
@@ -65,24 +68,14 @@ int main()
     {
         liste_boule[i] = NULL;
     }
-<<<<<<< HEAD
-    SDL_Delay(1000);
-    SDL_RenderClear(renderer);
-    int map_bis_tab[NB_LIGNE_LABY][NB_COLONNE_LABY];
-    map_bis(map, map_bis_tab, tab_boule, 0);
-    play_texture_mur(window, renderer, texture_mur, map_bis_tab);
-    
-    SDL_Delay(5000);
-=======
->>>>>>> fe0b162cbf62bd9e417e3788323b5f26f0027891
 
-    creer_entite(window, renderer, 0, 0, 0, 0, 0, &liste_boule[0], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, 1, 0, 0, 0, &liste_boule[0], PATH_IMG_BOULE);
 
     creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[1], PATH_IMG_BOULE);
 
     creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boule[2], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, &liste_boule[3], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[3], PATH_IMG_BOULE);
     //////////////////////*****************************/////////////////////////////
 
     SDL_bool
@@ -106,13 +99,12 @@ int main()
                 switch (event.key.keysym.sym)
                 {                     // la touche appuyée est ...
                 case SDLK_p:          // 'p'
-                creer_bombe(window,renderer,perso->pos_cour,3,5,&bombe,PATH_IMG_BOMBE);
-                    nb_bombes++;
-                    break;
                 case SDLK_SPACE:      // 'SPC'
                     paused = !paused; // basculement pause/unpause
                     break;
-                case SDLK_ESCAPE:   // 'ESCAPE'
+                case SDLK_ESCAPE: // 'ESCAPE'
+                    //creer bombe
+                    break;
                 case SDLK_q:        // 'q'
                     program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
                     break;
@@ -135,39 +127,49 @@ int main()
             horizontal = 0;
         }
 
-    
         if (!paused)
         { // Si on n'est pas en pause
 
-            //calcul perso
-            //deplacement_perso(map, perso, vertical, horizontal);
+            currentTime = SDL_GetTicks();
+            delta_tps += currentTime - lastTime;
+            lastTime = currentTime;
+            if (delta_tps > 1000)
+            {
+                //calcul perso
+                //deplacement_perso(map, perso, vertical, horizontal);
 
-            //calcul boule
-            //deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+                //calcul boule
+                //printf("perso pos %d, boule_pos %d\n", perso->pos_cour, liste_boule[0]->pos_cour);
+                deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+                delta_tps = 0;
+            }
 
             //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
             //affichage entite perso
-            //affichage_entite(window, renderer, perso);
+            affichage_entite(window, renderer, perso, &delta_tps);
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
-                affichage_entite(window, renderer, liste_boule[k]);
+                affichage_entite(window, renderer, liste_boule[k], &delta_tps);
             }
             //affichage entite boule
 
             coll = collision(perso, liste_boule);
             if (coll)
-            { //program_on = 0;
+            {
+                program_on = 0;
             }
             SDL_RenderPresent(renderer);
 
-            SDL_Delay(1000);
+            //SDL_Delay(1000);
             SDL_RenderClear(renderer);
         }
-        SDL_Delay(20); // Petite pause
+        SDL_Delay(80); // Petite pause
     }
 
+    liberer_entite(perso);
+    liberer_liste_boule(liste_boule);
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
     return 0;
