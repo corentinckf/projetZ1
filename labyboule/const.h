@@ -40,7 +40,7 @@
 #define VITESSE_MIN -1
 #define VITESSE_MAX 1
 
-#define NB_BOULES 1
+#define NB_BOULES 4
 
 typedef struct couple
 {
