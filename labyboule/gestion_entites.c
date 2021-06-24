@@ -92,4 +92,13 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,entite_t * en
     
     SDL_RenderCopy(renderer, sprite, &state, &destination);
 
+//retourne 0 si pas de collision
+int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
+{
+    int res = 0;
+    for (int k = 0; k < NB_BOULES; ++k)
+    {
+        res = res || (perso->pos_cour == liste_boule[k]->pos_cour);
+    }
+    return res;
 }
