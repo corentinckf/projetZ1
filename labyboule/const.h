@@ -31,6 +31,8 @@
 #define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
 #define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
 
+#define NB_BOULES 4
+
 typedef struct couple
 {
     int d;
