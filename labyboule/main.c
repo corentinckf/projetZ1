@@ -52,6 +52,23 @@ int main()
     init_map(map);
     play_texture_mur(window, renderer, texture_mur, map);
 
+    //////////////////////*****************/////////////////////////////
+    entite_t *tab_boule[NB_BOULES];
+    entite_t *nouv = NULL;
+    for (int i = 0; i < NB_BOULES; ++i)
+    {
+        creer_entite(window, renderer, 0, 26, 0, 0, 0, nouv, PATH_IMG_MUR);
+        tab_boule[i] = nouv;
+    }
+    SDL_Delay(1000);
+
+    int map_bis_tab[NB_LIGNE_LABY][NB_COLONNE_LABY];
+    map_bis(map, map_bis_tab, tab_boule, 0);
+    play_texture_mur(window, renderer, texture_mur, map_bis_tab);
+    SDL_Delay(5000);
+
+    //////////////////////*****************/////////////////////////////
+
     SDL_bool
         program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
         paused = SDL_FALSE;    // Booléen pour dire que le programme est en pause
@@ -112,10 +129,8 @@ int main()
         if (!paused)
         { // Si on n'est pas en pause
 
-        
             //calcul perso
             //calcul boule
-
 
             //affichage entite perso
             //affichage entite boule

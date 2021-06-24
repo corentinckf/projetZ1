@@ -66,7 +66,16 @@ typedef struct tas_binaire
     int indice_tas[N];
 } tas_binaire_t;
 
+typedef struct entite{
+    int pos_prec;
+    int pos_cour;
+    int vitesse;
+    int vertical;
+    int horizontal;
+    SDL_Texture *texture;
+}entite_t;
 
+#include "gestion_entites.h"
 #include "gestion_map.h"
 #include "tas_binaire.h"
 #include "liste_chainee.h"
