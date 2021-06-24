@@ -241,9 +241,13 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *m
         {
             destination.x = j * destination.w;
             destination.y = i * destination.h;
-
+            
             switch (map[i][j])
             {
+                case 15:
+                    state.x = 0;
+                    state.y = 2* offset_y;
+                    break;
             case 14:
                 state.x = 8 * offset_x;
                 state.y = 3 * offset_y;
@@ -306,6 +310,7 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *m
                 state.y = 0 * offset_y;
                 break;
             default:
+                printf("%d\n",map[i][j]);
                 printf("tes pas censé etre la!\n");
                 break;
             }

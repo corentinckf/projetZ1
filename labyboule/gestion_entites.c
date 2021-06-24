@@ -1,16 +1,16 @@
 #include "gestion_entites.h"
 
-void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, int vitesse, int vertical, int horizontal, entite_t *entite, char *chemin)
+void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, int vitesse, int vertical, int horizontal, entite_t **pentite, char *chemin)
 {
-    entite = (entite_t *)malloc(sizeof(entite_t));
-    if (entite)
+    *pentite = (entite_t *)malloc(sizeof(entite_t));
+    if (*pentite)
     {
-        entite->pos_prec = pos_prec;
-        entite->pos_cour = pos_cour;
-        entite->vitesse = vitesse;
-        entite->vertical = vertical;
-        entite->horizontal = horizontal;
-        charger_texture(window, renderer, entite, chemin);
+        (*pentite)->pos_prec = pos_prec;
+        (*pentite)->pos_cour = pos_cour;
+        (*pentite)->vitesse = vitesse;
+        (*pentite)->vertical = vertical;
+        (*pentite)->horizontal = horizontal;
+        charger_texture(window, renderer, *pentite, chemin);
     }
 }
 
