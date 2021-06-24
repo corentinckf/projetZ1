@@ -10,8 +10,13 @@
 #include <time.h>
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
+<<<<<<< HEAD
 #define PATH_IMG_PERSO ""
 #define PATH_IMG_BOULE ""
+=======
+#define PATH_IMG_PERSO "./textures/character.png"
+#define PATH_IMG_BOULE "./textures/boule_tmp.png"
+>>>>>>> fe0b162cbf62bd9e417e3788323b5f26f0027891
 
 #define PERSO_POS
 
@@ -40,7 +45,7 @@
 #define VITESSE_MIN -1
 #define VITESSE_MAX 1
 
-#define NB_BOULES 4
+#define NB_BOULES 1
 
 typedef struct couple
 {
@@ -87,6 +92,7 @@ typedef struct bombe{
 }bombe_t;
 
 #include "gestion_entites.h"
+#include "gestion_boule.h"
 #include "gestion_map.h"
 #include "tas_binaire.h"
 #include "liste_chainee.h"

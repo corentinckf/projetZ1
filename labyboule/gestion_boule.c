@@ -8,13 +8,14 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
     int distance[N];
     int parent[N];
     dijkstra(map_bis, pos_perso, distance, parent);
+    //affficher_tab(parent, N);
 
-    if (parent[boule->pos_cour] != -1) //chemin existe
+    if (parent[0] != -1) //chemin existe
     {
         //for (int i = 0; i < boule->vitesse; ++i)
         //{
         boule->pos_prec = boule->pos_cour;
-        boule->pos_cour = parent[pos];
+        boule->pos_cour = parent[boule->pos_cour];
         //}
 
         /**********Gestion de l'orientation du perso **********/
@@ -38,9 +39,11 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
 }
 
 void deplacement_toutes_boules(int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
-                               entite_t liste_boules[NB_BOULES], int pos_perso)
-{   
-    for (int k=0;k<NB_BOULES;++k)
-        deplacement_boule(map, liste_boules, pos_perso);
-
+                               entite_t *liste_boules[NB_BOULES], int pos_perso)
+{
+    for (int k = 0; k < NB_BOULES; ++k)
+        if (liste_boules[k] != NULL)
+        {
+            deplacement_boule(map, liste_boules[k], pos_perso);
+        }
 }
