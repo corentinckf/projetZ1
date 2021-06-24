@@ -10,8 +10,8 @@
 #include <time.h>
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
-#define PATH_IMG_PERSO ""
-#define PATH_IMG_BOULE ""
+#define PATH_IMG_PERSO "./textures/character.png"
+#define PATH_IMG_BOULE "./textures/boule_tmp.png"
 
 #define PERSO_POS
 
@@ -40,7 +40,7 @@
 #define VITESSE_MIN -1
 #define VITESSE_MAX 1
 
-#define NB_BOULES 4
+#define NB_BOULES 1
 
 typedef struct couple
 {

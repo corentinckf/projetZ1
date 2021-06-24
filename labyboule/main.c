@@ -65,13 +65,13 @@ int main()
         liste_boule[i] = NULL;
     }
 
-    creer_entite(window, renderer, 0, 0, 0, 0, 0, &liste_boule[0], PATH_IMG_MUR);
+    creer_entite(window, renderer, 0, 0, 0, 0, 0, &liste_boule[0], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[1], PATH_IMG_MUR);
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[1], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boule[2], PATH_IMG_MUR);
+    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boule[2], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, &liste_boule[3], PATH_IMG_MUR);
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, &liste_boule[3], PATH_IMG_BOULE);
     //////////////////////*****************************/////////////////////////////
 
     SDL_bool
@@ -121,6 +121,7 @@ int main()
             horizontal = 0;
         }
 
+    
         if (!paused)
         { // Si on n'est pas en pause
 
@@ -128,19 +129,26 @@ int main()
             //deplacement_perso(map, perso, vertical, horizontal);
 
             //calcul boule
-            deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+            //deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
 
             //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
             //affichage entite perso
+            //affichage_entite(window, renderer, perso);
             //affichage_entite
+            for (int k = 0; k < NB_BOULES; ++k)
+            {
+                affichage_entite(window, renderer, liste_boule[k]);
+            }
             //affichage entite boule
 
             coll = collision(perso, liste_boule);
             if (coll)
-                program_on = 0;
+            { //program_on = 0;
+            }
             SDL_RenderPresent(renderer);
-            SDL_Delay(80);
+
+            SDL_Delay(1000);
             SDL_RenderClear(renderer);
         }
         SDL_Delay(20); // Petite pause

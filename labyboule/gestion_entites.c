@@ -29,7 +29,7 @@ void liberer(entite_t *entite)
     entite = NULL;
 }
 
-void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,entite_t * entite)
+void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite)
 {
     float taille = 0.01;
     int idle = 0;
@@ -43,7 +43,7 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,entite_t * en
     SDL_GetWindowSize(window, // Récupération des dimensions de la fenêtre
                       &window_dimensions.w,
                       &window_dimensions.h);
-    SDL_QueryTexture(sprite, // Récupération des dimensions de l'image
+    SDL_QueryTexture(entite->texture, // Récupération des dimensions de l'image
                      NULL, NULL,
                      &source.w, &source.h);
     /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
@@ -53,44 +53,47 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,entite_t * en
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
-    state.x = 0; 
+    state.x = 0;
     state.w = offset_x;
     state.h = offset_y;
-    if(entite->horizontal==0 && entite->vertical==0) idle = 1;
-    else idle = 0;
+    if (entite->horizontal == 0 && entite->vertical == 0)
+        idle = 1;
+    else
+        idle = 0;
 
-    
-    if(entite->vertical == 1)state.y = 1 * offset_y;
-    else if(entite->vertical == -1)state.y = 0 * offset_y;
+    if (entite->vertical == 1)
+        state.y = 1 * offset_y;
+    else if (entite->vertical == -1)
+        state.y = 0 * offset_y;
 
-
-    if(entite->horizontal == 1)state.y = 2 * offset_y;
-    else if(entite->horizontal == -1)state.y = 3 * offset_y;
-
-    
+    if (entite->horizontal == 1)
+        state.y = 2 * offset_y;
+    else if (entite->horizontal == -1)
+        state.y = 3 * offset_y;
 
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
     destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
 
-
-    if(!idle)
+    if (!idle)
     {
         state.x += offset_x;
         state.x %= source.w;
-    }else{
+    }
+    else
+    {
         state.y = 0;
         state.x = 0;
     }
 
-    
-
-    destination.x += entite->vitesse;/* * LARGEUR_CASE + (*deltaTime * *input_h * TRANSI);*/
+    destination.x += entite->vitesse; /* * LARGEUR_CASE + (*deltaTime * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
-    printf("x : %d y : %d\n", destination.x, destination.y);
+   // printf("x : %d y : %d\n", destination.x, destination.y);
     
-    SDL_RenderCopy(renderer, sprite, &state, &destination);
+    SDL_RenderCopy(renderer, entite->texture, &state, &destination);
+}
+
 
 //retourne 0 si pas de collision
 int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
