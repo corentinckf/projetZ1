@@ -168,7 +168,7 @@ int main()
         SDL_Delay(80); // Petite pause
     }
 
-    liberer(perso);
+    liberer_entite(perso);
     liberer_liste_boule(liste_boule);
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
