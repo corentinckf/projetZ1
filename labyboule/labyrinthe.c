@@ -2,6 +2,8 @@
 
 int main_labyrinthe()
 {
+    printf("\nMAIN LABYRINTHE \n");
+
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -16,7 +18,7 @@ int main_labyrinthe()
     }
 
     SDL_GetCurrentDisplayMode(0, &screen);
-    printf("Résolution écran\n\tw : %d\n\th : %d\n", screen.w, screen.h);
+    //printf("Résolution écran\n\tw : %d\n\th : %d\n", screen.w, screen.h);
 
     /************** creation window ****************/
     window = SDL_CreateWindow(
@@ -40,11 +42,11 @@ int main_labyrinthe()
     //generation graph arete
     graph_l_arete_t *graph = NULL;
     graph = init_graph_arete_en_grille();
-    graphviz_affiche_graph_arete(graph);
+    //graphviz_affiche_graph_arete(graph);
 
     melange_fisher_yates_arete(graph);
 
-/*
+    /*
     //en calculer une forêt couvrante de poids minimal
     graph_l_arete_t *arbre_couvrant = NULL;
     arbre_couvrant = calcul_foret_couvrant(graph);
@@ -55,7 +57,7 @@ int main_labyrinthe()
 
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
-    graphviz_affiche_graph_arete(quasi_arbre);
+    //graphviz_affiche_graph_arete(quasi_arbre);
 
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
     construire_map(map, quasi_arbre);
@@ -63,10 +65,15 @@ int main_labyrinthe()
     liberer_graph_arete(graph);
     liberer_graph_arete(quasi_arbre);
 
-    //main_labyrinthe(map);
     //dessiner(window, renderer, map);
 
-    play_texture_mur(window, renderer, map);
+/********* chargement texture map ***********/
+    SDL_Texture *texture_mur;
+    texture_mur = IMG_LoadTexture(renderer, PATH_IMG_MUR);
+    if (texture_mur == NULL)
+        end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+
+    play_texture_mur(window, renderer,texture_mur, map);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(5000);
@@ -201,13 +208,8 @@ void trace_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY
     }
 }
 
-void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
+void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *my_texture, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
 {
-
-    SDL_Texture *my_texture;
-    my_texture = IMG_LoadTexture(renderer, PATH_IMG_MUR);
-    if (my_texture == NULL)
-        end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
 
     SDL_Rect
         source = {0},            // Rectangle définissant la zone totale de la planche
@@ -239,9 +241,13 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIG
         {
             destination.x = j * destination.w;
             destination.y = i * destination.h;
-
+            
             switch (map[i][j])
             {
+                case 15:
+                    state.x = 0;
+                    state.y = 2* offset_y;
+                    break;
             case 14:
                 state.x = 8 * offset_x;
                 state.y = 3 * offset_y;
@@ -304,6 +310,7 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIG
                 state.y = 0 * offset_y;
                 break;
             default:
+                printf("%d\n",map[i][j]);
                 printf("tes pas censé etre la!\n");
                 break;
             }
@@ -311,7 +318,6 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIG
         }
     }
 
-    SDL_DestroyTexture(my_texture);
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)

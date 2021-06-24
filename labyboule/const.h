@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -27,9 +28,15 @@
 
 #define ALEA_GEN 10
 #define GRAINE 10
+#define P_ALEA_MUR 0.05
 
 #define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
 #define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
+
+#define VITESSE_MIN -1
+#define VITESSE_MAX 1
+
+#define NB_BOULES 4
 
 typedef struct couple
 {
@@ -59,7 +66,17 @@ typedef struct tas_binaire
     int indice_tas[N];
 } tas_binaire_t;
 
+typedef struct entite{
+    int pos_prec;
+    int pos_cour;
+    int vitesse;
+    int vertical;
+    int horizontal;
+    SDL_Texture *texture;
+}entite_t;
 
+#include "gestion_entites.h"
+#include "gestion_map.h"
 #include "tas_binaire.h"
 #include "liste_chainee.h"
 #include "partition.h"
