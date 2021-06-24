@@ -23,8 +23,9 @@ void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entit
     entite->texture = my_texture;
 }
 
-void liberer(entite_t *entite)
+void liberer_entite(entite_t *entite)
 {
     free(entite);
     entite = NULL;
+    SDL_DestroyTexture(entite->texture);
 }

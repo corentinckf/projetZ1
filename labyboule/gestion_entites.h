@@ -10,6 +10,6 @@
 
 void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, int vitesse, int vertical, int horizontal, entite_t **pentite, char *chemin);
 void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, char *chemin);
-void liberer(entite_t *entite);
+void liberer_entite(entite_t *entite);
 
 #endif

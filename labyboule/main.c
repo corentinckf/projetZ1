@@ -65,7 +65,7 @@ int main()
     int map_bis_tab[NB_LIGNE_LABY][NB_COLONNE_LABY];
     map_bis(map, map_bis_tab, tab_boule, 0);
     play_texture_mur(window, renderer, texture_mur, map_bis_tab);
-    SDL_RenderPresent(renderer);
+    
     SDL_Delay(5000);
 
     //////////////////////*****************/////////////////////////////

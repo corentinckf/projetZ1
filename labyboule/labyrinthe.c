@@ -310,7 +310,6 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *m
                 state.y = 0 * offset_y;
                 break;
             default:
-                printf("%d\n",map[i][j]);
                 printf("tes pas censé etre la!\n");
                 break;
             }

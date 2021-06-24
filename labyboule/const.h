@@ -10,6 +10,10 @@
 #include <time.h>
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
+#define PATH_IMG_PERSO ""
+#define PATH_IMG_BOULE ""
+
+#define PERSO_POS
 
 #define HAUTEUR_FENETRE 800
 #define LARGEUR_FENETRE 1000
@@ -74,6 +78,13 @@ typedef struct entite{
     int horizontal;
     SDL_Texture *texture;
 }entite_t;
+
+typedef struct bombe{
+    int pos_cour;
+    int rayon_action;
+    int temps;
+    SDL_Texture *texture;
+}bombe_t;
 
 #include "gestion_entites.h"
 #include "gestion_map.h"
