@@ -29,7 +29,7 @@ void liberer(entite_t *entite)
     entite = NULL;
 }
 
-void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite)
+void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, int *delta)
 {
     float taille = 0.01;
     int idle = 0;
@@ -49,7 +49,7 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
 
     int nb_images = 4;                   // Il y a 8 vignette dans la ligne de l'image qui nous intéresse
-    float zoom = 2;                      // zoom, car ces images sont un peu petites
+    float zoom = 1.95;                      // zoom, car ces images sont un peu petites
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
@@ -62,21 +62,23 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
         idle = 0;
 
     if (entite->vertical == 1)
-        state.y = 1 * offset_y;
+        state.y = 2 * offset_y;
     else if (entite->vertical == -1)
-        state.y = 0 * offset_y;
+        state.y = 3 * offset_y;
 
     if (entite->horizontal == 1)
-        state.y = 2 * offset_y;
+        state.y = 0 * offset_y;
     else if (entite->horizontal == -1)
-        state.y = 3 * offset_y;
+        state.y = 1 * offset_y;
+
+    state.x = (*delta / 4) * offset_x;
 
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
     //destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
 
-   /* if (!idle)
+    if (!idle)
     {
         state.x += offset_x;
         state.x %= source.w;
@@ -85,12 +87,14 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     {
         state.y = 0;
         state.x = 0;
-    }*/
-    int i = entite->pos_cour / NB_COLONNE_LABY;
-    int j = entite->pos_cour % NB_COLONNE_LABY;
+    }
+    int i = entite->pos_prec / NB_COLONNE_LABY;
+    int j = entite->pos_prec % NB_COLONNE_LABY;
 
-    destination.y = i * HAUTEUR_CASE;
-    destination.x = j * LARGEUR_CASE; /* * LARGEUR_CASE + (*deltaTime * *input_h * TRANSI);*/
+    destination.y = i * HAUTEUR_CASE - 4 +(*delta * 0.04) *entite->horizontal;
+    destination.x = j * LARGEUR_CASE + (*delta * 0.04) *entite->vertical;
+
+    /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
     // printf("x : %d y : %d\n", destination.x, destination.y);
 

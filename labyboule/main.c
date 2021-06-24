@@ -11,6 +11,10 @@ int main()
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
+    int currentTime = SDL_GetTicks();
+    int lastTime = currentTime;
+    int delta_tps = 0;
+
     int vertical = 0;
     int horizontal = 0;
     int coll = 0;
@@ -123,24 +127,31 @@ int main()
             horizontal = 0;
         }
 
-promenade_labyrinthe_dijkstra(window, renderer);
-        if (!paused)
+         if (!paused)
         { // Si on n'est pas en pause
 
-            //calcul perso
-            //deplacement_perso(map, perso, vertical, horizontal);
-            //calcul boule
-            //printf("perso pos %d, boule_pos %d\n", perso->pos_cour, liste_boule[0]->pos_cour);
-            deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+            currentTime = SDL_GetTicks();
+            delta_tps += currentTime - lastTime;
+            lastTime = currentTime;
+            if (delta_tps > 1000)
+            {
+                //calcul perso
+                //deplacement_perso(map, perso, vertical, horizontal);
+
+                //calcul boule
+                //printf("perso pos %d, boule_pos %d\n", perso->pos_cour, liste_boule[0]->pos_cour);
+                deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+                delta_tps = 0;
+            }
 
             //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
             //affichage entite perso
-            affichage_entite(window, renderer, perso);
+            affichage_entite(window, renderer, perso, &delta_tps);
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
-                affichage_entite(window, renderer, liste_boule[k]);
+                affichage_entite(window, renderer, liste_boule[k], &delta_tps);
             }
             //affichage entite boule
 
@@ -151,10 +162,10 @@ promenade_labyrinthe_dijkstra(window, renderer);
             }
             SDL_RenderPresent(renderer);
 
-            SDL_Delay(1000);
+            //SDL_Delay(1000);
             SDL_RenderClear(renderer);
         }
-        SDL_Delay(20); // Petite pause
+        SDL_Delay(80); // Petite pause
     }
 
     SDL_DestroyTexture(texture_mur);
