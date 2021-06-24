@@ -40,10 +40,12 @@ int main()
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
+    main_labyrinthe();
+
     //promenade_labyrinthe_dijkstra(window, renderer);
     //promenade_labyrinthe_a_etoile(window, renderer);
 
-    utilisation_parcours_en_profondeur();
+    //utilisation_parcours_en_profondeur();
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;

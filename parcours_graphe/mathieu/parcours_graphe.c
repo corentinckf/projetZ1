@@ -62,25 +62,16 @@ void dijkstra(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r, int distance[N], i
         mur = (unsigned)map[i_pt_tas][j_pt_tas];
 
         if ((pt_tas->n + 1) % NB_COLONNE_LABY != 0 && !(mur & (unsigned)mur_est))
-        {
             relachement(pt_tas->n, pt_tas->n + 1, 1, distance, parent, file);
-            // printf("%d,%d\n", pt_tas->n, pt_tas->n + 1);
-        }
+
         if (pt_tas->n - 1 > 0 && !(mur & (unsigned)mur_ouest))
-        {
             relachement(pt_tas->n, pt_tas->n - 1, 1, distance, parent, file);
-            // printf("%d,%d et mur %d et murOuest %d\n", pt_tas->n, pt_tas->n - 1, mur, mur_ouest);
-        }
+
         if (pt_tas->n - NB_COLONNE_LABY > 0 && !(mur & (unsigned)mur_nord))
-        {
             relachement(pt_tas->n, pt_tas->n - NB_COLONNE_LABY, 1, distance, parent, file);
-            // printf("%d,%d\n", pt_tas->n, pt_tas->n - NB_COLONNE_LABY);
-        }
+
         if (pt_tas->n + NB_COLONNE_LABY < N && !(mur & (unsigned)mur_sud))
-        {
             relachement(pt_tas->n, pt_tas->n + NB_COLONNE_LABY, 1, distance, parent, file);
-            // printf("%d,%d\n", pt_tas->n, pt_tas->n + NB_COLONNE_LABY);
-        }
 
         /* cherche les voisins en parcourant toute la liste des aretes
         for (int a = 0; k < graph_copie->nb_arete; ++k)
@@ -170,7 +161,7 @@ void dessiner_chemin(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGN
         SDL_RenderFillRect(renderer, &rectangle);
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(50);
+        SDL_Delay(200);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
