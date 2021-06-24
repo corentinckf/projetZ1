@@ -6,7 +6,7 @@ int main()
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
-    int input_h = 0, input_v = 0;
+    int input_h = 0 , input_v = -1;
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -41,9 +41,8 @@ int main()
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
     
     //animation
-    affichage_personnage(window, renderer, sprite, &input_h, &input_v);
+    affichage_entite(window, renderer, sprite, &input_h, &input_v);
     
-    SDL_Delay(500);
     SDL_RenderClear(renderer);
 
     IMG_Quit();
@@ -51,9 +50,10 @@ int main()
     return 0;
 }
 
-void affichage_personnage(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture * sprite, int * input_h, int * input_v)
+void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture * sprite, int * input_h, int * input_v)
 {
     float taille = 0.01;
+    int idle = 0;
 
     SDL_Rect
         source = {0},            // Rectangle définissant la zone totale de la planche
@@ -74,10 +74,21 @@ void affichage_personnage(SDL_Window * window, SDL_Renderer * renderer,SDL_Textu
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
-    state.x = 0;            // La première vignette est en début de ligne
-    state.y = 3 * offset_y; // On s'intéresse à la 4ème ligne, le bonhomme qui court
-    state.w = offset_x;     // Largeur de la vignette
-    state.h = offset_y;     // Hauteur de la vignette
+    state.x = 0; 
+    state.w = offset_x;
+    state.h = offset_y;
+    if(*input_h==0 && *input_v==0) idle = 1;
+    else idle = 0;
+
+    
+    if(*input_h == 1)state.y = 1 * offset_y;
+    else if(*input_h == -1)state.y = 0 * offset_y;
+
+
+    if(*input_v == 1)state.y = 2 * offset_y;
+    else if(*input_v == -1)state.y = 3 * offset_y;
+
+    
 
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
@@ -87,12 +98,19 @@ void affichage_personnage(SDL_Window * window, SDL_Renderer * renderer,SDL_Textu
 
     for (int t = 0; t < 110; t++)
     {
-        state.x = 1;
-        state.y = 2 * offset_y;
+        if(!idle)
+        {
+            state.x += offset_x;
+            state.x %= source.w;
+        }else{
+            state.y = 0;
+            state.x = 0;
+        }
+        
         SDL_RenderCopy(renderer, sprite, &state, &destination);
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(60);
+        SDL_Delay(100);
     }
 }
 

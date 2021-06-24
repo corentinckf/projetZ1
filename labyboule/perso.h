@@ -28,7 +28,7 @@
 #define Y_POS_PERSO_DEPART 0
 
 
-void affichage_personnage(SDL_Window *, SDL_Renderer *,SDL_Texture *,int*, int*);
+void affichage_entite(SDL_Window *, SDL_Renderer *,SDL_Texture *,int*, int*);
 int end_sdl(char , char const *, SDL_Window *, SDL_Renderer *);
 
 
