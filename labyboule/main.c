@@ -137,7 +137,6 @@ int main()
             {
                 //calcul perso
                 //deplacement_perso(map, perso, vertical, horizontal);
-
                 //calcul boule
                 deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
                 delta_tps = 0;
@@ -167,8 +166,8 @@ int main()
         SDL_Delay(80); // Petite pause
     }
 
-    liberer_entite(perso);
-    liberer_liste_boule(liste_boule);
+    //liberer_entite(perso);
+    //liberer_liste_boule(liste_boule);
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
     return 0;

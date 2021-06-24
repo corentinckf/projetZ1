@@ -4,6 +4,7 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
 {
     int distance[N];
     int parent[N];
+
     dijkstra(map, pos_perso, distance, parent);
     //affficher_tab(parent, N);
     //printf("pos=%d et parent[]%d\n", boule->pos_cour, parent[boule->pos_cour]);
@@ -38,14 +39,18 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
 void deplacement_toutes_boules(int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
                                entite_t *liste_boules[NB_BOULES], int pos_perso)
 {
+
     int map_bis_tab[NB_LIGNE_LABY][NB_COLONNE_LABY];
     for (int k = 0; k < NB_BOULES; ++k)
+    {
         if (liste_boules[k] != NULL)
         {
             //calcul map_bis
+
             map_bis(map, map_bis_tab, liste_boules, k);
             deplacement_boule(map, liste_boules[k], pos_perso);
         }
+    }
 }
 
 void liberer_liste_boule(entite_t *liste_boule[NB_BOULES])

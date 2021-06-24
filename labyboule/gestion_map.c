@@ -46,9 +46,8 @@ void map_bis(int map_bonne[NB_LIGNE_LABY][NB_COLONNE_LABY], int map[NB_LIGNE_LAB
     printf("valeur case haut : %d\n",map[0][1]);
     printf("valeur case bas : %d\n",map[2][1]);
     */
-   
-    int k=0;
-    while (k < NB_BOULES && tab[k] != NULL)
+
+    for (int k = 0; k < NB_BOULES; k++)
     {
         if (k != boule_cour)
         {
@@ -104,7 +103,7 @@ void map_bis(int map_bonne[NB_LIGNE_LABY][NB_COLONNE_LABY], int map[NB_LIGNE_LAB
             }
             else    //toutes les autres cases
             {
-                //  printf("ligne: %d \tcolonne : %d\n",i,j);
+                //printf("ligne: %d \tcolonne : %d\n",i,j);
                 map[i - 1][j] += 8; //mur sud sur case au dessus
                 map[i][j - 1] += 1; //mur est sur case a gauche
                 map[i + 1][j] += 2; //mur nord sur case en dessous
