@@ -1,4 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine on
-RewriteCond %{HTTP_HOST} ^perso.limos.fr$
-RewriteRule (.*) https://perso.isima.fr%{REQUEST_URI} [R=301,L]
