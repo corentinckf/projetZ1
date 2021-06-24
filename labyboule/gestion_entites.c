@@ -25,11 +25,9 @@ void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entit
 
 void liberer_entite(entite_t *entite)
 {
+    SDL_DestroyTexture(entite->texture);
     free(entite);
     entite = NULL;
-<<<<<<< HEAD
-    SDL_DestroyTexture(entite->texture);
-=======
 }
 
 void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, int *delta)
@@ -52,7 +50,7 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
 
     int nb_images = 4;                   // Il y a 8 vignette dans la ligne de l'image qui nous intéresse
-    float zoom = 1.95;                      // zoom, car ces images sont un peu petites
+    float zoom = 1.95;                   // zoom, car ces images sont un peu petites
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
@@ -94,8 +92,8 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     int i = entite->pos_prec / NB_COLONNE_LABY;
     int j = entite->pos_prec % NB_COLONNE_LABY;
 
-    destination.y = i * HAUTEUR_CASE - 4 +(*delta * 0.04) *entite->horizontal;
-    destination.x = j * LARGEUR_CASE + (*delta * 0.04) *entite->vertical;
+    destination.y = i * HAUTEUR_CASE - 4 + (*delta * 0.04) * entite->horizontal;
+    destination.x = j * LARGEUR_CASE + (*delta * 0.04) * entite->vertical;
 
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
@@ -113,5 +111,4 @@ int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
         res = res || (perso->pos_cour == liste_boule[k]->pos_cour);
     }
     return res;
->>>>>>> fe0b162cbf62bd9e417e3788323b5f26f0027891
 }

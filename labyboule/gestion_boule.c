@@ -51,5 +51,5 @@ void deplacement_toutes_boules(int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
 void liberer_liste_boule(entite_t *liste_boule[NB_BOULES])
 {
     for (int k = 0; k < NB_BOULES; ++k)
-        liberer(liste_boule[k]);
+        liberer_entite(liste_boule[k]);
 }
