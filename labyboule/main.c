@@ -112,14 +112,16 @@ int main()
         if (!paused)
         { // Si on n'est pas en pause
 
+        
             //calcul perso
             //calcul boule
+
 
             //affichage entite perso
             //affichage entite boule
             play_texture_mur(window, renderer, texture_mur, map);
             SDL_RenderPresent(renderer);
-            SDL_Delay(100);
+            SDL_Delay(80);
             SDL_RenderClear(renderer);
         }
         SDL_Delay(20); // Petite pause
