@@ -1,12 +1,12 @@
 #include "perso.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     SDL_DisplayMode screen;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
-    int input_h = 0 , input_v = -1;
+    int input_h = atoi(argv[1]) , input_v = atoi(argv[2]), debut = atoi(argv[3]), fin = atoi(argv[4]);
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -41,7 +41,7 @@ int main()
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
     
     //animation
-    affichage_entite(window, renderer, sprite, &input_h, &input_v);
+    affichage_entite(window, renderer, sprite, &input_h, &input_v, &debut, &fin);
     
     SDL_RenderClear(renderer);
 
@@ -50,7 +50,7 @@ int main()
     return 0;
 }
 
-void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture * sprite, int * input_h, int * input_v)
+void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture * sprite, int * input_h, int * input_v, int * deb, int * fin)
 {
     float taille = 0.01;
     int idle = 0;
@@ -94,9 +94,9 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture *
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
     destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
-    destination.x = 0;
+    
 
-    for (int t = 0; t < 110; t++)
+    for (int t = 0; t < 10; t++)
     {
         if(!idle)
         {
@@ -106,6 +106,11 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture *
             state.y = 0;
             state.x = 0;
         }
+
+        time_t ancienTime = time();
+        time_t deltaTime = ancienTime - time();
+        time_t tempTime += deltaTime;
+        destination.x += deb * destination.w + (tempTime);
         
         SDL_RenderCopy(renderer, sprite, &state, &destination);
 

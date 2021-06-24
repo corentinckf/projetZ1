@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 #define LARGEUR_FENETRE 400
 #define HAUTEUR_FENETRE 400
@@ -28,7 +29,7 @@
 #define Y_POS_PERSO_DEPART 0
 
 
-void affichage_entite(SDL_Window *, SDL_Renderer *,SDL_Texture *,int*, int*);
+void affichage_entite(SDL_Window *, SDL_Renderer *,SDL_Texture *,int*, int*, int*, int*);
 int end_sdl(char , char const *, SDL_Window *, SDL_Renderer *);
 
 
