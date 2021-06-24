@@ -1,4 +1,4 @@
- #include "const.h"
+#include "const.h"
 
 int main()
 {
@@ -51,23 +51,28 @@ int main()
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
     init_map(map);
     play_texture_mur(window, renderer, texture_mur, map);
-    SDL_RenderPresent(renderer);
+
+    /********* initialisation perso **************/
+    entite_t * perso = NULL;
+    creer_entite(window, renderer,PERSO_POS-1,PERSO_POS,1,0,0,perso,PATH_IMG_PERSO)
+
+
     //////////////////////*****************/////////////////////////////
+/*  
     entite_t *tab_boule[NB_BOULES];
     entite_t *nouv = NULL;
     for (int i = 0; i < NB_BOULES; ++i)
     {
-        creer_entite(window, renderer, 0, 26, 0, 0, 0, &nouv, PATH_IMG_MUR);
+        creer_entite(window, renderer, 0, 26, 0, 0, 0, nouv, PATH_IMG_MUR);
         tab_boule[i] = nouv;
     }
     SDL_Delay(1000);
-    SDL_RenderClear(renderer);
+
     int map_bis_tab[NB_LIGNE_LABY][NB_COLONNE_LABY];
     map_bis(map, map_bis_tab, tab_boule, 0);
     play_texture_mur(window, renderer, texture_mur, map_bis_tab);
-    SDL_RenderPresent(renderer);
     SDL_Delay(5000);
-
+*/
     //////////////////////*****************/////////////////////////////
 
     SDL_bool
@@ -146,4 +151,15 @@ int main()
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
     return 0;
+}
+
+//retourne 0 si pas de collision
+int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
+{
+    int res = 0;
+    for (int k = 0; k < NB_BOULES; ++k)
+    {
+        res = res || (perso->pos_cour == liste_boule[k]->pos_cour);
+    }
+    return res;
 }
