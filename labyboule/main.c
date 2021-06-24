@@ -55,6 +55,7 @@ int main()
 
     /********* initialisation perso **************/
     entite_t *perso = NULL;
+    bombe_t *bombe = NULL;
     creer_entite(window, renderer, 10 - 1, 10, 1, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
@@ -105,6 +106,9 @@ int main()
                 switch (event.key.keysym.sym)
                 {                     // la touche appuyée est ...
                 case SDLK_p:          // 'p'
+                creer_bombe(window,renderer,perso->pos_cour,3,5,&bombe,PATH_IMG_BOMBE);
+                    nb_bombes++;
+                    break;
                 case SDLK_SPACE:      // 'SPC'
                     paused = !paused; // basculement pause/unpause
                     break;
