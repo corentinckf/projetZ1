@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture * sprite, int * input_h, int * input_v, int * deb, int * fin)
+void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture * sprite, int * input_h, int * input_v, int * debut, int * fin)
 {
     float taille = 0.01;
     int idle = 0;
@@ -81,12 +81,12 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture *
     else idle = 0;
 
     
-    if(*input_h == 1)state.y = 1 * offset_y;
-    else if(*input_h == -1)state.y = 0 * offset_y;
+    if(*input_v == 1)state.y = 1 * offset_y;
+    else if(*input_v == -1)state.y = 0 * offset_y;
 
 
-    if(*input_v == 1)state.y = 2 * offset_y;
-    else if(*input_v == -1)state.y = 3 * offset_y;
+    if(*input_h == 1)state.y = 2 * offset_y;
+    else if(*input_h == -1)state.y = 3 * offset_y;
 
     
 
@@ -94,9 +94,9 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture *
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
     destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
-    
-
-    for (int t = 0; t < 10; t++)
+    //destination.x = window_dimensions.w / 2;
+    unsigned int tempPrecedent = 0, tempsActuel = 0, deltaTime = 0;
+    for (int t = 0; t < 50; t++)
     {
         if(!idle)
         {
@@ -107,14 +107,18 @@ void affichage_entite(SDL_Window * window, SDL_Renderer * renderer,SDL_Texture *
             state.x = 0;
         }
 
-        time_t ancienTime = time();
-        time_t deltaTime = ancienTime - time();
-        time_t tempTime += deltaTime;
-        destination.x += deb * destination.w + (tempTime);
+        tempsActuel = SDL_GetTicks();
+        deltaTime = tempsActuel - tempPrecedent;
+        if(destination.x < *fin * LARGEUR_CASE)
+            destination.x += *debut * LARGEUR_CASE + (deltaTime * *input_h * 0.05);
+        printf(" 1 : %d\n", *fin * LARGEUR_CASE);
+        printf(" 2 : %d\n", *fin * destination.x);
+        tempPrecedent = tempsActuel;
         
         SDL_RenderCopy(renderer, sprite, &state, &destination);
 
         SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer);
         SDL_Delay(100);
     }
 }
