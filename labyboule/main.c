@@ -65,7 +65,7 @@ int main()
         liste_boule[i] = NULL;
     }
 
-    creer_entite(window, renderer, 0, 0, 0, 0, 0, &liste_boule[0], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, 1, 0, 0, 0, &liste_boule[0], PATH_IMG_BOULE);
 
     creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[1], PATH_IMG_BOULE);
 
@@ -98,7 +98,9 @@ int main()
                 case SDLK_SPACE:      // 'SPC'
                     paused = !paused; // basculement pause/unpause
                     break;
-                case SDLK_ESCAPE:   // 'ESCAPE'
+                case SDLK_ESCAPE: // 'ESCAPE'
+                    //creer bombe
+                    break;
                 case SDLK_q:        // 'q'
                     program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
                     break;
@@ -121,20 +123,20 @@ int main()
             horizontal = 0;
         }
 
-    
+promenade_labyrinthe_dijkstra(window, renderer);
         if (!paused)
         { // Si on n'est pas en pause
 
             //calcul perso
             //deplacement_perso(map, perso, vertical, horizontal);
-
             //calcul boule
-            //deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+            //printf("perso pos %d, boule_pos %d\n", perso->pos_cour, liste_boule[0]->pos_cour);
+            deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
 
             //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
             //affichage entite perso
-            //affichage_entite(window, renderer, perso);
+            affichage_entite(window, renderer, perso);
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
@@ -144,7 +146,8 @@ int main()
 
             coll = collision(perso, liste_boule);
             if (coll)
-            { //program_on = 0;
+            {
+                program_on = 0;
             }
             SDL_RenderPresent(renderer);
 

@@ -74,9 +74,9 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
-    destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
+    //destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
 
-    if (!idle)
+   /* if (!idle)
     {
         state.x += offset_x;
         state.x %= source.w;
@@ -85,15 +85,17 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     {
         state.y = 0;
         state.x = 0;
-    }
+    }*/
+    int i = entite->pos_cour / NB_COLONNE_LABY;
+    int j = entite->pos_cour % NB_COLONNE_LABY;
 
-    destination.x += entite->vitesse; /* * LARGEUR_CASE + (*deltaTime * *input_h * TRANSI);*/
+    destination.y = i * HAUTEUR_CASE;
+    destination.x = j * LARGEUR_CASE; /* * LARGEUR_CASE + (*deltaTime * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
-   // printf("x : %d y : %d\n", destination.x, destination.y);
-    
+    // printf("x : %d y : %d\n", destination.x, destination.y);
+
     SDL_RenderCopy(renderer, entite->texture, &state, &destination);
 }
-
 
 //retourne 0 si pas de collision
 int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])

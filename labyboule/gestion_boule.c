@@ -9,8 +9,8 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
     int parent[N];
     dijkstra(map_bis, pos_perso, distance, parent);
     //affficher_tab(parent, N);
-
-    if (parent[0] != -1) //chemin existe
+    printf("                %d\n", parent[boule->pos_cour]);
+    if (parent[boule->pos_cour] != -1) //chemin existe
     {
         //for (int i = 0; i < boule->vitesse; ++i)
         //{
