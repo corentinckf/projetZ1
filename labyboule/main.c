@@ -127,7 +127,7 @@ int main()
             horizontal = 0;
         }
 
-         if (!paused)
+        if (!paused)
         { // Si on n'est pas en pause
 
             currentTime = SDL_GetTicks();
@@ -168,6 +168,8 @@ int main()
         SDL_Delay(80); // Petite pause
     }
 
+    liberer(perso);
+    liberer_liste_boule(liste_boule);
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
     return 0;
