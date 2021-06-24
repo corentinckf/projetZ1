@@ -18,6 +18,7 @@ int main()
     int vertical = 0;
     int horizontal = 0;
     int coll = 0;
+    float anim = 0.;
 
     SDL_Rect window_dimensions = {0};
 
@@ -141,18 +142,17 @@ int main()
                 deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
                 delta_tps = 0;
             }
-
             //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
             //affichage entite perso
-            affichage_entite(window, renderer, perso, &delta_tps);
+            affichage_entite(window, renderer, perso, &delta_tps, anim);
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
-                affichage_entite(window, renderer, liste_boule[k], &delta_tps);
+                affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             //affichage entite boule
-
+            anim += 0.4;
             coll = collision(perso, liste_boule);
             if (coll)
             {

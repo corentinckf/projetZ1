@@ -11,7 +11,7 @@
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 #define PATH_IMG_PERSO "./textures/character.png"
-#define PATH_IMG_BOULE "./textures/character.png"
+#define PATH_IMG_BOULE "./textures/boule_petite.png"
 
 #define PERSO_POS
 
@@ -19,7 +19,7 @@
 #define LARGEUR_FENETRE 1000
 
 #define NB_LIGNE_LABY 25
-#define NB_COLONNE_LABY 25  
+#define NB_COLONNE_LABY 25
 
 #define NB_ELT_MAX (NB_LIGNE_LABY * NB_COLONNE_LABY)
 
@@ -34,8 +34,8 @@
 #define GRAINE 10
 #define P_ALEA_MUR 0.05
 
-#define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
-#define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
+#define LARGEUR_CASE (LARGEUR_FENETRE / NB_COLONNE_LABY)
+#define HAUTEUR_CASE (HAUTEUR_FENETRE / NB_LIGNE_LABY)
 
 #define VITESSE_MIN -1
 #define VITESSE_MAX 1
@@ -70,21 +70,23 @@ typedef struct tas_binaire
     int indice_tas[N];
 } tas_binaire_t;
 
-typedef struct entite{
+typedef struct entite
+{
     int pos_prec;
     int pos_cour;
     int vitesse;
     int vertical;
     int horizontal;
     SDL_Texture *texture;
-}entite_t;
+} entite_t;
 
-typedef struct bombe{
+typedef struct bombe
+{
     int pos_cour;
     int rayon_action;
     int temps;
     SDL_Texture *texture;
-}bombe_t;
+} bombe_t;
 
 #include "gestion_entites.h"
 #include "gestion_boule.h"

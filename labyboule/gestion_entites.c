@@ -30,7 +30,7 @@ void liberer_entite(entite_t *entite)
     entite = NULL;
 }
 
-void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, int *delta)
+void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, int *delta, float anim)
 {
     float taille = 0.01;
     int idle = 0;
@@ -50,9 +50,11 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
 
     int nb_images = 4;                   // Il y a 8 vignette dans la ligne de l'image qui nous intéresse
-    float zoom = 1.95;                   // zoom, car ces images sont un peu petites
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
+
+    float zoom = 1.95;                   // zoom, car ces images sont un peu petites
+    //float zoom = LARGEUR_CASE/offset_x;                   // zoom, car ces images sont un peu petites
 
     state.x = 0;
     state.w = offset_x;
@@ -72,7 +74,9 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     else if (entite->horizontal == -1)
         state.y = 1 * offset_y;
 
-    state.x = (*delta / 4) * offset_x;
+    state.x = ((int)anim % 4) * offset_x;
+
+    
 
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
