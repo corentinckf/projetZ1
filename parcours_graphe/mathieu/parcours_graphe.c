@@ -233,7 +233,7 @@ void promenade_labyrinthe_dijkstra(SDL_Window *window, SDL_Renderer *renderer)
         dessiner_chemin(window, renderer, map, chemin_list, taille_chemin);
         ++compt;
     }
-    SDL_Delay(1000);
+    SDL_Delay(750);
     SDL_RenderPresent(renderer);
     liberer_graph_arete(quasi_arbre);
 }
@@ -444,19 +444,19 @@ void DFS_run(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int r,
     DFS_rec(map, r, couleur, parent, debut, fin, &temps);
 }
 
-void utilisation_parcours_en_profondeur()
+void promenade_parcours_en_profondeur(SDL_Window *window, SDL_Renderer *renderer)
 {
 
     float p = 0.01;
     //generation graph arete
     graph_l_arete_t *graph = NULL;
     graph = init_graph_arete_en_grille();
-    graphviz_affiche_graph_arete(graph);
+    //graphviz_affiche_graph_arete(graph);
     melange_fisher_yates_arete(graph);
     //Generation quasi arbre
     graph_l_arete_t *quasi_arbre = NULL;
     quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
-    graphviz_affiche_graph_arete(quasi_arbre);
+    //graphviz_affiche_graph_arete(quasi_arbre);
     liberer_graph_arete(graph);
 
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
@@ -470,7 +470,7 @@ void utilisation_parcours_en_profondeur()
     int r = 0;
 
     DFS_run(map, r, couleur, parent, debut, fin);
-
+    /*
     printf("couleur : ");
     affficher_tab(couleur, N);
     printf("parent : ");
@@ -479,4 +479,119 @@ void utilisation_parcours_en_profondeur()
     affficher_tab(debut, N);
     printf("fin : ");
     affficher_tab(fin, N);
+    */
+
+    SDL_Rect rectangle;
+    SDL_Rect rectangle_bis;
+
+    int i_k, j_k;
+    rectangle.w = LARGEUR_CASE - 2;
+    rectangle.h = HAUTEUR_CASE - 2;
+    rectangle_bis.w = LARGEUR_CASE - 2;
+    rectangle_bis.h = HAUTEUR_CASE - 2;
+
+    int ordre[2 * N];
+    int d = 1;
+    int f;
+    for (int i = 0; i < N; ++i)
+        ordre[i] = -1;
+    for (int i = 0; i < N; ++i)
+        ordre[debut[i]] = i;
+
+    int compt = 0;
+    while (compt < 2 * N)
+    {
+        if (ordre[compt] != -1)
+        {
+
+            rectangle_bis.x = rectangle.x;
+            rectangle_bis.y = rectangle.y;
+            i_k = ordre[compt] / NB_COLONNE_LABY;
+            j_k = ordre[compt] % NB_COLONNE_LABY;
+            rectangle.x = j_k * LARGEUR_CASE + 1;
+            rectangle.y = i_k * HAUTEUR_CASE + 1;
+
+            dessiner(window, renderer, map);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
+            SDL_RenderFillRect(renderer, &rectangle_bis);
+
+            SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
+            SDL_RenderFillRect(renderer, &rectangle);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(100);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            // SDL_RenderClear(renderer);
+        }
+        ++compt;
+    }
+    liberer_graph_arete(quasi_arbre);
+}
+
+void compare_a_etoile()
+{
+    float p = 0.01;
+    //generation graph arete
+    graph_l_arete_t *graph = NULL;
+    graph = init_graph_arete_en_grille();
+    //graphviz_affiche_graph_arete(graph);
+    melange_fisher_yates_arete(graph);
+    //Generation quasi arbre
+    graph_l_arete_t *quasi_arbre = NULL;
+    quasi_arbre = calcul_quasi_foret_couvrant(graph, p);
+    // graphviz_affiche_graph_arete(quasi_arbre);
+    liberer_graph_arete(graph);
+
+    int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
+    construire_map(map, quasi_arbre);
+
+    int distance[N];
+    int parent[N];
+
+    clock_t start_t, end_t, total_t;
+    double temps_d_euclidienne;
+    double temps_d_tchebychev;
+    double temps_d_manattan;
+
+    float m_e = 0.;
+    float m_t = 0.;
+    float m_m = 0.;
+
+    for (int k = 0; k < 10; k++)
+    {
+        start_t = clock();
+        printf("Debut de A_etoide avec la distance euclidienne, start_t = %ld\n", start_t);
+        A_etoile(d_euclidienne, map, 0, distance, parent);
+        end_t = clock();
+        printf("Fin de A_etoide avec la distance euclidienne,   end_t = %ld\n", end_t);
+        temps_d_euclidienne = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+        printf("A_etoide avec la distance euclidienne :         Total time taken by CPU: %f\n", temps_d_euclidienne);
+
+        start_t = clock();
+        printf("Debut de A_etoide avec la distance tchebychev,  start_t = %ld\n", start_t);
+        A_etoile(d_tchebychev, map, 0, distance, parent);
+        end_t = clock();
+        printf("Fin de A_etoide avec la distance tchebychev,    end_t = %ld\n", end_t);
+        temps_d_tchebychev = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+        printf("A_etoide avec la distance tchebychev :          Total time taken by CPU: %f\n", temps_d_tchebychev);
+
+        start_t = clock();
+        printf("Debut de A_etoide avec la distance manattan,    start_t = %ld\n", start_t);
+        A_etoile(d_manattan, map, 0, distance, parent);
+        end_t = clock();
+        printf("Fin de A_etoide avec la distance manattan, end_t = %ld\n", end_t);
+        temps_d_manattan = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+        printf("A_etoide avec la distance manattan :            Total time taken by CPU: %f\n", temps_d_manattan);
+
+        m_e = m_e + temps_d_euclidienne;
+        m_t = m_t + temps_d_tchebychev;
+        m_m = m_m + temps_d_manattan;
+    }
+
+    m_e /= 10;
+    m_t /= 10;
+    m_m /= 10;
+    printf("\n\n");
+    printf("A_etoide avec la distance euclidienne : Total time taken by CPU: %f\n", m_e);
+    printf("A_etoide avec la distance tchebychev :  Total time taken by CPU: %f\n", m_t);
+    printf("A_etoide avec la distance manattan :    Total time taken by CPU: %f\n", m_m);
 }

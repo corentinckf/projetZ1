@@ -63,6 +63,8 @@ int main_labyrinthe()
     liberer_graph_arete(graph);
     liberer_graph_arete(quasi_arbre);
 
+    //promenade_labyrinthe_dijkstra(window, renderer);
+
     //main_labyrinthe(map);
     //dessiner(window, renderer, map);
 
