@@ -13,7 +13,7 @@ void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entit
 void liberer_entite(entite_t *entite);
 =======
 void liberer(entite_t *entite);
-void affichage_entite(SDL_Window *, SDL_Renderer *,entite_t*);
+void affichage_entite(SDL_Window *, SDL_Renderer *,entite_t*, int *temps);
 int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES]);
 >>>>>>> fe0b162cbf62bd9e417e3788323b5f26f0027891
 

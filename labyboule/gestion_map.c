@@ -104,7 +104,7 @@ void map_bis(int map_bonne[NB_LIGNE_LABY][NB_COLONNE_LABY], int map[NB_LIGNE_LAB
             }
             else    //toutes les autres cases
             {
-                printf("ligne: %d \tcolonne : %d\n",i,j);
+                //printf("ligne: %d \tcolonne : %d\n",i,j);
                 map[i - 1][j] += 8; //mur sud sur case au dessus
                 map[i][j - 1] += 1; //mur est sur case a gauche
                 map[i + 1][j] += 2; //mur nord sur case en dessous
