@@ -28,3 +28,14 @@ void liberer(entite_t *entite)
     free(entite);
     entite = NULL;
 }
+
+//retourne 0 si pas de collision
+int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
+{
+    int res = 0;
+    for (int k = 0; k < NB_BOULES; ++k)
+    {
+        res = res || (perso->pos_cour == liste_boule[k]->pos_cour);
+    }
+    return res;
+}

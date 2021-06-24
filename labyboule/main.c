@@ -13,7 +13,7 @@ int main()
 
     int vertical = 0;
     int horizontal = 0;
-    int collision = 0;
+    int coll = 0;
 
     SDL_Rect window_dimensions = {0};
 
@@ -55,20 +55,23 @@ int main()
 
     /********* initialisation perso **************/
     entite_t *perso = NULL;
-    creer_entite(window, renderer, PERSO_POS - 1, PERSO_POS, 1, 0, 0, perso, PATH_IMG_PERSO);
+    creer_entite(window, renderer, 10 - 1, 10, 1, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boule[NB_BOULES];
-    entite_t *nouv = NULL;
 
-    creer_entite(window, renderer, 0, 0, 0, 0, 0, nouv, PATH_IMG_MUR);
-    liste_boule[0] = nouv;
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, nouv, PATH_IMG_MUR);
-    liste_boule[1] = nouv;
-    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, nouv, PATH_IMG_MUR);
-    liste_boule[2] = nouv;
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, nouv, PATH_IMG_MUR);
-    liste_boule[3] = nouv;
+    for (int i = 0; i < NB_BOULES; ++i)
+    {
+        liste_boule[i] = NULL;
+    }
+
+    creer_entite(window, renderer, 0, 0, 0, 0, 0, &liste_boule[0], PATH_IMG_MUR);
+
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[1], PATH_IMG_MUR);
+
+    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boule[2], PATH_IMG_MUR);
+
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, &liste_boule[3], PATH_IMG_MUR);
     //////////////////////*****************************/////////////////////////////
 
     SDL_bool
@@ -133,9 +136,9 @@ int main()
             //affichage_entite
             //affichage entite boule
 
-            collision = collision(perso, liste_boule);
-            if (collcollision)
-                program_on = false;
+            coll = collision(perso, liste_boule);
+            if (coll)
+                program_on = 0;
             SDL_RenderPresent(renderer);
             SDL_Delay(80);
             SDL_RenderClear(renderer);
@@ -146,15 +149,4 @@ int main()
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
     return 0;
-}
-
-//retourne 0 si pas de collision
-int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
-{
-    int res = 0;
-    for (int k = 0; k < NB_BOULES; ++k)
-    {
-        res = res || (perso->pos_cour == liste_boule[k]->pos_cour);
-    }
-    return res;
 }
