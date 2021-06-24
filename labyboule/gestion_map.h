@@ -3,6 +3,6 @@
 
 #include "const.h"
 
-void init_map();
+void init_map(int map[NB_LIGNE_MAT][NB_COLONNE_LABY]);
 
 #endif

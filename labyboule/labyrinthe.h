@@ -1,9 +1,7 @@
 #ifndef __LABYRINTHE_H__
 #define __LABYRINTHE_H__
 
-
 #include "const.h"
-
 
 enum murs
 {
@@ -24,7 +22,7 @@ void construire_map(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], graph_l_arete_t *gr
 void dessiner(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
 void trace_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY], int i, int j);
 
-void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
+void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *my_texture, int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer);
 
