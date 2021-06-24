@@ -112,10 +112,8 @@ int main()
         if (!paused)
         { // Si on n'est pas en pause
 
-        
             //calcul perso
             //calcul boule
-
 
             //affichage entite perso
             //affichage entite boule
@@ -130,4 +128,9 @@ int main()
     SDL_DestroyTexture(texture_mur);
     end_sdl(1, "fin normal", window, renderer);
     return 0;
+}
+
+int collision(entite_t *perso, entite_t *tab_boule)
+{
+    
 }

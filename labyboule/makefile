@@ -1,6 +1,9 @@
-CC= gcc
-OPT  = -c -Wextra -Wall -g
-SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net -lm
+CC = gcc
+CFLAGS = -g -Wall -Wextra
+LDFLAGS = -lm
+OBJFILES = perso.o
+SDL2FLAGS = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net
+TARGET = prog
 
 prog : main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o tas_binaire.o gestion_map.o 
 	$(CC) main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o tas_binaire.o gestion_map.o $(SDL2) -o prog
@@ -29,11 +32,12 @@ liste_chainee.o : liste_chainee.c liste_chainee.h
 tas_binaire.o : tas_binaire.c tas_binaire.h
 	$(CC) $(OPT) -o tas_binaire.o -c tas_binaire.c
 
+$(TARGET) : $(OBJFILES)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS) $(SDL2FLAGS)
 
 gestion_map.o : gestion_map.c gestion_map.h
 	$(CC) $(OPT) -o gestion_map.o -c gestion_map.c
 
 
 clean:
-	rm -f *.o
-
+	rm -f $(OBJFILES) $(TARGET)
