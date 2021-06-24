@@ -13,6 +13,7 @@ int main()
 
     int vertical = 0;
     int horizontal = 0;
+    int collision = 0;
 
     SDL_Rect window_dimensions = {0};
 
@@ -53,27 +54,22 @@ int main()
     play_texture_mur(window, renderer, texture_mur, map);
 
     /********* initialisation perso **************/
-    entite_t * perso = NULL;
-    creer_entite(window, renderer,PERSO_POS-1,PERSO_POS,1,0,0,perso,PATH_IMG_PERSO)
+    entite_t *perso = NULL;
+    creer_entite(window, renderer, PERSO_POS - 1, PERSO_POS, 1, 0, 0, perso, PATH_IMG_PERSO);
 
-
-    //////////////////////*****************/////////////////////////////
-/*  
-    entite_t *tab_boule[NB_BOULES];
+    //////////////////////********creation boules*********/////////////////////////////
+    entite_t *liste_boule[NB_BOULES];
     entite_t *nouv = NULL;
-    for (int i = 0; i < NB_BOULES; ++i)
-    {
-        creer_entite(window, renderer, 0, 26, 0, 0, 0, nouv, PATH_IMG_MUR);
-        tab_boule[i] = nouv;
-    }
-    SDL_Delay(1000);
 
-    int map_bis_tab[NB_LIGNE_LABY][NB_COLONNE_LABY];
-    map_bis(map, map_bis_tab, tab_boule, 0);
-    play_texture_mur(window, renderer, texture_mur, map_bis_tab);
-    SDL_Delay(5000);
-*/
-    //////////////////////*****************/////////////////////////////
+    creer_entite(window, renderer, 0, 0, 0, 0, 0, nouv, PATH_IMG_MUR);
+    liste_boule[0] = nouv;
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, nouv, PATH_IMG_MUR);
+    liste_boule[1] = nouv;
+    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, nouv, PATH_IMG_MUR);
+    liste_boule[2] = nouv;
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY * NB_LIGNE_LABY, 0, 0, 0, nouv, PATH_IMG_MUR);
+    liste_boule[3] = nouv;
+    //////////////////////*****************************/////////////////////////////
 
     SDL_bool
         program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
@@ -103,16 +99,6 @@ int main()
                 case SDLK_q:        // 'q'
                     program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
                     break;
-                    /*
-                case SDLK_LEFT:
-                    if (vitesse > VITESSE_MIN)
-                        vitesse--;
-                    break;
-                case SDLK_RIGHT:
-                    if (vitesse < VITESSE_MAX)
-                        vitesse++;
-                    break;
-*/
                 default: // Une touche appuyée qu'on ne traite pas
                     break;
                 }
@@ -136,11 +122,20 @@ int main()
         { // Si on n'est pas en pause
 
             //calcul perso
-            //calcul boule
+            //deplacement_perso(map, perso, vertical, horizontal);
 
-            //affichage entite perso
-            //affichage entite boule
+            //calcul boule
+            deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+
+            //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
+            //affichage entite perso
+            //affichage_entite
+            //affichage entite boule
+
+            collision = collision(perso, liste_boule);
+            if (collcollision)
+                program_on = false;
             SDL_RenderPresent(renderer);
             SDL_Delay(80);
             SDL_RenderClear(renderer);

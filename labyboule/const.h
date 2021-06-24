@@ -75,6 +75,7 @@ typedef struct entite{
     SDL_Texture *texture;
 }entite_t;
 
+#include "gestion_boule.h"
 #include "gestion_entites.h"
 #include "gestion_map.h"
 #include "tas_binaire.h"
