@@ -12,8 +12,11 @@
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 #define PATH_IMG_PERSO "./textures/character.png"
 #define PATH_IMG_BOULE "./textures/pokeboulev2.png"
+#define PATH_FONT "./fonts/Pacifico.ttf"
 
 #define PERSO_POS 312
+
+#define TAILLE_FONT 65
 
 #define HAUTEUR_FENETRE 800
 #define LARGEUR_FENETRE 1000
@@ -89,6 +92,7 @@ typedef struct bombe
     SDL_Texture *texture;
 } bombe_t;
 
+#include "ui.h"
 #include "gestion_bombes.h"
 #include "perso.h"
 #include "gestion_entites.h"

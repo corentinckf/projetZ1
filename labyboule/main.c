@@ -31,6 +31,10 @@ int main()
         SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError()); // l'initialisation de la SDL a échoué
         exit(EXIT_FAILURE);
     }
+    /************** initialisation ttf ****************/
+    if (TTF_Init() < 0)
+        end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
+    /**** fin initialisation  *****/
 
     SDL_GetCurrentDisplayMode(0, &screen);
     printf("Résolution écran\n\tw : %d\n\th : %d\n", screen.w, screen.h);
@@ -55,6 +59,12 @@ int main()
     texture_mur = IMG_LoadTexture(renderer, PATH_IMG_MUR);
     if (texture_mur == NULL)
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+
+    /****** chargement de la font *******/
+    TTF_Font *font = NULL;                       // la variable 'police de caractère'
+    font = TTF_OpenFont(PATH_FONT, TAILLE_FONT); // La police à charger, la taille désirée    if (font == NULL)
+    if (font == NULL)
+        end_sdl(0, "Can't load font", window, renderer);
 
     /*********** initialisation map **************/
     int map[NB_LIGNE_LABY][NB_COLONNE_LABY];
@@ -129,11 +139,11 @@ int main()
         keystates = SDL_GetKeyboardState(NULL);
         horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
         vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
-        /*if (!abs(horizontal - vertical))
+        if (!(abs(horizontal) - abs(vertical)) && delta_tps>500)
         {
             vertical = 0;
             horizontal = 0;
-        }*/
+        }
 
         if (!paused)
         { // Si on n'est pas en pause
@@ -175,6 +185,7 @@ int main()
         SDL_Delay(80); // Petite pause
     }
 
+    ecran_fin(window, renderer, font, coll);
     //liberer_entite(perso);
     //liberer_liste_boule(liste_boule);
     SDL_DestroyTexture(texture_mur);
