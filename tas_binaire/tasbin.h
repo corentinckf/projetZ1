@@ -15,12 +15,15 @@ int estVide(tete_t *tete);
 void ajouter(tete_t *tete, int valeur);
 void retirer_racine(tete_t *tete, int *res);
 int fils_min(tete_t *tete, int i);
-void modifier(tete_t *tete, int place, int augmenter);
-void construire(int tab[7], tete_t *tete);
+void construire(int *tab, tete_t *tete, int nb_elements);
 void afficher_tas(tete_t *tete);
 void percolate_down(tete_t *tete, int place);
 void percolate_up(tete_t *tete, int place);
-void tri(tete_t *tete, int tab[7], int **liste);
-void afficher_tab(int **liste);
+int tri(tete_t *tete, int *tab, int *liste, int nb_elements);
+void afficher_tab(int *liste, int nb_elements);
+void liberer_tas(tete_t *tete);
+void tas_graphviz(FILE *fichier, tete_t *tete);
+void relier_pere_fils(FILE *fichier, tete_t *tete, int i);
+int inf(int *v1, int *v2);
 
 #endif
