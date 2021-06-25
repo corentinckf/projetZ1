@@ -190,9 +190,11 @@ int main()
         SDL_Delay(80); // Petite pause
     }
 
-    //liberer_entite(perso);
-    //liberer_liste_boule(liste_boule);
+    liberer_entite(perso);
+    liberer_liste_boule(liste_boule);
     SDL_DestroyTexture(texture_mur);
+    ecran_fin(window, renderer, font, coll);
+    
     end_sdl(1, "fin normal", window, renderer);
     return 0;
 }
