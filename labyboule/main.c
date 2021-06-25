@@ -97,6 +97,7 @@ int main()
     SDL_bool
         program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
         paused = SDL_FALSE;    // Booléen pour dire que le programme est en pause
+    ecran_debut(window, renderer, font);
     while (program_on)
     {                    // La boucle des évènements
         SDL_Event event; // Evènement à traiter
@@ -181,7 +182,7 @@ int main()
             //affichage entite boule
             anim += 1;
             coll = collision(perso, liste_boule,bombe,&nb_bombe,map);
-            if (coll == 1 || coll == 2)
+            if (coll == 1 || coll == -1)
             {
                 program_on = SDL_FALSE;
             }

@@ -65,3 +65,19 @@ void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int c
     SDL_RenderPresent(renderer);
     SDL_Delay(2500);
 }
+
+void ecran_debut(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font)
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
+
+    affichage_texte(window, renderer, font, "LabyBoule", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4);
+
+    affichage_texte(window, renderer, font, "Fleches directionnelles pour se deplacer", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
+    affichage_texte(window, renderer, font, "P pour poser une bombe", 1, LARGEUR_FENETRE / 2, 0.75 * HAUTEUR_FENETRE / 2);
+    
+
+    SDL_RenderPresent(renderer);
+    SDL_Delay(2500);
+}
