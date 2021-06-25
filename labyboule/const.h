@@ -11,7 +11,7 @@
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 #define PATH_IMG_PERSO "./textures/character.png"
-#define PATH_IMG_BOULE "./textures/boule_petite.png"
+#define PATH_IMG_BOULE "./textures/boule_petite_contour.png"
 
 #define PERSO_POS
 
@@ -41,6 +41,7 @@
 #define VITESSE_MAX 1
 
 #define NB_BOULES 4
+
 
 typedef struct couple
 {
@@ -88,6 +89,7 @@ typedef struct bombe
     SDL_Texture *texture;
 } bombe_t;
 
+#include "gestion_bombes.h"
 #include "perso.h"
 #include "gestion_entites.h"
 #include "gestion_boule.h"

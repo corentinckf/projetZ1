@@ -20,6 +20,9 @@ int main()
     int coll = 0;
     float anim = 0.;
 
+    bombe_t *bombe = NULL;
+    int nb_bombe = 0;
+
     SDL_Rect window_dimensions = {0};
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
@@ -98,8 +101,14 @@ int main()
                               // comme la valeur du type est SDL_Keydown, dans la pratie 'union' de
                               // l'event, plusieurs champs deviennent pertinents
                 switch (event.key.keysym.sym)
-                {                     // la touche appuyée est ...
-                case SDLK_p:          // 'p'
+                {            // la touche appuyée est ...
+                case SDLK_p: // 'p'
+                    if (nb_bombe < 1)
+                    {
+                        creer_bombe(window, renderer, perso->pos_cour, 1, 0, &bombe, PATH_IMG_BOULE);
+                        nb_bombe++;
+                    }
+                    break;
                 case SDLK_SPACE:      // 'SPC'
                     paused = !paused; // basculement pause/unpause
                     break;
