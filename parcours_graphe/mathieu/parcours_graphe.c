@@ -496,32 +496,33 @@ void promenade_parcours_en_profondeur(SDL_Window *window, SDL_Renderer *renderer
     for (int i = 0; i < N; ++i)
         ordre[i] = -1;
     for (int i = 0; i < N; ++i)
+    {
         ordre[debut[i]] = i;
+        ordre[fin[i]] = i;
+    }
 
     int compt = 0;
     while (compt < 2 * N)
     {
-        if (ordre[compt] != -1)
-        {
 
-            rectangle_bis.x = rectangle.x;
-            rectangle_bis.y = rectangle.y;
-            i_k = ordre[compt] / NB_COLONNE_LABY;
-            j_k = ordre[compt] % NB_COLONNE_LABY;
-            rectangle.x = j_k * LARGEUR_CASE + 1;
-            rectangle.y = i_k * HAUTEUR_CASE + 1;
+        rectangle_bis.x = rectangle.x;
+        rectangle_bis.y = rectangle.y;
+        i_k = ordre[compt] / NB_COLONNE_LABY;
+        j_k = ordre[compt] % NB_COLONNE_LABY;
+        rectangle.x = j_k * LARGEUR_CASE + 1;
+        rectangle.y = i_k * HAUTEUR_CASE + 1;
 
-            dessiner(window, renderer, map);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
-            SDL_RenderFillRect(renderer, &rectangle_bis);
+        dessiner(window, renderer, map);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
+        SDL_RenderFillRect(renderer, &rectangle_bis);
 
-            SDL_SetRenderDrawColor(renderer, 0, 0, 250, 255);
-            SDL_RenderFillRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
-            SDL_Delay(100);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            // SDL_RenderClear(renderer);
-        }
+        SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rectangle);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        // SDL_RenderClear(renderer);
+
         ++compt;
     }
     liberer_graph_arete(quasi_arbre);
