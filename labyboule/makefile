@@ -3,8 +3,8 @@ CC= gcc
 OPT  = -c -Wextra -Wall -g
 SDL2 = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lSDL2_net -lm
 
-prog : main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o tas_binaire.o gestion_map.o gestion_entites.o gestion_boule.o perso.o gestion_bombes.o
-	$(CC) main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o tas_binaire.o gestion_map.o gestion_entites.o gestion_boule.o perso.o gestion_bombes.o $(SDL2) -o prog
+prog : main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o tas_binaire.o gestion_map.o gestion_entites.o gestion_boule.o perso.o gestion_bombes.o ui.o
+	$(CC) main.o parcours_graphe.o labyrinthe.o kruskal.o connexe.o partition.o liste_chainee.o tas_binaire.o gestion_map.o gestion_entites.o gestion_boule.o perso.o gestion_bombes.o ui.o $(SDL2) -o prog
 
 main.o : main.c const.h
 	$(CC) $(OPT) -o main.o -c main.c
@@ -44,6 +44,11 @@ perso.o : perso.c perso.h
 
 gestion_bombes.o : gestion_bombes.c gestion_bombes.h
 	$(CC) gestion_bombes.c $(OPT) -o gestion_bombes.o
+
+ui.o : ui.c ui.h
+	$(CC) ui.c $(OPT) -o ui.o
+
+
 
 clean:
 	rm -f *.o

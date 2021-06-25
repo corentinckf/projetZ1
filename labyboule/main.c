@@ -50,6 +50,18 @@ int main()
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
+    
+    /************** initialisation ttf ****************/
+    if (TTF_Init() < 0)
+        end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
+    /**** fin initialisation  *****/
+
+    /****** chargement de la font *******/
+    TTF_Font *font = NULL;                       // la variable 'police de caractère'
+    font = TTF_OpenFont(PATH_FONT, TAILLE_FONT); // La police à charger, la taille désirée    if (font == NULL)
+    if (font == NULL)
+        end_sdl(0, "Can't load font", window, renderer);
+
     /********* chargement texture map ***********/
     SDL_Texture *texture_mur;
     texture_mur = IMG_LoadTexture(renderer, PATH_IMG_MUR);
@@ -162,12 +174,14 @@ int main()
                     affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             //affichage entite boule
+            affichage_texte(window, renderer, font, texte_score(NB_BOULES), 0.5,LARGEUR_FENETRE/2, (NB_LIGNE_LABY - 2) * HAUTEUR_CASE);
             anim += 0.75;
             coll = collision(perso, liste_boule);
             if (coll)
             {
                 program_on = 0;
             }
+
             SDL_RenderPresent(renderer);
 
             //SDL_Delay(1000);
@@ -182,3 +196,4 @@ int main()
     end_sdl(1, "fin normal", window, renderer);
     return 0;
 }
+
