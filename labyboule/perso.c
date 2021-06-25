@@ -7,7 +7,10 @@ void deplacement_perso(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *perso,
     int j = perso->pos_cour % NB_COLONNE_LABY;
 
     int peut_d = 1, peut_g = 1, peut_h = 1, peut_b = 1;
-
+    if(!(*v && *h))
+    {
+        peut_d = 0, peut_g = 0, peut_h = 0, peut_b = 0;
+    }
     unsigned mur = (unsigned)map[i][j];
 
     if ((perso->pos_cour + 1) % NB_COLONNE_LABY != 0 && !(mur & (unsigned)mur_est))
