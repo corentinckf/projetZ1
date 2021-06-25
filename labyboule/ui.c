@@ -43,3 +43,25 @@ void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     SDL_DestroyTexture(text_texture);                   // On n'a plus besoin de la texture avec le texte
 
 }
+
+
+void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int coll)
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
+
+    affichage_texte(window, renderer, font, "Game Over !", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4);
+    //printf("coll %d ", coll);
+    if (coll == 1)
+    {
+        affichage_texte(window, renderer, font, "Une boule vous a rattrape.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
+    }else if(coll==-1)
+    {
+        affichage_texte(window, renderer, font, "Une bombe a explose vers vous.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
+    }
+    
+
+    SDL_RenderPresent(renderer);
+    SDL_Delay(2500);
+}
