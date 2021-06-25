@@ -129,11 +129,11 @@ int main()
         keystates = SDL_GetKeyboardState(NULL);
         horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
         vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
-        if (!abs(horizontal - vertical))
+        /*if (!abs(horizontal - vertical))
         {
             vertical = 0;
             horizontal = 0;
-        }
+        }*/
 
         if (!paused)
         { // Si on n'est pas en pause
@@ -161,7 +161,7 @@ int main()
                 affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             //affichage entite boule
-            anim += 1;
+            anim += 0.75;
             coll = collision(perso, liste_boule);
             if (coll)
             {

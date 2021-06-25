@@ -11,7 +11,7 @@
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 #define PATH_IMG_PERSO "./textures/character.png"
-#define PATH_IMG_BOULE "./textures/boule.png"
+#define PATH_IMG_BOULE "./textures/pokeboulev2.png"
 
 #define PERSO_POS 312
 
