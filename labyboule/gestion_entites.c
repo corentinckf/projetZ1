@@ -95,9 +95,10 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     }
     int i = entite->pos_prec / NB_COLONNE_LABY;
     int j = entite->pos_prec % NB_COLONNE_LABY;
+float val = 0.075;
 
-    destination.y = i * HAUTEUR_CASE - 4 + (*delta * 0.04) * entite->horizontal;
-    destination.x = j * LARGEUR_CASE + (*delta * 0.04) * entite->vertical;
+    destination.y = i * HAUTEUR_CASE - 4 + (*delta * val) * entite->horizontal;
+    destination.x = j * LARGEUR_CASE + (*delta * val) * entite->vertical;
 
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;

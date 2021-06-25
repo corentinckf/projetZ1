@@ -143,9 +143,9 @@ int main()
             currentTime = SDL_GetTicks();
             delta_tps += currentTime - lastTime;
             lastTime = currentTime;
-            if (delta_tps > 1000)
-            {
                 //calcul perso
+            if (delta_tps > 500)
+            {
                 printf("v %d h %d\n", vertical, horizontal);
                 deplacement_perso(map, perso, &vertical, &horizontal);
                 //calcul boule
@@ -162,7 +162,7 @@ int main()
                 affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             //affichage entite boule
-            anim += 0.4;
+            anim += 1;
             coll = collision(perso, liste_boule);
             if (coll)
             {

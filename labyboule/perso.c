@@ -3,8 +3,8 @@
 void deplacement_perso(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *perso, int *v, int *h)
 {
 
-    int i = perso->pos_prec / NB_COLONNE_LABY;
-    int j = perso->pos_prec % NB_COLONNE_LABY;
+    int i = perso->pos_cour / NB_COLONNE_LABY;
+    int j = perso->pos_cour % NB_COLONNE_LABY;
 
     int peut_d = 1, peut_g = 1, peut_h = 1, peut_b = 1;
 
