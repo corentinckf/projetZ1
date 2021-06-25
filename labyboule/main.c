@@ -174,8 +174,8 @@ int main()
                     affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             //affichage entite boule
-            affichage_texte(window, renderer, font, texte_score(NB_BOULES), 0.5,LARGEUR_FENETRE/2, (NB_LIGNE_LABY - 2) * HAUTEUR_CASE);
-            anim += 0.75;
+            affichage_texte(window, renderer, font, texte_score(NB_BOULES), 0.5,LARGEUR_FENETRE/2, (NB_LIGNE_LABY - 3) * HAUTEUR_CASE);
+            anim += 0.70;
             coll = collision(perso, liste_boule);
             if (coll)
             {

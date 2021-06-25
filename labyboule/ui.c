@@ -14,7 +14,7 @@ char *texte_score(int a)
 
 void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, char *texte,float taille, int x, int y)
 {
-    TTF_SetFontStyle(font, TTF_STYLE_BOLD); // en italique, gras
+    TTF_SetFontStyle(font, TTF_STYLE_NORMAL); // en italique, gras
 
     SDL_Color color = {250, 250, 250, 255}; // la couleur du texte
 
