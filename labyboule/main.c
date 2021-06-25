@@ -158,7 +158,8 @@ int main()
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
-                affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
+                if(liste_boule[k]!=NULL)
+                    affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             //affichage entite boule
             anim += 0.75;
