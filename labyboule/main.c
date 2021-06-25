@@ -63,7 +63,7 @@ int main()
 
     /********* initialisation perso **************/
     entite_t *perso = NULL;
-    creer_entite(window, renderer, 10 - 1, 10, 1, 0, 0, &perso, PATH_IMG_PERSO);
+    creer_entite(window, renderer, PERSO_POS, PERSO_POS, 1, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boule[NB_BOULES];
@@ -101,24 +101,21 @@ int main()
                               // comme la valeur du type est SDL_Keydown, dans la pratie 'union' de
                               // l'event, plusieurs champs deviennent pertinents
                 switch (event.key.keysym.sym)
-                {            // la touche appuyée est ...
-                case SDLK_p: // 'p'
+                {                // la touche appuyée est ...
+                case SDLK_SPACE: // 'SPC'
+                case SDLK_p:     // 'p'
                     if (nb_bombe < 1)
                     {
-                        creer_bombe(window, renderer, perso->pos_cour, 1, 2000, SDL_GetTicks(), &bombe, PATH_IMG_BOULE);
+                        creer_bombe(window, renderer, perso->pos_cour, 5, 3000, SDL_GetTicks(), &bombe, PATH_IMG_BOMBE);
                         nb_bombe++;
                     }
                     break;
-                case SDLK_SPACE:      // 'SPC'
-                    paused = !paused; // basculement pause/unpause
-                    break;
-                case SDLK_ESCAPE: // 'ESCAPE'
-                    //creer bombe
-                    break;
+                case SDLK_ESCAPE:
                 case SDLK_q:        // 'q'
                     program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
                     break;
                 default: // Une touche appuyée qu'on ne traite pas
+
                     break;
                 }
                 break;
@@ -128,14 +125,15 @@ int main()
         }
 
         /********** Regarde les touches de directions ************/
+
         keystates = SDL_GetKeyboardState(NULL);
         horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
         vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
-        if (!abs(horizontal - vertical))
+        /*if (!abs(horizontal - vertical))
         {
             vertical = 0;
             horizontal = 0;
-        }
+        }*/
 
         if (!paused)
         { // Si on n'est pas en pause
@@ -143,11 +141,12 @@ int main()
             currentTime = SDL_GetTicks();
             delta_tps += currentTime - lastTime;
             lastTime = currentTime;
-                //calcul perso
+            //calcul perso
             if (delta_tps > 500)
             {
                 printf("v %d h %d\n", vertical, horizontal);
                 deplacement_perso(map, perso, &vertical, &horizontal);
+
                 //calcul boule
                 deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
                 delta_tps = 0;
@@ -159,7 +158,8 @@ int main()
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
-                affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
+                if(liste_boule[k]!=NULL)
+                    affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
             if (nb_bombe > 0) 
             {

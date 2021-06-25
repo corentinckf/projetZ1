@@ -11,6 +11,6 @@ void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int 
 void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, char *chemin);
 void liberer_entite(entite_t *entite);
 void affichage_entite(SDL_Window *, SDL_Renderer *,entite_t*, int *temps, float anim);
-int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES]);
+int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES], bombe_t *bombe, int *nb_bombes, int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
 
 #endif

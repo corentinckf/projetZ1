@@ -53,7 +53,6 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
-    float zoom = 1.95;                   // zoom, car ces images sont un peu petites
     //float zoom = LARGEUR_CASE/offset_x;                   // zoom, car ces images sont un peu petites
 
     state.x = 0;
@@ -76,10 +75,9 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
 
     state.x = ((int)anim % 4) * offset_x;
 
-    
-
-    destination.w = offset_x * zoom; // Largeur du sprite à l'écran
-    destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
+    float zoom = 30 ;    // zoom, car ces images sont un peu petites
+    destination.w =  zoom; // Largeur du sprite à l'écran
+    destination.h =  zoom; // Hauteur du sprite à l'écran
 
     //destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
 
@@ -95,10 +93,10 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     }
     int i = entite->pos_prec / NB_COLONNE_LABY;
     int j = entite->pos_prec % NB_COLONNE_LABY;
-float val = 0.075;
+    float val = 0.070;
 
-    destination.y = i * HAUTEUR_CASE - 4 + (*delta * val) * entite->horizontal;
-    destination.x = j * LARGEUR_CASE + (*delta * val) * entite->vertical;
+    destination.y = i * HAUTEUR_CASE - 1 + (*delta * val) * entite->horizontal;
+    destination.x = j * LARGEUR_CASE + 5  + (*delta * val) * entite->vertical;
 
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
@@ -123,6 +121,7 @@ int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES], bombe_t *bombe,
         if (SDL_GetTicks() > bombe->pose_bombe + bombe->temps)
         {
             erreur = explosion(bombe,perso,liste_boule,map); //bombe liberee
+            printf("bombe explose ! \n");
             (*nb_bombes)--;
             if (erreur < 0) //perso explose
             {

@@ -49,7 +49,7 @@ void map_bis(int map_bonne[NB_LIGNE_LABY][NB_COLONNE_LABY], int map[NB_LIGNE_LAB
 
     for (int k = 0; k < NB_BOULES; k++)
     {
-        if (k != boule_cour)
+        if (k != boule_cour && tab[k] != NULL)
         {
             boule = tab[k];
             position = boule->pos_cour;
