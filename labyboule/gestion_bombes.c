@@ -8,11 +8,11 @@ void creer_bombe(SDL_Window *window, SDL_Renderer *renderer, int pos_cour, int r
         (*pbombe)->pos_cour = pos_cour;
         (*pbombe)->rayon_action = rayon_action;
         (*pbombe)->temps = temps;
-        charger_texture(window, renderer, *pbombe, chemin);
+        charger_texture_bombe(window, renderer, *pbombe, chemin);
     }
 }
 
-void charger_texture(SDL_Window *window, SDL_Renderer *renderer, bombe_t *bombe, char *chemin)
+void charger_texture_bombe(SDL_Window *window, SDL_Renderer *renderer, bombe_t *bombe, char *chemin)
 {
     SDL_Texture *my_texture = NULL;
     my_texture = IMG_LoadTexture(renderer, chemin);
@@ -40,29 +40,29 @@ void explosion(bombe_t *bombe, entite_t *perso, entite_t *tab_boule[NB_BOULES], 
         unsigned mur = (unsigned)map[i][j];
         if (mur && mur_est)
         {
-            collision(perso, tab_boule, map,i-1,j);
-            collision(perso, tab_boule, map,i+1,j);
-            collision(perso, tab_boule, map,i,j-1);
+            collision_bombe(perso, tab_boule, map,i-1,j);
+            collision_bombe(perso, tab_boule, map,i+1,j);
+            collision_bombe(perso, tab_boule, map,i,j-1);
         }
 
         if (mur && (unsigned)mur_ouest)
         {
-            collision(perso, tab_boule, map,i-1,j);
-            collision(perso, tab_boule, map,i+1,j);
-            collision(perso, tab_boule, map,i,j+1);
+            collision_bombe(perso, tab_boule, map,i-1,j);
+            collision_bombe(perso, tab_boule, map,i+1,j);
+            collision_bombe(perso, tab_boule, map,i,j+1);
         }
 
         if (mur && (unsigned)mur_nord)
         {
-            collision(perso, tab_boule, map,i+1,j);
-            collision(perso, tab_boule, map,i,j+1);
-            collision(perso, tab_boule, map,i,j-1);
+            collision_bombe(perso, tab_boule, map,i+1,j);
+            collision_bombe(perso, tab_boule, map,i,j+1);
+            collision_bombe(perso, tab_boule, map,i,j-1);
         }
         if (mur && (unsigned)mur_sud)
         {
-            collision(perso, tab_boule, map,i-1,j);
-            collision(perso, tab_boule, map,i,j+1);
-            collision(perso, tab_boule, map,i,j-1);
+            collision_bombe(perso, tab_boule, map,i-1,j);
+            collision_bombe(perso, tab_boule, map,i,j+1);
+            collision_bombe(perso, tab_boule, map,i,j-1);
         }
     }
 }
@@ -82,7 +82,7 @@ int collision_bombe(entite_t *perso, entite_t *tab_boule[NB_BOULES], int map[NB_
     }
 
     int k=0;
-    while (k < NB_BOULES && tab_boule[k] != NULL])
+    while (k < NB_BOULES && tab_boule[k] != NULL)
     {
         entite_t *boule = tab_boule[k];
         int position_boule = boule->pos_cour;

@@ -10,13 +10,8 @@
 #include <time.h>
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
-<<<<<<< HEAD
-#define PATH_IMG_PERSO ""
-#define PATH_IMG_BOULE ""
-=======
 #define PATH_IMG_PERSO "./textures/character.png"
-#define PATH_IMG_BOULE "./textures/boule_tmp.png"
->>>>>>> fe0b162cbf62bd9e417e3788323b5f26f0027891
+#define PATH_IMG_BOULE "./textures/boule_petite_contour.png"
 
 #define PERSO_POS
 
@@ -26,9 +21,9 @@
 #define NB_LIGNE_LABY 25
 #define NB_COLONNE_LABY 25
 
-#define NB_ELT_MAX NB_LIGNE_LABY * NB_COLONNE_LABY
+#define NB_ELT_MAX (NB_LIGNE_LABY * NB_COLONNE_LABY)
 
-#define N NB_LIGNE_LABY * NB_COLONNE_LABY
+#define N (NB_LIGNE_LABY * NB_COLONNE_LABY)
 #define NB_LIGNE_MAT N
 #define NB_COLONNE_MAT N
 
@@ -39,13 +34,14 @@
 #define GRAINE 10
 #define P_ALEA_MUR 0.05
 
-#define LARGEUR_CASE LARGEUR_FENETRE / NB_COLONNE_LABY
-#define HAUTEUR_CASE HAUTEUR_FENETRE / NB_LIGNE_LABY
+#define LARGEUR_CASE (LARGEUR_FENETRE / NB_COLONNE_LABY)
+#define HAUTEUR_CASE (HAUTEUR_FENETRE / NB_LIGNE_LABY)
 
 #define VITESSE_MIN -1
 #define VITESSE_MAX 1
 
-#define NB_BOULES 1
+#define NB_BOULES 4
+
 
 typedef struct couple
 {
@@ -75,22 +71,26 @@ typedef struct tas_binaire
     int indice_tas[N];
 } tas_binaire_t;
 
-typedef struct entite{
+typedef struct entite
+{
     int pos_prec;
     int pos_cour;
     int vitesse;
     int vertical;
     int horizontal;
     SDL_Texture *texture;
-}entite_t;
+} entite_t;
 
-typedef struct bombe{
+typedef struct bombe
+{
     int pos_cour;
     int rayon_action;
     int temps;
     SDL_Texture *texture;
-}bombe_t;
+} bombe_t;
 
+#include "gestion_bombes.h"
+#include "perso.h"
 #include "gestion_entites.h"
 #include "gestion_boule.h"
 #include "gestion_map.h"
