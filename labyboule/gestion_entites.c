@@ -108,12 +108,27 @@ float val = 0.075;
 }
 
 //retourne 0 si pas de collision
-int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES])
+int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES], bombe_t *bombe, int *nb_bombes, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
 {
-    int res = 0;
+    int res = 0,erreur;
     for (int k = 0; k < NB_BOULES; ++k)
     {
-        res = res || (perso->pos_cour == liste_boule[k]->pos_cour);
+        if (perso->pos_cour == liste_boule[k]->pos_cour && res == 0)
+        {
+            res = 1;
+        }
+    }
+    if (*nb_bombes > 0)
+    {
+        if (SDL_GetTicks() > bombe->pose_bombe + bombe->temps)
+        {
+            erreur = explosion(bombe,perso,liste_boule,map); //bombe liberee
+            (*nb_bombes)--;
+            if (erreur < 0) //perso explose
+            {
+                res = 1;
+            }
+        }
     }
     return res;
 }

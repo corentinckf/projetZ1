@@ -105,7 +105,7 @@ int main()
                 case SDLK_p: // 'p'
                     if (nb_bombe < 1)
                     {
-                        creer_bombe(window, renderer, perso->pos_cour, 1, 0, &bombe, PATH_IMG_BOULE);
+                        creer_bombe(window, renderer, perso->pos_cour, 1, 2000, SDL_GetTicks(), &bombe, PATH_IMG_BOULE);
                         nb_bombe++;
                     }
                     break;
@@ -161,13 +161,23 @@ int main()
             {
                 affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
             }
+            if (nb_bombe > 0) 
+            {
+                //printf("nb de bombes : %d\n",nb_bombe);
+                affichage_bombe(window,renderer,bombe);
+            }
             //affichage entite boule
             anim += 1;
-            coll = collision(perso, liste_boule);
-            if (coll)
+            coll = collision(perso, liste_boule,bombe,&nb_bombe,map);
+            if (coll == 1 || coll == 2)
             {
-                program_on = 0;
+                program_on = SDL_FALSE;
             }
+            else
+            {
+                coll = 0;
+            }
+            
             SDL_RenderPresent(renderer);
 
             //SDL_Delay(1000);

@@ -12,6 +12,7 @@
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 #define PATH_IMG_PERSO "./textures/character.png"
 #define PATH_IMG_BOULE "./textures/boule_petite_contour.png"
+#define PATH_IMG_BOMBE ""
 
 #define PERSO_POS
 
@@ -36,10 +37,6 @@
 
 #define LARGEUR_CASE (LARGEUR_FENETRE / NB_COLONNE_LABY)
 #define HAUTEUR_CASE (HAUTEUR_FENETRE / NB_LIGNE_LABY)
-
-#define VITESSE_MIN -1
-#define VITESSE_MAX 1
-
 #define NB_BOULES 4
 
 
@@ -86,6 +83,7 @@ typedef struct bombe
     int pos_cour;
     int rayon_action;
     int temps;
+    int pose_bombe;
     SDL_Texture *texture;
 } bombe_t;
 
