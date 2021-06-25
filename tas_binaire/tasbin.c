@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "tasbin.h"
 
-#define TAILLE 20   //taille maximale du tas
+#define TAILLE 50   //taille maximale du tas
 
 int fils1(int i)
 {
@@ -35,12 +36,12 @@ void init(tete_t **tete)
 
 int estPlein(tete_t *tete)
 {
-    return tete->fin == TAILLE;
+    return tete->fin == TAILLE - 1;
 }
 
 int estVide(tete_t *tete)
 {
-    return tete->fin == 0;
+    return tete->fin == -1;
 }
 
 //verifier que ca marche si tas vide
@@ -114,13 +115,13 @@ void modifier(tete_t *tete, int place, int augmenter)
     }
 }
 
-void construire(int tab[7], tete_t *tete)
+void construire(int *tab, tete_t *tete, int nb_elements)
 {
     int i=0;
     int *cour = tete->tas;
 
     //on ajoute tous les elements sans se soucier de l'ordre impose par le tas
-    for (i=0;i<7;i++)
+    for (i=0;i<nb_elements;i++)
     {
         *cour = tab[i];
         tete->fin++;
@@ -136,13 +137,6 @@ void construire(int tab[7], tete_t *tete)
         percolate_down(tete,j);
         j--;
     }
-}
-
-void liberer_tas(tete_t **tete)
-{
-    free((*tete)->tas);
-    free(*tete);
-    *tete = NULL;
 }
 
 void afficher_tas(tete_t *tete)
@@ -204,59 +198,128 @@ void percolate_up(tete_t *tete, int place)
     }
 }
 
+void liberer_tas(tete_t *tete)
+{
+    free(tete->tas);
+    free(tete);
+    tete = NULL;
+}
 
-void tri(tete_t *tete, int tab[7], int **liste)
+int tri(tete_t *tete, int *tab, int *liste, int nb_elements)
 {
     int i = 0;
     int *cour;
 
-    construire(tab,tete);
+    init(&tete);
+    construire(tab,tete,nb_elements);
     while (tete->fin >= 0)
     {
         cour = tete->tas;
-        *(*liste + i) = *cour;
+        *(liste + i) = *cour;
         i++;
         cour += tete->fin;
         *(tete->tas) = *cour;
         tete->fin--;
         percolate_down(tete,0);
     }
+    return i;
 }
 
-void afficher_tab(int **liste)
+void afficher_tab(int *liste, int nb_elements)
 {
-    for (int i=0;i<7;i++)
+    for (int i=0;i<nb_elements;i++)
     {
-        fprintf(stdout,"%d\t", *(*liste+i));
+        fprintf(stdout,"%d\t", *(liste+i));
+    }
+    printf("\n");
+}
+
+void tas_graphviz(FILE *fichier, tete_t *tete)
+{
+    int i=0;
+
+    fprintf(fichier,"graph {\n");
+    relier_pere_fils(fichier,tete,i);
+    i++;
+    while (fils1(i) <= tete->fin)
+    {
+        relier_pere_fils(fichier,tete,i);
+        i++;
+    }
+    fprintf(fichier,"}");
+}
+
+void relier_pere_fils(FILE *fichier, tete_t *tete, int i)
+{
+    fprintf(fichier,"\t%d -- %d\n",*(tete->tas + i),*(tete->tas + fils1(i)));
+    if (fils2(i) <= tete->fin)
+    {
+        fprintf(fichier,"\t%d -- %d\n",*(tete->tas + i),*(tete->tas + fils2(i)));
+    }
+}
+
+int inf(int *v1, int *v2)
+{
+    if (*v1 < *v2)
+    {
+        return -1;
+    }
+    else if (*v1 == *v2)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
     }
 }
 
 int main()
 {
-    tete_t *tete = NULL;
-    int resultat;       //sauvegarde la racine
-    int tab[7] = {5,8,2,1,6,19,7};
-    int *liste = NULL;
-    liste = (int *) malloc(7*sizeof(int));
+    clock_t start_tri,end_tri;
+    clock_t start_qsort,end_qsort;
 
-    if (liste)
+    tete_t *tete = NULL;
+    //int resultat;       //sauvegarde la racine
+    int tab[13] = {5,8,2,1,6,19,7,9,15,18,13,14,17};
+    int *liste = NULL;
+    liste = (int *) malloc(TAILLE*sizeof(int));
+    int nb_elements = 13;
+
+    FILE *fichier = NULL;
+    fichier = fopen("tas_graphviz.dot","w");
+
+    if (liste && fichier)
     {
         init (&tete);
-
         /*
-        construire(tab,tete);
+        construire(tab,tete,nb_elements);
         afficher_tas(tete);
         ajouter(tete,12);
         afficher_tas(tete);
+        tas_graphviz(fichier,tete);
         retirer_racine(tete,&resultat);
         fprintf(stdout,"valeur de la racine : %d\n",resultat);
         afficher_tas(tete);
         modifier(tete,2,1);
         afficher_tas(tete);
         */
-        fprintf(stdout,"liste triee en ordre croissant :\t");
-        tri(tete,tab,&liste);
-        afficher_tab(&liste);
+        printf("liste non triee : \t");
+        afficher_tab(tab,nb_elements);
+        construire(tab,tete,nb_elements);
+        tas_graphviz(fichier,tete);
+        fprintf(stdout,"liste triee :\t");
+        start_tri = clock();
+        nb_elements = tri(tete,tab,liste,nb_elements);
+        end_tri = clock();
+        afficher_tab(liste,nb_elements);
         fprintf(stdout,"\n");
+        //system("dot -Tjpg tas_graphviz.dot -o tas_graphviz.jpg")
+        start_qsort = clock();
+        qsort(tab,13,sizeof(int),inf);
+        end_qsort = clock();
+        printf("temps d'execution du tri par tas : %ld\n", end_tri-start_tri);
+        printf("temps d'execution du tri rapide : %ld\n", end_qsort-start_qsort);
+        liberer_tas(tete);
     }
 }
