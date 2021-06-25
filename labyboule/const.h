@@ -88,6 +88,7 @@ typedef struct bombe
     SDL_Texture *texture;
 } bombe_t;
 
+#include "perso.h"
 #include "gestion_entites.h"
 #include "gestion_boule.h"
 #include "gestion_map.h"

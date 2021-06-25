@@ -122,7 +122,7 @@ int main()
         keystates = SDL_GetKeyboardState(NULL);
         horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
         vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
-        if (abs(horizontal - vertical))
+        if (!abs(horizontal - vertical))
         {
             vertical = 0;
             horizontal = 0;
@@ -137,9 +137,10 @@ int main()
             if (delta_tps > 1000)
             {
                 //calcul perso
-                //deplacement_perso(map, perso, vertical, horizontal);
+                printf("v %d h %d\n", vertical, horizontal);
+                deplacement_perso(map, perso, &vertical, &horizontal);
                 //calcul boule
-                deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+                //deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
                 delta_tps = 0;
             }
             //affichage fond
@@ -147,10 +148,10 @@ int main()
             //affichage entite perso
             affichage_entite(window, renderer, perso, &delta_tps, anim);
             //affichage_entite
-            for (int k = 0; k < NB_BOULES; ++k)
+            /*for (int k = 0; k < NB_BOULES; ++k)
             {
                 affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
-            }
+            }*/
             //affichage entite boule
             anim += 0.4;
             coll = collision(perso, liste_boule);
