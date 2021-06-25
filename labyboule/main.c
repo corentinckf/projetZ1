@@ -140,7 +140,7 @@ int main()
                 printf("v %d h %d\n", vertical, horizontal);
                 deplacement_perso(map, perso, &vertical, &horizontal);
                 //calcul boule
-                //deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+                deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
                 delta_tps = 0;
             }
             //affichage fond
@@ -148,10 +148,10 @@ int main()
             //affichage entite perso
             affichage_entite(window, renderer, perso, &delta_tps, anim);
             //affichage_entite
-            /*for (int k = 0; k < NB_BOULES; ++k)
+            for (int k = 0; k < NB_BOULES; ++k)
             {
                 affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
-            }*/
+            }
             //affichage entite boule
             anim += 0.4;
             coll = collision(perso, liste_boule);
