@@ -28,7 +28,7 @@ int main()
     int *tas = NULL;
 
     tas = creer_tas_b(tab_v, sizeof(tab_v) / sizeof(int));
-    affficher_tab(tas, NB_ELT_MAX);
+    //affficher_tab(tas, NB_ELT_MAX);
     printf("\ntas cree\n");
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
@@ -89,7 +89,6 @@ int main()
     system("display ./img.jpg 2> /dev/null");
 */
 
-     
     //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
     time_t debut;
     time_t fin;
@@ -102,25 +101,34 @@ int main()
     init_tab(t1);
     init_tab(t2);
 
-    debut = time(NULL);
-    //printf("tableau non trie : ");
-    //affficher_tab(tab_v, sizeof(tab_v) / sizeof(int));
+    printf("\n\n");
+
+    clock_t start_t, end_t, total_t;
+    double temps_tri_tas;
+    double temps_qsort;
+
+    start_t = clock();
+    printf("Debut du Tri par tas, start_t = %ld\n", start_t);
     tri_tas_min(t1, NB_ELT_MAX);
-    printf("tableau triee avec tri_tas_min: ");
-    //affficher_tab(t1, NB_ELT_MAX);
-    fin = time(NULL);
-    tps_tri_tas_min = fin - debut;
+    end_t = clock();
+    printf("Fin du Tri par tas,   end_t = %ld\n", end_t);
+    temps_tri_tas = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+    printf("Tri par tas:         Total time taken by CPU: %f\n", temps_tri_tas);
 
-    //tri avec qsort
-    //qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
-    debut = time(NULL);
+    printf("\n");
+
+    start_t = clock();
+    printf("Debut du Tri par tas, start_t = %ld\n", start_t);
     qsort(t2, NB_ELT_MAX, sizeof *t2, compare);
-    printf("tableau triee avec qsort: ");
-    //affficher_tab(t2,NB_ELT_MAX);
-    fin = time(NULL);
-    tps_qsort = fin - debut;
+    end_t = clock();
+    printf("Fin du Tri par tas,   end_t = %ld\n", end_t);
+    temps_qsort = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+    printf("Tri par tas:         Total time taken by CPU: %f\n", temps_qsort);
 
-    printf("temps : tri_tas_min=%ld s, qsort=%ld s\n", tps_tri_tas_min, tps_qsort);
+    printf("\nComparaison :\n\ttri_tas_min = %f s \n\tqsort       = %f s\n", temps_tri_tas, temps_qsort);
+
+    printf("\n\n");
+    //printf("A_etoide avec la distance euclidienne : Total time taken by CPU: %f\n", m_e);
 
     return 0;
 }
@@ -164,7 +172,6 @@ int *creer_tas_b(int *tab_v, int nb_elt)
         {
             //printf("tas[%d]=%d\n", i, tas[i]);
             entasser(tas, i);
-
         }
     }
     return tas;
@@ -335,7 +342,6 @@ int *tri_tas_min(int *tab_valeur, int nb_elt)
         for (int i = 0; i < nb_elt; i++)
         {
             tab_valeur[i] = retirer_elt(tas);
-
         }
     }
     else
