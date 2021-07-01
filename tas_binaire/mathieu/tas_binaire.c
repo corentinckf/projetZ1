@@ -12,11 +12,11 @@ int main()
     tab_v[0] = 48;
     tab_v[1] = 912;
     tab_v[10] = 12;
-    tab_v[2] = 24;
+    tab_v[2] = 74;
     tab_v[3] = 98;
     tab_v[4] = 44;
     tab_v[5] = 58;
-    tab_v[6] = 74;
+    tab_v[6] = 24;
     tab_v[7] = 6;
     tab_v[8] = 100;
     tab_v[9] = 41;
@@ -33,14 +33,16 @@ int main()
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
-
+    fichier_graphiz(tas);
+    system("dot -Tsvg graph_tas.dot -o img.svg");
+    system("display ./img.svg 2> /dev/null");
     /*
     ajouter_elt(tas, 4);
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
     printf("\n\n fin ajout 4\n");
-
+    
     ajouter_elt(tas, 999);
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
@@ -60,13 +62,11 @@ int main()
     printf("\n\n fin ajout 10\n");
 */
 
-    /*
     printf("\n\n\n\n\n debut retirage");
     printf("valeur retiree %d\n", retirer_elt(tas));
     fichier_graphiz(tas);
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
-*/
 
     /*
     fichier_graphiz(tas);
@@ -88,6 +88,8 @@ int main()
     system("dot -Tjpg graph_tas.dot -o img.jpg");
     system("display ./img.jpg 2> /dev/null");
 */
+
+     
     //void qsort(void *base, size_t nitems, size_t size, int (*compar)(const void *, const void*))
     time_t debut;
     time_t fin;
@@ -162,6 +164,7 @@ int *creer_tas_b(int *tab_v, int nb_elt)
         {
             //printf("tas[%d]=%d\n", i, tas[i]);
             entasser(tas, i);
+
         }
     }
     return tas;
@@ -218,6 +221,7 @@ int retirer_elt(int *tas)
 
 void entasser(int *tas, int i)
 {
+
     int l = f_g(i);
     int r = f_d(i);
     int min = i;
@@ -242,11 +246,12 @@ void entasser(int *tas, int i)
 
 void detasser(int *tas, int i)
 {
+
     int p = pere(i);
 
     int max = i;
 
-    if (p > 1 && tas[p] > tas[i])
+    if (p > 0 && tas[p] > tas[i])
     {
         max = p;
     }
@@ -330,6 +335,7 @@ int *tri_tas_min(int *tab_valeur, int nb_elt)
         for (int i = 0; i < nb_elt; i++)
         {
             tab_valeur[i] = retirer_elt(tas);
+
         }
     }
     else
