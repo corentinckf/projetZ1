@@ -20,9 +20,6 @@ int main()
     int coll = 0;
     float anim = 0.;
 
-    bombe_t *bombe = NULL;
-    int nb_bombe = 0;
-
     SDL_Rect window_dimensions = {0};
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
@@ -50,7 +47,6 @@ int main()
     if (renderer == NULL)
         end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-    
     /************** initialisation ttf ****************/
     if (TTF_Init() < 0)
         end_sdl(0, "Couldn't initialize SDL TTF", window, renderer);
@@ -78,26 +74,38 @@ int main()
     creer_entite(window, renderer, PERSO_POS, PERSO_POS, 1, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
-    entite_t *liste_boule[NB_BOULES];
-
+    entite_t *liste_boules[NB_BOULES];
+    int nb_boules = 0;
     for (int i = 0; i < NB_BOULES; ++i)
     {
-        liste_boule[i] = NULL;
+        liste_boules[i] = NULL;
     }
 
-    creer_entite(window, renderer, 0, 1, 0, 0, 0, &liste_boule[0], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, 1, 0, 0, 0, &liste_boules[0], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[1], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boules[1], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boule[2], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boules[2], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boule[3], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boules[3], PATH_IMG_BOULE);
+
+    nb_boules = NB_BOULES;
     //////////////////////*****************************/////////////////////////////
+
+    //////////////////////********creation boules*********/////////////////////////////
+
+    int nb_bombes = 0;
+    bombe_t *liste_bombes[NB_BOMBES];
+    for (int i = 0; i < NB_BOMBES; ++i)
+    {
+        liste_bombes[i] = NULL;
+    }
+    //////////////////////********creation boules*********/////////////////////////////
 
     SDL_bool
         program_on = SDL_TRUE, // Booléen pour dire que le programme doit continuer
         paused = SDL_FALSE;    // Booléen pour dire que le programme est en pause
-    ecran_debut(window, renderer, font);
+    //ecran_debut(window, renderer, font);
     while (program_on)
     {                    // La boucle des évènements
         SDL_Event event; // Evènement à traiter
@@ -116,17 +124,30 @@ int main()
                 switch (event.key.keysym.sym)
                 {                // la touche appuyée est ...
                 case SDLK_SPACE: // 'SPC'
-                case SDLK_p:     // 'p'
-                    if (nb_bombe < 1)
-                    {
-                        creer_bombe(window, renderer, perso->pos_cour, 5, 3000, SDL_GetTicks(), &bombe, PATH_IMG_BOMBE);
-                        nb_bombe++;
-                    }
+                    ajouter_bombe(window, renderer,
+                                  liste_bombes, &nb_bombes, perso);
+                    break;
+                case SDLK_p: // 'p'
+                    paused = !paused;
                     break;
                 case SDLK_ESCAPE:
                 case SDLK_q:        // 'q'
                     program_on = 0; // 'escape' ou 'q', d'autres façons de quitter le programme
                     break;
+                /*
+                case SDLK_LEFT:
+                    horizontal = -1;
+                    break;
+                case SDLK_RIGHT:
+                    horizontal = 1;
+                    break;
+                case SDLK_UP:
+                    vertical = -1;
+                    break;
+                case SDLK_DOWN:
+                    vertical = 1;
+                    break;
+       */
                 default: // Une touche appuyée qu'on ne traite pas
 
                     break;
@@ -140,13 +161,12 @@ int main()
         /********** Regarde les touches de directions ************/
 
         keystates = SDL_GetKeyboardState(NULL);
-        horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
-        vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
-        /*if (!abs(horizontal - vertical))
-        {
-            vertical = 0;
-            horizontal = 0;
-        }*/
+
+        if (!horizontal)
+            horizontal = keystates[SDL_SCANCODE_LEFT] * (-1) + keystates[SDL_SCANCODE_RIGHT];
+
+        if (!vertical)
+            vertical = keystates[SDL_SCANCODE_UP] * (-1) + keystates[SDL_SCANCODE_DOWN];
 
         if (!paused)
         { // Si on n'est pas en pause
@@ -155,13 +175,13 @@ int main()
             delta_tps += currentTime - lastTime;
             lastTime = currentTime;
             //calcul perso
-            if (delta_tps > 500)
+            if (delta_tps > 200)
             {
-                printf("v %d h %d\n", vertical, horizontal);
                 deplacement_perso(map, perso, &vertical, &horizontal);
+                //printf("v %d h %d\n", vertical, horizontal);
 
                 //calcul boule
-                deplacement_toutes_boules(map, liste_boule, perso->pos_cour);
+                deplacement_toutes_boules(map, liste_boules, perso->pos_cour);
                 delta_tps = 0;
             }
             //affichage fond
@@ -171,17 +191,17 @@ int main()
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
-                if(liste_boule[k]!=NULL)
-                    affichage_entite(window, renderer, liste_boule[k], &delta_tps, anim);
+                if (liste_boules[k] != NULL)
+                    affichage_entite(window, renderer, liste_boules[k], &delta_tps, anim);
             }
-            if (nb_bombe > 0) 
-            {
-                //printf("nb de bombes : %d\n",nb_bombe);
-                affichage_bombe(window,renderer,bombe);
-            }
+
+            //printf("nb de bombes : %d\n",nb_bombes);
+            affichage_liste_bombes(window, renderer, liste_bombes);
+
             //affichage entite boule
             anim += 1;
-            coll = collision(perso, liste_boule,bombe,&nb_bombe,map);
+            coll = collision(delta_tps, perso, liste_boules, &nb_boules,
+                             liste_bombes, &nb_bombes, map);
             if (coll == 1 || coll == -1)
             {
                 program_on = SDL_FALSE;
@@ -190,7 +210,7 @@ int main()
             {
                 coll = 0;
             }
-            
+
             SDL_RenderPresent(renderer);
 
             //SDL_Delay(1000);
@@ -198,13 +218,13 @@ int main()
         }
         SDL_Delay(80); // Petite pause
     }
+    SDL_Delay(500); // Petite pause
 
-    liberer_entite(perso);
-    liberer_liste_boule(liste_boule);
+    liberer_entite(&perso);
+    liberer_liste_boules(liste_boules);
     SDL_DestroyTexture(texture_mur);
     ecran_fin(window, renderer, font, coll);
-    
+
     end_sdl(1, "fin normal", window, renderer);
     return 0;
 }
-

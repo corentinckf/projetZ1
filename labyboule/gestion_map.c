@@ -127,3 +127,4 @@ void map_bis(int map_bonne[NB_LIGNE_LABY][NB_COLONNE_LABY], int map[NB_LIGNE_LAB
     printf("valeur case bas : %d\n",map[2][1]);
     */
 }
+

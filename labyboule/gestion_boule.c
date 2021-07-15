@@ -32,7 +32,7 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
     }
     else
     {
-        printf("chemin impossible\n");
+        // printf("chemin impossible\n");
     }
 }
 
@@ -53,8 +53,9 @@ void deplacement_toutes_boules(int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
     }
 }
 
-void liberer_liste_boule(entite_t *liste_boule[NB_BOULES])
+void liberer_liste_boules(entite_t *liste_boules[NB_BOULES])
 {
     for (int k = 0; k < NB_BOULES; ++k)
-        liberer_entite(liste_boule[k]);
+        if (liste_boules[k] != NULL)
+            liberer_entite(&liste_boules[k]);
 }

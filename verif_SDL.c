@@ -14,4 +14,3 @@ int main(int argc, char **argv) {
   printf("Version de la SDL : %d.%d.%d\n", nb.major, nb.minor, nb.patch);
   return 0;
 }
-

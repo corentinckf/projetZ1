@@ -21,8 +21,8 @@
 
 
 
-#define HAUTEUR_FENETRE 800
-#define LARGEUR_FENETRE 1000
+#define HAUTEUR_FENETRE 700
+#define LARGEUR_FENETRE 700
 
 #define NB_LIGNE_LABY 25
 #define NB_COLONNE_LABY 25
@@ -43,7 +43,9 @@
 #define LARGEUR_CASE (LARGEUR_FENETRE / NB_COLONNE_LABY)
 #define HAUTEUR_CASE (HAUTEUR_FENETRE / NB_LIGNE_LABY)
 #define NB_BOULES 4
+#define NB_BOMBES 4
 
+#define ZOOM_BOMBE 30
 
 typedef struct couple
 {
@@ -88,9 +90,11 @@ typedef struct bombe
     int pos_cour;
     int rayon_action;
     int temps;
-    int pose_bombe;
+    int temps_pose_bombe;
     SDL_Texture *texture;
 } bombe_t;
+
+
 
 #include "ui.h"
 #include "gestion_bombes.h"

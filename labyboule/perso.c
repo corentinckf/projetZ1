@@ -32,11 +32,27 @@ void deplacement_perso(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *perso,
 
     perso->pos_prec = perso->pos_cour;
 
+    /*
+    if (*v && *h && abs(perso->horizontal) && (peut_h || peut_b))
+    {
+        peut_d = 0;
+        peut_g = 0;
+    }
+    if (*v && *h && abs(perso->vertical) && (peut_g || peut_d))
+    {
+        peut_h = 0;
+        peut_b = 0;
+    }
+*/
+
     if (*v && *h)
     {
-        peut_d = 0, peut_g = 0, peut_h = 0, peut_b = 0;
+        peut_h = 0;
+        peut_b = 0;
+        peut_d = 0;
+        peut_g = 0;
     }
-    
+
     if (*h == 1 && peut_d)
     {
         ++perso->pos_cour;
@@ -62,4 +78,7 @@ void deplacement_perso(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *perso,
     }
     else
         perso->horizontal = 0;
+
+    *v = 0;
+    *h = 0;
 }

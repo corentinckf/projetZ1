@@ -7,6 +7,6 @@ void deplacement_boule(int map[NB_LIGNE_LABY][NB_COLONNE_LABY], entite_t *boule,
 
 void deplacement_toutes_boules(int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
                                entite_t *liste_boules[NB_BOULES], int pos_perso);
-void liberer_liste_boule(entite_t *liste_boule[NB_BOULES]);
+void liberer_liste_boules(entite_t *liste_boules[NB_BOULES]);
 
 #endif

@@ -23,14 +23,15 @@ void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entit
     entite->texture = my_texture;
 }
 
-void liberer_entite(entite_t *entite)
+void liberer_entite(entite_t **p_entite)
 {
-    SDL_DestroyTexture(entite->texture);
-    free(entite);
-    entite = NULL;
+    SDL_DestroyTexture((*p_entite)->texture);
+    free(*p_entite);
+    *p_entite = NULL;
 }
 
-void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, int *delta, float anim)
+void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
+                      entite_t *entite, int *delta, float anim)
 {
     float taille = 0.01;
     int idle = 0;
@@ -47,9 +48,8 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
     SDL_QueryTexture(entite->texture, // Récupération des dimensions de l'image
                      NULL, NULL,
                      &source.w, &source.h);
-    /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
 
-    int nb_images = 4;                   // Il y a 8 vignette dans la ligne de l'image qui nous intéresse
+    int nb_images = 4;
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
@@ -75,10 +75,6 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
 
     state.x = ((int)anim % 4) * offset_x;
 
-    float zoom = 30 ;    // zoom, car ces images sont un peu petites
-    destination.w =  zoom; // Largeur du sprite à l'écran
-    destination.h =  zoom; // Hauteur du sprite à l'écran
-
     //destination.y = 0.1 * window_dimensions.h; // La course se fait en milieu d'écran (en vertical)
 
     if (!idle)
@@ -91,12 +87,8 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
         state.y = 0;
         state.x = 0;
     }
-    int i = entite->pos_prec / NB_COLONNE_LABY;
-    int j = entite->pos_prec % NB_COLONNE_LABY;
-    float val = 0.070;
 
-    destination.y = i * HAUTEUR_CASE - 1 + (*delta * val) * entite->horizontal;
-    destination.x = j * LARGEUR_CASE + 5  + (*delta * val) * entite->vertical;
+    destination = rectangle_sprite(entite, *delta, 30);
 
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
@@ -106,28 +98,91 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer, entite_t *enti
 }
 
 //retourne 0 si pas de collision
-int collision(entite_t *perso, entite_t *liste_boule[NB_BOULES], bombe_t *bombe, int *nb_bombes, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
+int collision(int delta, entite_t *perso,
+              entite_t *liste_boules[NB_BOULES], int *nb_boules,
+              bombe_t *liste_bombes[NB_BOMBES], int *nb_bombes,
+              int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
 {
-    int res = 0,erreur;
+    int res = 0;
+
+    SDL_Rect sprite_perso;
+    SDL_Rect sprite_boule;
+    SDL_Rect sprite_bombe;
+    SDL_Rect intersection;
+
+    sprite_perso = rectangle_sprite(perso, delta, LARGEUR_CASE);
+
     for (int k = 0; k < NB_BOULES; ++k)
     {
-        if (perso->pos_cour == liste_boule[k]->pos_cour && res == 0)
+        if (liste_boules[k] != NULL)
         {
-            res = 1;
+            sprite_boule = rectangle_sprite(liste_boules[k], delta, LARGEUR_CASE);
+            if (SDL_IntersectRect(&sprite_perso, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.6 * sprite_boule.h && intersection.w >= 0.6 * sprite_boule.w)
+                res = 1;
         }
     }
+
     if (*nb_bombes > 0)
     {
-        if (SDL_GetTicks() > bombe->pose_bombe + bombe->temps)
+        int i = 0;
+        while (!res && i < NB_BOMBES)
         {
-            erreur = explosion(bombe,perso,liste_boule,map); //bombe liberee
-            printf("bombe explose ! \n");
-            (*nb_bombes)--;
-            if (erreur < 0) //perso explose
+            if (liste_bombes[i] != NULL)
             {
-                res = 1;
+                int u = liste_bombes[i]->pos_cour / NB_COLONNE_LABY;
+                int v = liste_bombes[i]->pos_cour % NB_COLONNE_LABY;
+                sprite_bombe.y = u * HAUTEUR_CASE - 7;
+                sprite_bombe.x = v * LARGEUR_CASE;
+                sprite_bombe.w = ZOOM_BOMBE;
+                sprite_bombe.h = ZOOM_BOMBE;
+
+                if (SDL_IntersectRect(&sprite_perso, &sprite_bombe, &intersection) == SDL_TRUE && intersection.h >= 0.6 * sprite_bombe.h && intersection.w >= 0.6 * sprite_bombe.w)
+                {
+                    //res = -1;
+                }
+                int k = 0;
+                while (k < NB_BOULES)
+                {
+                    if (liste_bombes[i] != NULL && liste_boules[k] != NULL)
+                    {
+                        sprite_boule = rectangle_sprite(liste_boules[k], delta, LARGEUR_CASE);
+                        if (SDL_IntersectRect(&sprite_bombe, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.8 * sprite_boule.h && intersection.w >= 0.8 * sprite_boule.w)
+                        {
+                            liberer_entite(&liste_boules[k]);
+                            liberer_bombe(&liste_bombes[i]);
+
+                            printf("liste boule k = %p\n", liste_boules[k]);
+                            printf("liste bombe k = %p\n", liste_bombes[i]);
+                            *nb_bombes -= 1;
+                            *nb_boules -= 1;
+                            printf("bouls %d, bombe %d\n", *nb_boules, *nb_bombes);
+                            printf("contact boule bombe\n");
+                        }
+                    }
+                    ++k;
+                }
             }
+            ++i;
         }
     }
+
     return res;
+}
+
+SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
+{
+    float val = 0.15;
+
+    SDL_Rect rect;
+
+    int i = entite->pos_prec / NB_COLONNE_LABY;
+    int j = entite->pos_prec % NB_COLONNE_LABY;
+
+    rect.y = i * HAUTEUR_CASE - 7 + (delta_tps * val) * entite->horizontal;
+    rect.x = j * LARGEUR_CASE + (delta_tps * val) * entite->vertical;
+
+    rect.w = zoom;
+    rect.h = zoom;
+
+    return rect;
 }
