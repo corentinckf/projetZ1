@@ -1,6 +1,6 @@
 #include "gestion_entites.h"
 
-void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, int vitesse, int vertical, int horizontal, entite_t **pentite, char *chemin)
+void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, float vitesse, int vertical, int horizontal, entite_t **pentite, char *chemin)
 {
     *pentite = (entite_t *)malloc(sizeof(entite_t));
     if (*pentite)
@@ -8,6 +8,7 @@ void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int 
         (*pentite)->pos_prec = pos_prec;
         (*pentite)->pos_cour = pos_cour;
         (*pentite)->vitesse = vitesse;
+        (*pentite)->compteur_deplacement = 0.;
         (*pentite)->vertical = vertical;
         (*pentite)->horizontal = horizontal;
         charger_texture(window, renderer, *pentite, chemin);
@@ -31,7 +32,7 @@ void liberer_entite(entite_t **p_entite)
 }
 
 void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
-                      entite_t *entite, int *delta, float anim)
+                      entite_t *entite, int delta, float anim)
 {
     float taille = 0.01;
     int idle = 0;
@@ -88,7 +89,7 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
         state.x = 0;
     }
 
-    destination = rectangle_sprite(entite, *delta, 30);
+    destination = rectangle_sprite(entite, delta, 30);
 
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
@@ -171,15 +172,29 @@ int collision(int delta, entite_t *perso,
 
 SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
 {
-    float val = 0.15;
-
+    //float val = 0.15 * entite->compteur_deplacement ;
+    //float val = 0.075 * entite->vitesse;
+    /*
+    int delta_tps;
+    if (delta > PERIODE)
+        delta_tps = delta - PERIODE;
+    else
+        delta_tps = delta;
+*/
     SDL_Rect rect;
 
     int i = entite->pos_prec / NB_COLONNE_LABY;
     int j = entite->pos_prec % NB_COLONNE_LABY;
 
-    rect.y = i * HAUTEUR_CASE - 7 + (delta_tps * val) * entite->horizontal;
-    rect.x = j * LARGEUR_CASE + (delta_tps * val) * entite->vertical;
+    float nb_periode = 1. / entite->vitesse;
+
+
+    float ajustement = (entite->compteur_deplacement + ((float)delta_tps / (nb_periode * (float)PERIODE))) * LARGEUR_CASE;
+
+    //rect.y = i * HAUTEUR_CASE - 7 + (delta_tps * val)  * entite->horizontal;
+
+    rect.y = i * HAUTEUR_CASE - 7 + ajustement * entite->horizontal;
+    rect.x = j * LARGEUR_CASE + ajustement * entite->vertical;
 
     rect.w = zoom;
     rect.h = zoom;

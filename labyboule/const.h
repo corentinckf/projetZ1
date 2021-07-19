@@ -19,8 +19,6 @@
 
 #define PERSO_POS 312
 
-
-
 #define HAUTEUR_FENETRE 700
 #define LARGEUR_FENETRE 700
 
@@ -35,6 +33,8 @@
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+
+#define PERIODE 200
 
 #define ALEA_GEN 10
 #define GRAINE 10
@@ -79,7 +79,8 @@ typedef struct entite
 {
     int pos_prec;
     int pos_cour;
-    int vitesse;
+    float vitesse;
+    float compteur_deplacement;
     int vertical;
     int horizontal;
     SDL_Texture *texture;
@@ -93,8 +94,6 @@ typedef struct bombe
     int temps_pose_bombe;
     SDL_Texture *texture;
 } bombe_t;
-
-
 
 #include "ui.h"
 #include "gestion_bombes.h"

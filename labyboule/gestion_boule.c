@@ -46,9 +46,13 @@ void deplacement_toutes_boules(int map[NB_LIGNE_LABY][NB_COLONNE_LABY],
         if (liste_boules[k] != NULL)
         {
             //calcul map_bis
-
-            map_bis(map, map_bis_tab, liste_boules, k);
-            deplacement_boule(map, liste_boules[k], pos_perso);
+            liste_boules[k]->compteur_deplacement += liste_boules[k]->vitesse;
+            if (liste_boules[k]->compteur_deplacement >= 1)
+            {
+                map_bis(map, map_bis_tab, liste_boules, k);
+                deplacement_boule(map, liste_boules[k], pos_perso);
+                liste_boules[k]->compteur_deplacement = 0.;
+            }
         }
     }
 }

@@ -18,7 +18,9 @@ int main()
     int vertical = 0;
     int horizontal = 0;
     int coll = 0;
-    float anim = 0.;
+    float anim_perso = 0.;
+    float anim_boule = 0.;
+    int periode = 0;
 
     SDL_Rect window_dimensions = {0};
 
@@ -36,7 +38,7 @@ int main()
     window = SDL_CreateWindow(
         "LabyBoule",
         (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
-        LARGEUR_FENETRE, HAUTEUR_FENETRE,
+        LARGEUR_FENETRE+LARGEUR_CASE*5, HAUTEUR_FENETRE,
         0);
     if (window == NULL)
         end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
@@ -71,23 +73,25 @@ int main()
 
     /********* initialisation perso **************/
     entite_t *perso = NULL;
-    creer_entite(window, renderer, PERSO_POS, PERSO_POS, 1, 0, 0, &perso, PATH_IMG_PERSO);
+    float vitesse_perso = 1;
+    creer_entite(window, renderer, PERSO_POS, PERSO_POS, vitesse_perso, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boules[NB_BOULES];
     int nb_boules = 0;
+    float vitesse_boule = 0.25;
     for (int i = 0; i < NB_BOULES; ++i)
     {
         liste_boules[i] = NULL;
     }
 
-    creer_entite(window, renderer, 0, 1, 0, 0, 0, &liste_boules[0], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, 1, vitesse_boule, 0, 0, &liste_boules[0], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boules[1], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, vitesse_boule, 0, 0, &liste_boules[1], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), 0, 0, 0, &liste_boules[2], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), vitesse_boule, 0, 0, &liste_boules[2], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, 0, 0, 0, &liste_boules[3], PATH_IMG_BOULE);
+    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, vitesse_boule, 0, 0, &liste_boules[3], PATH_IMG_BOULE);
 
     nb_boules = NB_BOULES;
     //////////////////////*****************************/////////////////////////////
@@ -175,31 +179,34 @@ int main()
             delta_tps += currentTime - lastTime;
             lastTime = currentTime;
             //calcul perso
-            if (delta_tps > 200)
+            if (delta_tps > PERIODE)
             {
+                //for (int u = 0; u < perso->vitesse; ++u)
                 deplacement_perso(map, perso, &vertical, &horizontal);
                 //printf("v %d h %d\n", vertical, horizontal);
 
                 //calcul boule
                 deplacement_toutes_boules(map, liste_boules, perso->pos_cour);
+
                 delta_tps = 0;
             }
             //affichage fond
             play_texture_mur(window, renderer, texture_mur, map);
             //affichage entite perso
-            affichage_entite(window, renderer, perso, &delta_tps, anim);
+            affichage_entite(window, renderer, perso, delta_tps, anim_perso);
             //affichage_entite
             for (int k = 0; k < NB_BOULES; ++k)
             {
                 if (liste_boules[k] != NULL)
-                    affichage_entite(window, renderer, liste_boules[k], &delta_tps, anim);
+                    affichage_entite(window, renderer, liste_boules[k], delta_tps, anim_boule);
             }
 
             //printf("nb de bombes : %d\n",nb_bombes);
             affichage_liste_bombes(window, renderer, liste_bombes);
 
             //affichage entite boule
-            anim += 1;
+            anim_perso += 1;
+            anim_boule += 0.3;
             coll = collision(delta_tps, perso, liste_boules, &nb_boules,
                              liste_bombes, &nb_bombes, map);
             if (coll == 1 || coll == -1)
@@ -218,6 +225,7 @@ int main()
         }
         SDL_Delay(80); // Petite pause
     }
+
     SDL_Delay(500); // Petite pause
 
     liberer_entite(&perso);
