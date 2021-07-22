@@ -20,7 +20,7 @@ int main()
     int coll = 0;
     float anim_perso = 0.;
     float anim_boule = 0.;
-    int periode = 0;
+    //int periode = 0;
 
     SDL_Rect window_dimensions = {0};
 
@@ -79,7 +79,7 @@ int main()
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boules[NB_BOULES];
     int nb_boules = 0;
-    float vitesse_boule = 0.25;
+    float vitesse_boule = 0.5;
     for (int i = 0; i < NB_BOULES; ++i)
     {
         liste_boules[i] = NULL;

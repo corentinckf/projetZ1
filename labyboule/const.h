@@ -1,3 +1,4 @@
+
 #ifndef __CONST_H__
 #define __CONST_H__
 
@@ -16,6 +17,7 @@
 #define PATH_IMG_BOMBE "./textures/bomb.png"
 #define PATH_IMG_BOULE "./textures/pokeboulev2.png"
 #define PATH_FONT "./fonts/Pacifico.ttf"
+#define PATH_IMG_EFFET ""
 
 #define PERSO_POS 312
 
@@ -94,6 +96,19 @@ typedef struct bombe
     int temps_pose_bombe;
     SDL_Texture *texture;
 } bombe_t;
+
+
+#define NB_FRAME_EFFET 4
+#define NB_EFFET 3
+
+enum effet
+{
+    explosion_case = 0,      
+    capture_succes = 1,   
+    capture_echec = 2,  
+
+};
+
 
 #include "ui.h"
 #include "gestion_bombes.h"

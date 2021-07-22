@@ -13,5 +13,6 @@ void liberer_entite(entite_t **p_entite);
 void affichage_entite(SDL_Window *, SDL_Renderer *, entite_t *, int delta_tps, float anim);
 int collision(int delta, entite_t *perso, entite_t *liste_boule[NB_BOULES], int *nb_boules, bombe_t *liste_bombes[NB_BOMBES], int *nb_bombes, int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
 SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom);
+void affichage_effet(SDL_Window *window, SDL_Renderer *renderer, enum effet type_effet, int position, int delta, float anim);
 
 #endif

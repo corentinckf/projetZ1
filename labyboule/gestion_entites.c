@@ -186,10 +186,10 @@ SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
     int i = entite->pos_prec / NB_COLONNE_LABY;
     int j = entite->pos_prec % NB_COLONNE_LABY;
 
-    float nb_periode = 1. / entite->vitesse;
+    float nb_periode = 1. / (float)entite->vitesse;
+    float ajustement;
 
-
-    float ajustement = (entite->compteur_deplacement + ((float)delta_tps / (nb_periode * (float)PERIODE))) * LARGEUR_CASE;
+    ajustement = (entite->compteur_deplacement + ((float)delta_tps / (nb_periode * (float)PERIODE))) * LARGEUR_CASE;
 
     //rect.y = i * HAUTEUR_CASE - 7 + (delta_tps * val)  * entite->horizontal;
 
@@ -200,4 +200,55 @@ SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
     rect.h = zoom;
 
     return rect;
+}
+
+void affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
+                      enum effet type_effet, int position, int delta, float anim)
+{
+
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};             // Rectangle de la vignette en cours dans la planche
+
+    SDL_GetWindowSize(window, // Récupération des dimensions de la fenêtre
+                      &window_dimensions.w,
+                      &window_dimensions.h);
+
+    SDL_Texture *my_texture;
+    my_texture = IMG_LoadTexture(renderer, PATH_IMG_EFFET);
+    if (my_texture == NULL)
+    {
+        SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());
+
+        SDL_QueryTexture(my_texture, // Récupération des dimensions de l'image
+                         NULL, NULL,
+                         &source.w, &source.h);
+
+        int nb_images = NB_FRAME_EFFET;
+        int offset_x = source.w / nb_images,
+            offset_y = source.h / NB_EFFET;
+
+        state.x = 0;
+        state.w = offset_x;
+        state.h = offset_y;
+
+        state.y = type_effet * offset_y;
+
+        state.x = ((int)anim % 4) * offset_x;
+
+        int i = position / NB_COLONNE_LABY;
+        int j = position % NB_COLONNE_LABY;
+
+        destination.y = i * HAUTEUR_CASE - 7;
+        destination.x = j * LARGEUR_CASE;
+
+        int zoom = ZOOM_BOMBE * 1.2;
+
+        destination.w = zoom;
+        destination.h = zoom;
+
+        SDL_RenderCopy(renderer, my_texture, &state, &destination);
+    }
 }
