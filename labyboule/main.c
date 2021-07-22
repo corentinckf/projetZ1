@@ -18,7 +18,7 @@ int main()
     int vertical = 0;
     int horizontal = 0;
     int coll = 0;
-    float anim_perso = 0.;
+    float anim = 0.;
     float anim_boule = 0.;
     //int periode = 0;
 
@@ -191,10 +191,10 @@ int main()
                 delta_tps = 0;
             }
 
-            anim_perso += 1;
+            anim += 1;
             anim_boule += 0.3;
 
-            affichage_ecran(window, renderer, delta_tps, anim_perso, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes,texture_mur, map);
+            affichage_ecran(window, renderer, delta_tps, anim, perso,  liste_boules, &nb_boules, liste_bombes, &nb_bombes,texture_mur, map);
 
             coll = collision(window, renderer, delta_tps, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes, map);
             if (coll == 1 || coll == -1)
