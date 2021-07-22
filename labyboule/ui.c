@@ -12,7 +12,7 @@ char *texte_score(int a)
     return nom;
 }
 
-void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, char *texte,float taille, int x, int y)
+void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, char *texte, float taille, int x, int y)
 {
     TTF_SetFontStyle(font, TTF_STYLE_NORMAL); // en italique, gras
 
@@ -41,9 +41,7 @@ void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     pos.y = y + pos.h / 2;
     SDL_RenderCopy(renderer, text_texture, NULL, &pos); // Ecriture du texte dans le renderer
     SDL_DestroyTexture(text_texture);                   // On n'a plus besoin de la texture avec le texte
-
 }
-
 
 void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int coll)
 {
@@ -56,14 +54,14 @@ void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int c
     if (coll == 1)
     {
         affichage_texte(window, renderer, font, "Une boule vous a rattrape.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
-    }else if(coll==-1)
+    }
+    else if (coll == -1)
     {
         affichage_texte(window, renderer, font, "Une bombe a explose vers vous.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
     }
-    
 
     SDL_RenderPresent(renderer);
-    SDL_Delay(2500);
+    SDL_Delay(500);
 }
 
 void ecran_debut(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font)
@@ -76,8 +74,103 @@ void ecran_debut(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font)
 
     affichage_texte(window, renderer, font, "Fleches directionnelles pour se deplacer", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
     affichage_texte(window, renderer, font, "P pour poser une bombe", 1, LARGEUR_FENETRE / 2, 0.75 * HAUTEUR_FENETRE / 2);
-    
 
     SDL_RenderPresent(renderer);
     SDL_Delay(2500);
+}
+
+void affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
+                     SDL_Texture *my_texture,
+                     enum effet type_effet, int position, int delta, int anim)
+{
+
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};             // Rectangle de la vignette en cours dans la planche
+
+    SDL_GetWindowSize(window, // Récupération des dimensions de la fenêtre
+                      &window_dimensions.w,
+                      &window_dimensions.h);
+
+    SDL_QueryTexture(my_texture, // Récupération des dimensions de l'image
+                     NULL, NULL,
+                     &source.w, &source.h);
+
+    int nb_images = NB_FRAME_EFFET;
+    int offset_x = source.w / nb_images,
+        offset_y = source.h / NB_EFFET;
+
+    state.x = 0;
+    state.w = offset_x;
+    state.h = offset_y;
+
+    state.y = type_effet * offset_y;
+
+    state.x = anim * offset_x;
+
+    int i = position / NB_COLONNE_LABY;
+    int j = position % NB_COLONNE_LABY;
+
+    destination.y = i * HAUTEUR_CASE - 7;
+    destination.x = j * LARGEUR_CASE;
+
+    int zoom = ZOOM_BOMBE * 1;
+
+    destination.w = zoom;
+    destination.h = zoom;
+
+    SDL_RenderCopy(renderer, my_texture, &state, &destination);
+}
+
+void gestion_affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
+                             enum effet type_effet, int position, int delta)
+
+{
+    SDL_Texture *my_texture;
+    my_texture = IMG_LoadTexture(renderer, PATH_IMG_EFFET);
+    if (my_texture != NULL)
+    {
+        SDL_Delay(TEMPS_FRAME_EFFET);
+        for (int i = 0; i < NB_FRAME_EFFET; ++i)
+        {
+            affichage_effet(window, renderer, my_texture, type_effet, position, delta, i);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(TEMPS_FRAME_EFFET);
+        }
+        SDL_DestroyTexture(my_texture);
+    }
+    else
+    {
+        SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());
+    }
+}
+
+void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer,
+                     int delta_tps, int anim, entite_t *perso,
+                     entite_t *liste_boules[NB_BOULES], int *nb_boules,
+                     bombe_t *liste_bombes[NB_BOMBES], int *nb_bombes,
+                     SDL_Texture *texture_mur, int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
+{
+
+    SDL_RenderClear(renderer);
+
+    //affichage fond
+    play_texture_mur(window, renderer, texture_mur, map);
+    //printf("nb de bombes : %d\n",nb_bombes);
+    affichage_liste_bombes(window, renderer, liste_bombes);
+    //affichage_entite
+    //affichage entite perso
+    affichage_entite(window, renderer, perso, delta_tps, anim * perso->vitesse);
+    //affichage entite boule
+    for (int k = 0; k < NB_BOULES; ++k)
+    {
+        if (liste_boules[k] != NULL)
+            affichage_entite(window, renderer, liste_boules[k], delta_tps, anim * liste_boules[k]->vitesse);
+    }
+
+    SDL_RenderPresent(renderer);
+
+    SDL_Delay(10);
 }

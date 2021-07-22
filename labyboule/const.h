@@ -17,7 +17,7 @@
 #define PATH_IMG_BOMBE "./textures/bomb.png"
 #define PATH_IMG_BOULE "./textures/pokeboulev2.png"
 #define PATH_FONT "./fonts/Pacifico.ttf"
-#define PATH_IMG_EFFET ""
+#define PATH_IMG_EFFET "./textures/sprite_sheet_simplifie.png"
 
 #define PERSO_POS 312
 
@@ -37,6 +37,7 @@
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 #define PERIODE 200
+#define TEMPS_FRAME_EFFET 200
 
 #define ALEA_GEN 10
 #define GRAINE 10
@@ -81,6 +82,7 @@ typedef struct entite
 {
     int pos_prec;
     int pos_cour;
+    int vie;
     float vitesse;
     float compteur_deplacement;
     int vertical;

@@ -7,6 +7,7 @@ void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int 
     {
         (*pentite)->pos_prec = pos_prec;
         (*pentite)->pos_cour = pos_cour;
+        (*pentite)->vie = 100;
         (*pentite)->vitesse = vitesse;
         (*pentite)->compteur_deplacement = 0.;
         (*pentite)->vertical = vertical;
@@ -34,7 +35,6 @@ void liberer_entite(entite_t **p_entite)
 void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
                       entite_t *entite, int delta, float anim)
 {
-    float taille = 0.01;
     int idle = 0;
 
     SDL_Rect
@@ -99,7 +99,8 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
 }
 
 //retourne 0 si pas de collision
-int collision(int delta, entite_t *perso,
+int collision(SDL_Window *window, SDL_Renderer *renderer,
+              int delta, entite_t *perso,
               entite_t *liste_boules[NB_BOULES], int *nb_boules,
               bombe_t *liste_bombes[NB_BOMBES], int *nb_bombes,
               int map[NB_LIGNE_LABY][NB_COLONNE_LABY])
@@ -119,7 +120,20 @@ int collision(int delta, entite_t *perso,
         {
             sprite_boule = rectangle_sprite(liste_boules[k], delta, LARGEUR_CASE);
             if (SDL_IntersectRect(&sprite_perso, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.6 * sprite_boule.h && intersection.w >= 0.6 * sprite_boule.w)
-                res = 1;
+            {
+                liberer_entite(&liste_boules[k]);
+                *nb_boules -= 1;
+                perso->vie -= 50;
+                if (perso->vie <= 0)
+                {
+                    gestion_affichage_effet(window, renderer, capture_succes, perso->pos_cour, delta);
+                    res = 1;
+                }
+                else
+                {
+                    gestion_affichage_effet(window, renderer, capture_echec, perso->pos_cour, delta);
+                }
+            }
         }
     }
 
@@ -138,7 +152,7 @@ int collision(int delta, entite_t *perso,
                 sprite_bombe.h = ZOOM_BOMBE;
 
                 if (SDL_IntersectRect(&sprite_perso, &sprite_bombe, &intersection) == SDL_TRUE && intersection.h >= 0.6 * sprite_bombe.h && intersection.w >= 0.6 * sprite_bombe.w)
-                {
+                { //collision bombe perso
                     //res = -1;
                 }
                 int k = 0;
@@ -149,15 +163,16 @@ int collision(int delta, entite_t *perso,
                         sprite_boule = rectangle_sprite(liste_boules[k], delta, LARGEUR_CASE);
                         if (SDL_IntersectRect(&sprite_bombe, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.8 * sprite_boule.h && intersection.w >= 0.8 * sprite_boule.w)
                         {
+                            gestion_affichage_effet(window, renderer, explosion_case, liste_bombes[i]->pos_cour, delta);
                             liberer_entite(&liste_boules[k]);
                             liberer_bombe(&liste_bombes[i]);
 
-                            printf("liste boule k = %p\n", liste_boules[k]);
-                            printf("liste bombe k = %p\n", liste_bombes[i]);
+                            //printf("liste boule k = %p\n", liste_boules[k]);
+                            //printf("liste bombe k = %p\n", liste_bombes[i]);
                             *nb_bombes -= 1;
                             *nb_boules -= 1;
-                            printf("bouls %d, bombe %d\n", *nb_boules, *nb_bombes);
-                            printf("contact boule bombe\n");
+                            //printf("bouls %d, bombe %d\n", *nb_boules, *nb_bombes);
+                            //printf("contact boule bombe\n");
                         }
                     }
                     ++k;
@@ -200,55 +215,4 @@ SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
     rect.h = zoom;
 
     return rect;
-}
-
-void affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
-                      enum effet type_effet, int position, int delta, float anim)
-{
-
-    SDL_Rect
-        source = {0},            // Rectangle définissant la zone totale de la planche
-        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
-        destination = {0},       // Rectangle définissant où la zone_source doit être déposée dans le renderer
-        state = {0};             // Rectangle de la vignette en cours dans la planche
-
-    SDL_GetWindowSize(window, // Récupération des dimensions de la fenêtre
-                      &window_dimensions.w,
-                      &window_dimensions.h);
-
-    SDL_Texture *my_texture;
-    my_texture = IMG_LoadTexture(renderer, PATH_IMG_EFFET);
-    if (my_texture == NULL)
-    {
-        SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());
-
-        SDL_QueryTexture(my_texture, // Récupération des dimensions de l'image
-                         NULL, NULL,
-                         &source.w, &source.h);
-
-        int nb_images = NB_FRAME_EFFET;
-        int offset_x = source.w / nb_images,
-            offset_y = source.h / NB_EFFET;
-
-        state.x = 0;
-        state.w = offset_x;
-        state.h = offset_y;
-
-        state.y = type_effet * offset_y;
-
-        state.x = ((int)anim % 4) * offset_x;
-
-        int i = position / NB_COLONNE_LABY;
-        int j = position % NB_COLONNE_LABY;
-
-        destination.y = i * HAUTEUR_CASE - 7;
-        destination.x = j * LARGEUR_CASE;
-
-        int zoom = ZOOM_BOMBE * 1.2;
-
-        destination.w = zoom;
-        destination.h = zoom;
-
-        SDL_RenderCopy(renderer, my_texture, &state, &destination);
-    }
 }

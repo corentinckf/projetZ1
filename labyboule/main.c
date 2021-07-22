@@ -38,7 +38,7 @@ int main()
     window = SDL_CreateWindow(
         "LabyBoule",
         (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
-        LARGEUR_FENETRE+LARGEUR_CASE*5, HAUTEUR_FENETRE,
+        LARGEUR_FENETRE + LARGEUR_CASE * 5, HAUTEUR_FENETRE,
         0);
     if (window == NULL)
         end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
@@ -190,25 +190,13 @@ int main()
 
                 delta_tps = 0;
             }
-            //affichage fond
-            play_texture_mur(window, renderer, texture_mur, map);
-            //affichage entite perso
-            affichage_entite(window, renderer, perso, delta_tps, anim_perso);
-            //affichage_entite
-            for (int k = 0; k < NB_BOULES; ++k)
-            {
-                if (liste_boules[k] != NULL)
-                    affichage_entite(window, renderer, liste_boules[k], delta_tps, anim_boule);
-            }
 
-            //printf("nb de bombes : %d\n",nb_bombes);
-            affichage_liste_bombes(window, renderer, liste_bombes);
-
-            //affichage entite boule
             anim_perso += 1;
             anim_boule += 0.3;
-            coll = collision(delta_tps, perso, liste_boules, &nb_boules,
-                             liste_bombes, &nb_bombes, map);
+
+            affichage_ecran(window, renderer, delta_tps, anim_perso, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes,texture_mur, map);
+
+            coll = collision(window, renderer, delta_tps, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes, map);
             if (coll == 1 || coll == -1)
             {
                 program_on = SDL_FALSE;
@@ -217,11 +205,6 @@ int main()
             {
                 coll = 0;
             }
-
-            SDL_RenderPresent(renderer);
-
-            //SDL_Delay(1000);
-            SDL_RenderClear(renderer);
         }
         SDL_Delay(80); // Petite pause
     }
