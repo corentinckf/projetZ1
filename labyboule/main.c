@@ -38,7 +38,7 @@ int main()
     window = SDL_CreateWindow(
         "LabyBoule",
         (screen.w - LARGEUR_FENETRE) / 2, (screen.h - HAUTEUR_FENETRE) / 2,
-        LARGEUR_FENETRE + LARGEUR_CASE * 5, HAUTEUR_FENETRE,
+        LARGEUR_FENETRE + LARGEUR_ECRAN_SCORE, HAUTEUR_FENETRE,
         0);
     if (window == NULL)
         end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
@@ -79,7 +79,7 @@ int main()
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boules[NB_BOULES];
     int nb_boules = 0;
-    float vitesse_boule = 0.5;
+    float vitesse_boule = 0.8;
     for (int i = 0; i < NB_BOULES; ++i)
     {
         liste_boules[i] = NULL;
@@ -194,7 +194,9 @@ int main()
             anim += 1;
             anim_boule += 0.3;
 
-            affichage_ecran(window, renderer, delta_tps, anim, perso,  liste_boules, &nb_boules, liste_bombes, &nb_bombes,texture_mur, map);
+            affichage_ecran(window, renderer, font, delta_tps, anim, perso,  liste_boules, &nb_boules, liste_bombes, &nb_bombes,texture_mur, map);
+
+            //affichage_score(window,renderer,font);
 
             coll = collision(window, renderer, delta_tps, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes, map);
             if (coll == 1 || coll == -1)

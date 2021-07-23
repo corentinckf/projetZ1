@@ -12,11 +12,11 @@ char *texte_score(int a)
     return nom;
 }
 
-void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, char *texte, float taille, int x, int y)
+void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, char *texte, float taille, int x, int y, int r, int g, int b, int a)
 {
     TTF_SetFontStyle(font, TTF_STYLE_NORMAL); // en italique, gras
 
-    SDL_Color color = {250, 250, 250, 255}; // la couleur du texte
+    SDL_Color color = {r, g, b, a}; // la couleur du texte
 
     SDL_Surface *text_surface = NULL;                          // la surface  (uniquement transitoire)
     text_surface = TTF_RenderText_Blended(font, texte, color); // création du texte dans la surface
@@ -37,8 +37,10 @@ void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     pos.h = pos.h * taille;
 
     //SDL_GetWindowSize(window, &pos.x, &pos.y);
-    pos.x = x - pos.w / 2;
-    pos.y = y + pos.h / 2;
+    //pos.x = x - pos.w / 2;
+    //pos.y = y + pos.h / 2;
+    pos.x = x;
+    pos.y = y;
     SDL_RenderCopy(renderer, text_texture, NULL, &pos); // Ecriture du texte dans le renderer
     SDL_DestroyTexture(text_texture);                   // On n'a plus besoin de la texture avec le texte
 }
@@ -49,15 +51,15 @@ void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int c
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
 
-    affichage_texte(window, renderer, font, "Game Over !", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4);
+    affichage_texte(window, renderer, font, "Game Over !", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4, 250, 250, 250, 255);
     //printf("coll %d ", coll);
     if (coll == 1)
     {
-        affichage_texte(window, renderer, font, "Une boule vous a rattrape.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
+        affichage_texte(window, renderer, font, "Une boule vous a rattrape.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
     }
     else if (coll == -1)
     {
-        affichage_texte(window, renderer, font, "Une bombe a explose vers vous.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
+        affichage_texte(window, renderer, font, "Une bombe a explose vers vous.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
     }
 
     SDL_RenderPresent(renderer);
@@ -70,10 +72,10 @@ void ecran_debut(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font)
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
 
-    affichage_texte(window, renderer, font, "LabyBoule", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4);
+    affichage_texte(window, renderer, font, "LabyBoule", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4, 250, 250, 250, 255);
 
-    affichage_texte(window, renderer, font, "Fleches directionnelles pour se deplacer", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2);
-    affichage_texte(window, renderer, font, "P pour poser une bombe", 1, LARGEUR_FENETRE / 2, 0.75 * HAUTEUR_FENETRE / 2);
+    affichage_texte(window, renderer, font, "Fleches directionnelles pour se deplacer", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
+    affichage_texte(window, renderer, font, "P pour poser une bombe", 1, LARGEUR_FENETRE / 2, 0.75 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
 
     SDL_RenderPresent(renderer);
     SDL_Delay(2500);
@@ -147,7 +149,7 @@ void gestion_affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
     }
 }
 
-void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer,
+void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
                      int delta_tps, int anim, entite_t *perso,
                      entite_t *liste_boules[NB_BOULES], int *nb_boules,
                      bombe_t *liste_bombes[NB_BOMBES], int *nb_bombes,
@@ -170,7 +172,47 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer,
             affichage_entite(window, renderer, liste_boules[k], delta_tps, anim * liste_boules[k]->vitesse);
     }
 
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
+
+    SDL_RenderDrawLine(renderer, LARGEUR_FENETRE, 0, LARGEUR_FENETRE, HAUTEUR_FENETRE);
+    SDL_SetRenderDrawColor(renderer, 105, 105, 105, 255);
+    SDL_Rect rect;
+    rect.x = 0, rect.y = 0;
+    rect.w = LARGEUR_ECRAN_SCORE + LARGEUR_FENETRE, rect.h = HAUTEUR_FENETRE;
+    SDL_RenderDrawRect(renderer, &rect);
+
+    affichage_score(window, renderer, font, perso, liste_boules);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(10);
+}
+
+void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
+                     entite_t *perso, entite_t *liste_boules[NB_BOULES])
+{
+    int largeur_barre_vie = LARGEUR_ECRAN_SCORE - 2.8* LARGEUR_CASE;
+    SDL_Rect rect_vie_fond =
+        {(NB_COLONNE_LABY + 2.7) * LARGEUR_CASE-10, 1 * HAUTEUR_CASE,
+         largeur_barre_vie , HAUTEUR_CASE + 5};
+    int x = (NB_COLONNE_LABY)*LARGEUR_CASE;
+    SDL_Rect rect;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        SDL_SetRenderDrawColor(renderer, 105 + 10 * i, 105 + 10 * i, 105 + 10 * i, 255);
+        rect.x = LARGEUR_FENETRE + 1 + i, rect.y = 1 + i;
+        rect.w = LARGEUR_ECRAN_SCORE - 2 - 2 * i, rect.h = HAUTEUR_FENETRE - 2 - 2 * i;
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    affichage_texte(window, renderer, font, " vie", 0.5, x+2, 0, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
+    rect_vie_fond.w =largeur_barre_vie* perso->vie/100 ;
+    SDL_RenderFillRect(renderer, &rect_vie_fond);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    rect_vie_fond.w =largeur_barre_vie;
+    SDL_RenderDrawRect(renderer, &rect_vie_fond);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
