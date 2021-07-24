@@ -196,7 +196,7 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     SDL_Rect rect_vie_fond =
         {(NB_COLONNE_LABY + 2.17) * LARGEUR_CASE, 2 * HAUTEUR_CASE,
          largeur_barre_vie, hauteur_barre_vie};
-    int x = (NB_COLONNE_LABY)*LARGEUR_CASE;
+    int x_score = (NB_COLONNE_LABY)*LARGEUR_CASE + 18;
     SDL_Rect rect;
 
     /********* Contour score *******************/
@@ -209,7 +209,7 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     }
 
     /****************** Vie ******************/
-    affichage_texte(window, renderer, font, "vie", 0.4, x + 18, 1 * HAUTEUR_CASE + 6, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "vie", 0.4, x_score, 1 * HAUTEUR_CASE + 6, 0, 0, 0, 255);
 
     SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
     rect_vie_fond.w = largeur_barre_vie * perso->vie / 100;
@@ -227,11 +227,56 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
 
     /***************** Boules *****************/
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    affichage_texte(window, renderer, font, "Boules", 0.3, x + 20, 4 * HAUTEUR_CASE, 0, 0, 0, 255);
-
+    affichage_texte(window, renderer, font, "Boules", 0.3, x_score, 4 * HAUTEUR_CASE, 0, 0, 0, 255);
+    int nb_boules_restantes = 0;
     for (int k = 0; k < NB_BOULES; ++k)
     {
+        if (liste_boules[k] != NULL)
+        {
+            affichage_score_entite(window, renderer, 0, x_score + nb_boules_restantes % 4 * 25, 6 * HAUTEUR_CASE + 25 * (nb_boules_restantes / 4));
+            ++nb_boules_restantes;
+        }
     }
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+}
+
+void affichage_score_entite(SDL_Window *window, SDL_Renderer *renderer,
+                            int type, int x_pos, int y_pos)
+{
+
+    SDL_Rect
+        source = {0},
+        window_dimensions = {0},
+        destination = {0},
+        state = {0};
+
+    SDL_Texture *my_texture;
+    my_texture = IMG_LoadTexture(renderer, PATH_IMG_SCORE);
+    if (my_texture != NULL)
+    {
+        SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+        SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
+
+        int nb_images = 4;
+        int offset_x = source.w / nb_images,
+            offset_y = source.h;
+
+        float zoom = 25;
+
+        destination.x = x_pos;
+        destination.y = y_pos;
+        destination.w = zoom;
+        destination.h = zoom;
+
+        state.x = type*offset_x, state.y = 0;
+        state.w = offset_x, state.h = offset_y;
+
+        SDL_RenderCopy(renderer, my_texture, &state, &destination);
+        SDL_DestroyTexture(my_texture);
+    }
+    else
+    {
+        SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());
+    }
 }

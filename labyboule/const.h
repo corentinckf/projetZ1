@@ -18,6 +18,7 @@
 #define PATH_IMG_BOULE "./textures/pokeboulev2.png"
 #define PATH_FONT "./fonts/Pacifico.ttf"
 #define PATH_IMG_EFFET "./textures/sprite_sheet_simplifie.png"
+#define PATH_IMG_SCORE "./textures/icone_score.png"
 
 #define PERSO_POS 312
 

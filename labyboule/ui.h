@@ -21,4 +21,8 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
 void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
                      entite_t *perso, entite_t *liste_boules[NB_BOULES]);
 
+void affichage_score_entite(SDL_Window *window, SDL_Renderer *renderer,
+                            int type, int x_pos, int y_pos);
+
+
 #endif
