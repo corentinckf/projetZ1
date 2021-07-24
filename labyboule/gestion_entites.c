@@ -1,10 +1,14 @@
 #include "gestion_entites.h"
 
-void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, float vitesse, int vertical, int horizontal, entite_t **pentite, char *chemin)
+void creer_entite(SDL_Window *window, SDL_Renderer *renderer,
+                  enum type_entite type, int pos_prec, int pos_cour,
+                  float vitesse, int vertical, int horizontal, entite_t **pentite,
+                  char *chemin)
 {
     *pentite = (entite_t *)malloc(sizeof(entite_t));
     if (*pentite)
     {
+        (*pentite)->type = type;
         (*pentite)->pos_prec = pos_prec;
         (*pentite)->pos_cour = pos_cour;
         (*pentite)->vie = 100;
@@ -89,7 +93,7 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
         state.x = 0;
     }
 
-    destination = rectangle_sprite(entite, delta, 30);
+    destination = rectangle_sprite(entite, delta, 25);
 
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;

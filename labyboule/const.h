@@ -13,7 +13,8 @@
 #define TAILLE_FONT 80
 
 #define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
-#define PATH_IMG_PERSO "./textures/character.png"
+#define PATH_IMG_PERSO "./textures/pikachu3.png"
+//#define PATH_IMG_PERSO "./textures/character.png"
 #define PATH_IMG_BOMBE "./textures/bomb.png"
 #define PATH_IMG_BOULE "./textures/pokeboulev2.png"
 #define PATH_FONT "./fonts/Pacifico.ttf"
@@ -80,8 +81,16 @@ typedef struct tas_binaire
     int indice_tas[N];
 } tas_binaire_t;
 
+enum type_entite
+{
+    entite_perso = 0,
+    entite_boule = 1,
+};
+
+
 typedef struct entite
 {
+    enum type_entite type;
     int pos_prec;
     int pos_cour;
     int vie;
@@ -117,6 +126,7 @@ enum type_objet
     bombe = 0,
     boule = 1,
 };
+
 
 #include "ui.h"
 #include "gestion_bombes.h"

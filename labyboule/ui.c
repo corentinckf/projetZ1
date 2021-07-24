@@ -164,7 +164,7 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     affichage_liste_bombes(window, renderer, liste_bombes);
     //affichage_entite
     //affichage entite perso
-    affichage_entite(window, renderer, perso, delta_tps, anim * perso->vitesse);
+    affichage_entite(window, renderer, perso, delta_tps, anim * 1);
     //affichage entite boule
     for (int k = 0; k < NB_BOULES; ++k)
     {

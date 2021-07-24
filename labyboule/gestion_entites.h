@@ -7,7 +7,10 @@
 #include <SDL2/SDL_image.h>
 #include "const.h"
 
-void creer_entite(SDL_Window *window, SDL_Renderer *renderer, int pos_prec, int pos_cour, float vitesse, int vertical, int horizontal, entite_t **pentite, char *chemin);
+void creer_entite(SDL_Window *window, SDL_Renderer *renderer,
+                  enum type_entite type, int pos_prec, int pos_cour,
+                  float vitesse, int vertical, int horizontal, entite_t **pentite,
+                  char *chemin);
 void charger_texture(SDL_Window *window, SDL_Renderer *renderer, entite_t *entite, char *chemin);
 void liberer_entite(entite_t **p_entite);
 void affichage_entite(SDL_Window *, SDL_Renderer *, entite_t *, int delta_tps, float anim);

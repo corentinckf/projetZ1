@@ -74,24 +74,24 @@ int main()
     /********* initialisation perso **************/
     entite_t *perso = NULL;
     float vitesse_perso = 1;
-    creer_entite(window, renderer, PERSO_POS, PERSO_POS, vitesse_perso, 0, 0, &perso, PATH_IMG_PERSO);
+    creer_entite(window, renderer,entite_perso, PERSO_POS, PERSO_POS, vitesse_perso, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boules[NB_BOULES];
     int nb_boules = 0;
-    float vitesse_boule = 0.8;
+    float vitesse_boule = 0.5;
     for (int i = 0; i < NB_BOULES; ++i)
     {
         liste_boules[i] = NULL;
     }
 
-    creer_entite(window, renderer, 0, 1, vitesse_boule, 0, 0, &liste_boules[0], PATH_IMG_BOULE);
+    creer_entite(window, renderer, entite_boule, 1, 1, vitesse_boule, 0, 0, &liste_boules[0], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_COLONNE_LABY - 1, vitesse_boule, 0, 0, &liste_boules[1], PATH_IMG_BOULE);
+    creer_entite(window, renderer, entite_boule, 0, NB_COLONNE_LABY - 1, vitesse_boule, 0, 0, &liste_boules[1], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), vitesse_boule, 0, 0, &liste_boules[2], PATH_IMG_BOULE);
+    creer_entite(window, renderer, entite_boule, 0, (NB_LIGNE_LABY - 1) * (NB_COLONNE_LABY - 1), vitesse_boule, 0, 0, &liste_boules[2], PATH_IMG_BOULE);
 
-    creer_entite(window, renderer, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, vitesse_boule, 0, 0, &liste_boules[3], PATH_IMG_BOULE);
+    creer_entite(window, renderer, entite_boule, 0, NB_LIGNE_LABY * NB_COLONNE_LABY - 1, vitesse_boule, 0, 0, &liste_boules[3], PATH_IMG_BOULE);
 
     nb_boules = NB_BOULES;
     //////////////////////*****************************/////////////////////////////
