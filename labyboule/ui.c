@@ -175,7 +175,7 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
 
     SDL_RenderDrawLine(renderer, LARGEUR_FENETRE, 0, LARGEUR_FENETRE, HAUTEUR_FENETRE);
-    SDL_SetRenderDrawColor(renderer, 105, 105, 105, 255);
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
     SDL_Rect rect;
     rect.x = 0, rect.y = 0;
     rect.w = LARGEUR_ECRAN_SCORE + LARGEUR_FENETRE, rect.h = HAUTEUR_FENETRE;
@@ -190,14 +190,17 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
 void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
                      entite_t *perso, entite_t *liste_boules[NB_BOULES])
 {
-    int largeur_barre_vie = LARGEUR_ECRAN_SCORE - 2.8* LARGEUR_CASE;
+    int largeur_barre_vie = LARGEUR_ECRAN_SCORE - 2.75 * LARGEUR_CASE;
+    int hauteur_barre_vie = HAUTEUR_CASE - 3;
+
     SDL_Rect rect_vie_fond =
-        {(NB_COLONNE_LABY + 2.7) * LARGEUR_CASE-10, 1 * HAUTEUR_CASE,
-         largeur_barre_vie , HAUTEUR_CASE + 5};
+        {(NB_COLONNE_LABY + 2.17) * LARGEUR_CASE, 2 * HAUTEUR_CASE,
+         largeur_barre_vie, hauteur_barre_vie};
     int x = (NB_COLONNE_LABY)*LARGEUR_CASE;
     SDL_Rect rect;
 
-    for (int i = 0; i < 10; ++i)
+    /********* Contour score *******************/
+    for (int i = 0; i < 15; ++i)
     {
         SDL_SetRenderDrawColor(renderer, 105 + 10 * i, 105 + 10 * i, 105 + 10 * i, 255);
         rect.x = LARGEUR_FENETRE + 1 + i, rect.y = 1 + i;
@@ -205,14 +208,30 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
         SDL_RenderFillRect(renderer, &rect);
     }
 
-    affichage_texte(window, renderer, font, " vie", 0.5, x+2, 0, 0, 0, 0, 255);
+    /****************** Vie ******************/
+    affichage_texte(window, renderer, font, "vie", 0.4, x + 18, 1 * HAUTEUR_CASE + 6, 0, 0, 0, 255);
+
     SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
-    rect_vie_fond.w =largeur_barre_vie* perso->vie/100 ;
+    rect_vie_fond.w = largeur_barre_vie * perso->vie / 100;
     SDL_RenderFillRect(renderer, &rect_vie_fond);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    rect_vie_fond.w =largeur_barre_vie;
-    SDL_RenderDrawRect(renderer, &rect_vie_fond);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    rect_vie_fond.w = largeur_barre_vie;
+    SDL_RenderDrawRect(renderer, &rect_vie_fond);
+
+    char valeur_vie[5];
+    sprintf(valeur_vie, "%d", perso->vie);
+
+    affichage_texte(window, renderer, font, valeur_vie, 0.3, rect_vie_fond.x + 5, 2 * HAUTEUR_CASE - 15, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "%", 0.3, rect_vie_fond.x + 35, 2 * HAUTEUR_CASE - 11, 0, 0, 0, 255);
+
+    /***************** Boules *****************/
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "Boules", 0.3, x + 20, 4 * HAUTEUR_CASE, 0, 0, 0, 255);
+
+    for (int k = 0; k < NB_BOULES; ++k)
+    {
+    }
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
