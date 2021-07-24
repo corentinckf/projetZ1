@@ -19,10 +19,10 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
                      SDL_Texture *texture_mur, int map[NB_LIGNE_LABY][NB_COLONNE_LABY]);
 
 void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
-                     entite_t *perso, entite_t *liste_boules[NB_BOULES]);
+                     entite_t *perso, entite_t *liste_boules[NB_BOULES], bombe_t*liste_bombes[NB_BOMBES]);
 
 void affichage_score_entite(SDL_Window *window, SDL_Renderer *renderer,
-                            int type, int x_pos, int y_pos);
+                            enum type_objet type, int x_pos, int y_pos);
 
 
 #endif

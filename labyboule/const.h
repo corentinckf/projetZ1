@@ -101,18 +101,22 @@ typedef struct bombe
     SDL_Texture *texture;
 } bombe_t;
 
-
 #define NB_FRAME_EFFET 4
 #define NB_EFFET 3
 
 enum effet
 {
-    explosion_case = 0,      
-    capture_succes = 1,   
-    capture_echec = 2,  
+    explosion_case = 0,
+    capture_succes = 1,
+    capture_echec = 2,
 
 };
 
+enum type_objet
+{
+    bombe = 0,
+    boule = 1,
+};
 
 #include "ui.h"
 #include "gestion_bombes.h"
