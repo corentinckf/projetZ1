@@ -204,7 +204,7 @@ void modifier_cle(tas_binaire_t *tas, int indice, int val_ajoutee)
         }
     }
     else
-        printf("modification impossible : indice trop petit\n");
+        printf("dans tas binaire.c modification impossible : indice trop petit\n");
 }
 
 void diminuer_cle(tas_binaire_t *tas, couple_t val_couple)
@@ -229,7 +229,7 @@ void diminuer_cle(tas_binaire_t *tas, couple_t val_couple)
         detasser(tas, indice);
     }
     else
-        printf("modification impossible : indice trop petit\n");
+        printf("dans tas binaire.c modification impossible : indice trop petit\n");
 }
 
 /*

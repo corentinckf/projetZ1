@@ -1,4 +1,4 @@
-
+    
 #ifndef __CONST_H__
 #define __CONST_H__
 
@@ -38,7 +38,7 @@
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
-#define PERIODE 200
+#define PERIODE 100
 #define TEMPS_FRAME_EFFET 200
 
 #define ALEA_GEN 10
@@ -91,6 +91,8 @@ enum type_entite
 typedef struct entite
 {
     enum type_entite type;
+    int pos_x;
+    int pos_y;
     int pos_prec;
     int pos_cour;
     int vie;

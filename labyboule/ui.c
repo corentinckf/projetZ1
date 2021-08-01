@@ -164,12 +164,12 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     affichage_liste_bombes(window, renderer, liste_bombes);
     //affichage_entite
     //affichage entite perso
-    affichage_entite(window, renderer, perso, delta_tps, anim * 1);
+    affichage_entite_alter(window, renderer, perso, delta_tps, anim * 1);
     //affichage entite boule
     for (int k = 0; k < NB_BOULES; ++k)
     {
         if (liste_boules[k] != NULL)
-            affichage_entite(window, renderer, liste_boules[k], delta_tps, anim * liste_boules[k]->vitesse);
+            affichage_entite_alter(window, renderer, liste_boules[k], delta_tps, anim * liste_boules[k]->vitesse);
     }
 
     SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);

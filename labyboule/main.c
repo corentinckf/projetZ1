@@ -73,7 +73,7 @@ int main()
 
     /********* initialisation perso **************/
     entite_t *perso = NULL;
-    float vitesse_perso = 1;
+    float vitesse_perso = 10;
     creer_entite(window, renderer,entite_perso, PERSO_POS, PERSO_POS, vitesse_perso, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
@@ -182,11 +182,11 @@ int main()
             if (delta_tps > PERIODE)
             {
                 //for (int u = 0; u < perso->vitesse; ++u)
-                deplacement_perso(map, perso, &vertical, &horizontal);
+                deplacement_perso_alternatif(map, perso, &vertical, &horizontal);
                 //printf("v %d h %d\n", vertical, horizontal);
 
                 //calcul boule
-                deplacement_toutes_boules(map, liste_boules, perso->pos_cour);
+                //deplacement_toutes_boules(map, liste_boules, perso->pos_cour);
 
                 delta_tps = 0;
             }
@@ -208,7 +208,7 @@ int main()
                 coll = 0;
             }
         }
-        SDL_Delay(80); // Petite pause
+        SDL_Delay(20); // Petite pause
     }
 
     SDL_Delay(500); // Petite pause

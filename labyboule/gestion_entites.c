@@ -9,6 +9,8 @@ void creer_entite(SDL_Window *window, SDL_Renderer *renderer,
     if (*pentite)
     {
         (*pentite)->type = type;
+        (*pentite)->pos_x = (pos_cour % NB_COLONNE_LABY) * (LARGEUR_FENETRE / NB_COLONNE_LABY);
+        (*pentite)->pos_y = (pos_cour / NB_COLONNE_LABY) * (HAUTEUR_FENETRE / NB_LIGNE_LABY);
         (*pentite)->pos_prec = pos_prec;
         (*pentite)->pos_cour = pos_cour;
         (*pentite)->vie = 100;
@@ -219,4 +221,69 @@ SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
     rect.h = zoom;
 
     return rect;
+}
+
+void affichage_entite_alter(SDL_Window *window, SDL_Renderer *renderer,
+                            entite_t *entite, int delta, float anim)
+{
+    int idle = 0;
+
+    SDL_Rect
+        source = {0},            // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},       // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};             // Rectangle de la vignette en cours dans la planche
+
+    SDL_GetWindowSize(window, // Récupération des dimensions de la fenêtre
+                      &window_dimensions.w,
+                      &window_dimensions.h);
+    SDL_QueryTexture(entite->texture, NULL, NULL, &source.w, &source.h);
+
+    int nb_images = 4;
+    int offset_x = source.w / nb_images,
+        offset_y = source.h / 4;
+
+    state.x = 0;
+    state.w = offset_x;
+    state.h = offset_y;
+    if (entite->horizontal == 0 && entite->vertical == 0)
+        idle = 1;
+    else
+        idle = 0;
+
+    if (entite->vertical == 1)
+        state.y = 2 * offset_y;
+    else if (entite->vertical == -1)
+        state.y = 3 * offset_y;
+
+    if (entite->horizontal == 1)
+        state.y = 0 * offset_y;
+    else if (entite->horizontal == -1)
+        state.y = 1 * offset_y;
+
+    state.x = ((int)anim % 4) * offset_x;
+
+    if (!idle)
+    {
+        state.x += offset_x;
+        state.x %= source.w;
+    }
+    else
+    {
+        state.y = 0;
+        state.x = 0;
+    }
+
+    int zoom = 30;
+    destination.w = zoom, destination.h = zoom;
+
+    destination.x = entite->pos_x;
+    destination.y = entite->pos_y;
+
+    SDL_Rect rect;
+    rect = rectangle_sprite(entite, delta, 30);
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    SDL_RenderCopy(renderer, entite->texture, &state, &destination);
 }
