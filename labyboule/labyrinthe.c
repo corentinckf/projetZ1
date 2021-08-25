@@ -67,13 +67,13 @@ int main_labyrinthe()
 
     //dessiner(window, renderer, map);
 
-/********* chargement texture map ***********/
+    /********* chargement texture map ***********/
     SDL_Texture *texture_mur;
     texture_mur = IMG_LoadTexture(renderer, PATH_IMG_MUR);
     if (texture_mur == NULL)
         end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
 
-    play_texture_mur(window, renderer,texture_mur, map);
+    play_texture_mur(window, renderer, texture_mur, map);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(5000);
@@ -221,19 +221,33 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *m
     SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
 
     //int nb_images = 8;
+    //ancienne texture
+    /*
     int offset_x = source.w / 12;
     int offset_y = source.h / 8;
+    
 
-    //float zoom_x = 1;
-    //float zoom_y = 1;
+    //texture herbe
+    int offset_x = source.w / 12;
+    int offset_y = source.h / 10;
+    */
+
+    //texture herbe
+    int offset_x = source.w / 5;
+    int offset_y = source.h / 3;
+
 
     state.x = 0;
     state.y = 3 * offset_y;
     state.w = offset_x; // Largeur de la vignette
     state.h = offset_y; // Hauteur de la vignette
 
-    destination.w = LARGEUR_CASE; // Largeur du sprite à l'écran
-    destination.h = HAUTEUR_CASE; // Hauteur du sprite à l'écran
+
+    float zoom_x = 1;
+    float zoom_y = 1;
+    
+    destination.w = LARGEUR_CASE * zoom_x; // Largeur du sprite à l'écran
+    destination.h = HAUTEUR_CASE *zoom_y; // Hauteur du sprite à l'écran
 
     for (int i = 0; i < NB_LIGNE_LABY; ++i)
     {
@@ -241,13 +255,13 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *m
         {
             destination.x = j * destination.w;
             destination.y = i * destination.h;
-            
+            /* ancienne map
             switch (map[i][j])
             {
-                case 15:
-                    state.x = 0;
-                    state.y = 2* offset_y;
-                    break;
+            case 15:
+                state.x = 0;
+                state.y = 2 * offset_y;
+                break;
             case 14:
                 state.x = 8 * offset_x;
                 state.y = 3 * offset_y;
@@ -313,10 +327,157 @@ void play_texture_mur(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *m
                 printf("tes pas censé etre la!\n");
                 break;
             }
+        
+            tilesheet_packed
+            switch (map[i][j])
+            {
+            case 15:
+                state.x = 2;
+                state.y = 9 * offset_y;
+                break;
+            case 14:
+                state.x = 5 * offset_x;
+                state.y = 8 * offset_y;
+                break;
+            case 13:
+                state.x = 4 * offset_x;
+                state.y = 9 * offset_y;
+                break;
+            case 12:
+                state.x = 1 * offset_x;
+                state.y = 8 * offset_y;
+                break;
+            case 11:
+                state.x = 5 * offset_x;
+                state.y = 9 * offset_y;
+                break;
+            case 10:
+                state.x = 2 * offset_x;
+                state.y = 8 * offset_y;
+                break;
+            case 9:
+                state.x = 3 * offset_x;
+                state.y = 8 * offset_y;
+                break;
+            case 8:
+                state.x = 5 * offset_x;
+                state.y = 7 * offset_y;
+                break;
+            case 7:
+                state.x = 4 * offset_x;
+                state.y = 8 * offset_y;
+                break;
+
+            case 6:
+                state.x = 1 * offset_x;
+                state.y = 6 * offset_y;
+                break;
+            case 5:
+                state.x = 1 * offset_x;
+                state.y = 7 * offset_y;
+                break;
+            case 4:
+                state.x = 4 * offset_x;
+                state.y = 6 * offset_y;
+                break;
+            case 3:
+                state.x = 3 * offset_x;
+                state.y = 6 * offset_y;
+                break;
+            case 2:
+                state.x = 4 * offset_x;
+                state.y = 7 * offset_y;
+                break;
+            case 1:
+                state.x = 5 * offset_x;
+                state.y = 6 * offset_y;
+                break;
+            case 0:
+                state.x = 2 * offset_x;
+                state.y = 7 * offset_y;
+                break;
+            default:
+                printf("erreur play texture map!\n");
+                break;
+            }
+            */
+
+             switch (map[i][j])
+            {
+            case 15:
+                state.x = 10;
+                state.y = 10 * offset_y;
+                break;
+            case 14:
+                state.x = 3 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 13:
+                state.x = 2 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 12:
+                state.x = 1 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 11:
+                state.x = 0 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            case 10:
+                state.x = 4 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 9:
+                state.x = 3 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 8:
+                state.x = 2 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 7:
+                state.x = 1 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+
+            case 6:
+                state.x = 0 * offset_x;
+                state.y = 1 * offset_y;
+                break;
+            case 5:
+                state.x = 4 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 4:
+                state.x = 3 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 3:
+                state.x = 2 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 2:
+                state.x = 1 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 1:
+                state.x = 0 * offset_x;
+                state.y = 0 * offset_y;
+                break;
+            case 0:
+                state.x = 4 * offset_x;
+                state.y = 2 * offset_y;
+                break;
+            default:
+                printf("erreur play texture map!\n");
+                break;
+            }
+
+            
             SDL_RenderCopy(renderer, my_texture, &state, &destination);
         }
     }
-
 }
 
 void end_sdl(char ok, char const *msg, SDL_Window *window, SDL_Renderer *renderer)
