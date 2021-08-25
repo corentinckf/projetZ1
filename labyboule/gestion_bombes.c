@@ -99,7 +99,7 @@ void affichage_bombe(SDL_Window *window, SDL_Renderer *renderer, bombe_t *bombe)
     destination.w =  zoom; // La destination est un zoom de la source
     destination.h =  zoom; // La destination est un zoom de la source
     destination.x = (bombe->pos_cour % NB_COLONNE_LABY) * LARGEUR_CASE+2;
-    destination.y = (bombe->pos_cour / NB_COLONNE_LABY) * HAUTEUR_CASE -5;
+    destination.y = (bombe->pos_cour / NB_COLONNE_LABY) * HAUTEUR_CASE +1;
 
     SDL_RenderCopy(renderer, my_texture, &source, &destination);
 }

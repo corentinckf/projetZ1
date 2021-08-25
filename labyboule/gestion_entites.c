@@ -58,8 +58,6 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
     int offset_x = source.w / nb_images, // La largeur d'une vignette de l'image, marche car la planche est bien réglée
         offset_y = source.h / 4;         // La hauteur d'une vignette de l'image, marche car la planche est bien réglée
 
-    //float zoom = LARGEUR_CASE/offset_x;                   // zoom, car ces images sont un peu petites
-
     state.x = 0;
     state.w = offset_x;
     state.h = offset_y;
@@ -94,7 +92,13 @@ void affichage_entite(SDL_Window *window, SDL_Renderer *renderer,
     }
 
     destination = rectangle_sprite(entite, delta, 25);
-
+    if (entite->type == entite_boule)
+    {
+        destination.w *= 0.85;
+        destination.h *= 0.85;
+        destination.y += 6;
+        destination.x += 3;
+    }
     /* * LARGEUR_CASE + (*deltaTimeNB_COLONNE_LABY * *input_h * TRANSI);*/
     //destination.y += entite->vitesse;
     // printf("x : %d y : %d\n", destination.x, destination.y);
@@ -123,7 +127,7 @@ int collision(SDL_Window *window, SDL_Renderer *renderer,
         if (liste_boules[k] != NULL)
         {
             sprite_boule = rectangle_sprite(liste_boules[k], delta, LARGEUR_CASE);
-            if (SDL_IntersectRect(&sprite_perso, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.6 * sprite_boule.h && intersection.w >= 0.6 * sprite_boule.w)
+            if (SDL_IntersectRect(&sprite_perso, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.8 * sprite_boule.h && intersection.w >= 0.8 * sprite_boule.w)
             {
                 liberer_entite(&liste_boules[k]);
                 *nb_boules -= 1;
@@ -150,8 +154,8 @@ int collision(SDL_Window *window, SDL_Renderer *renderer,
             {
                 int u = liste_bombes[i]->pos_cour / NB_COLONNE_LABY;
                 int v = liste_bombes[i]->pos_cour % NB_COLONNE_LABY;
-                sprite_bombe.y = u * HAUTEUR_CASE - 7;
-                sprite_bombe.x = v * LARGEUR_CASE;
+                sprite_bombe.y = u * HAUTEUR_CASE +1;
+                sprite_bombe.x = v * LARGEUR_CASE+2;
                 sprite_bombe.w = ZOOM_BOMBE;
                 sprite_bombe.h = ZOOM_BOMBE;
 
@@ -165,7 +169,7 @@ int collision(SDL_Window *window, SDL_Renderer *renderer,
                     if (liste_bombes[i] != NULL && liste_boules[k] != NULL)
                     {
                         sprite_boule = rectangle_sprite(liste_boules[k], delta, LARGEUR_CASE);
-                        if (SDL_IntersectRect(&sprite_bombe, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.8 * sprite_boule.h && intersection.w >= 0.8 * sprite_boule.w)
+                        if (SDL_IntersectRect(&sprite_bombe, &sprite_boule, &intersection) == SDL_TRUE && intersection.h >= 0.9*0.85 * sprite_boule.h && intersection.w >= 0.9 *0.85 * sprite_boule.w)
                         {
                             gestion_affichage_effet(window, renderer, explosion_case, liste_bombes[i]->pos_cour, delta);
                             liberer_entite(&liste_boules[k]);
@@ -212,7 +216,7 @@ SDL_Rect rectangle_sprite(entite_t *entite, int delta_tps, int zoom)
 
     //rect.y = i * HAUTEUR_CASE - 7 + (delta_tps * val)  * entite->horizontal;
 
-    rect.y = i * HAUTEUR_CASE - 7 + ajustement * entite->horizontal;
+    rect.y = i * HAUTEUR_CASE - 5 + ajustement * entite->horizontal;
     rect.x = j * LARGEUR_CASE + ajustement * entite->vertical;
 
     rect.w = zoom;

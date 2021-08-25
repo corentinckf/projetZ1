@@ -115,10 +115,10 @@ void affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
     int i = position / NB_COLONNE_LABY;
     int j = position % NB_COLONNE_LABY;
 
-    destination.y = i * HAUTEUR_CASE - 7;
-    destination.x = j * LARGEUR_CASE;
+    destination.y = i * HAUTEUR_CASE - 5;
+    destination.x = j * LARGEUR_CASE-4;
 
-    int zoom = ZOOM_BOMBE * 1;
+    int zoom = ZOOM_BOMBE * 1.45;
 
     destination.w = zoom;
     destination.h = zoom;
@@ -138,9 +138,12 @@ void gestion_affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
         for (int i = 0; i < NB_FRAME_EFFET; ++i)
         {
             affichage_effet(window, renderer, my_texture, type_effet, position, delta, i);
+            //affich
             SDL_RenderPresent(renderer);
             SDL_Delay(TEMPS_FRAME_EFFET);
+            //SDL_RenderClear(renderer);
         }
+        //SDL_Delay(200);
         SDL_DestroyTexture(my_texture);
     }
     else
@@ -160,8 +163,10 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
 
     //affichage fond
     play_texture_mur(window, renderer, texture_mur, map);
+
     //printf("nb de bombes : %d\n",nb_bombes);
     affichage_liste_bombes(window, renderer, liste_bombes);
+
     //affichage_entite
     //affichage entite perso
     affichage_entite(window, renderer, perso, delta_tps, anim * 1);

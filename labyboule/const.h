@@ -14,7 +14,7 @@
 
 //#define PATH_IMG_MUR "./kenney_roadtextures_2/Tilesheet/roadTextures_tilesheet@2.png"
 //#define PATH_IMG_MUR "./textures/tiles_packed.png"
-#define PATH_IMG_MUR "./textures/tilesheet_herbe5.png"
+#define PATH_IMG_MUR "./textures/tilesheet_herbe6.png"
 
 #define PATH_IMG_PERSO "./textures/pikachu3.png"
 //#define PATH_IMG_PERSO "./textures/character.png"
@@ -24,7 +24,7 @@
 #define PATH_IMG_BOULE "./textures/pokeboulev2.png"
 #define PATH_FONT "./fonts/Pacifico.ttf"
 
-#define PATH_IMG_EFFET "./textures/effets.png"
+#define PATH_IMG_EFFET "./textures/effets2.png"
 #define PATH_IMG_SCORE "./textures/icone_score.png"
 
 #define PERSO_POS 312
@@ -45,7 +45,7 @@
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 #define PERIODE 200
-#define TEMPS_FRAME_EFFET 200
+#define TEMPS_FRAME_EFFET 250
 
 #define ALEA_GEN 10
 #define GRAINE 10
@@ -57,7 +57,7 @@
 #define NB_BOULES 4
 #define NB_BOMBES 4
 
-#define ZOOM_BOMBE 25
+#define ZOOM_BOMBE 23
 
 typedef struct couple
 {
@@ -116,7 +116,7 @@ typedef struct bombe
     SDL_Texture *texture;
 } bombe_t;
 
-#define NB_FRAME_EFFET 9
+#define NB_FRAME_EFFET 12
 #define NB_EFFET 3
 
 enum effet
