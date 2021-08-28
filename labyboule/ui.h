@@ -7,7 +7,7 @@ char *texte_score(int a);
 void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
                      char *texte, float taille, int x, int y,
                      int r, int g, int b, int a);
-void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int coll);
+void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int coll, int nb_boules);
 void ecran_debut(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font);
 void affichage_effet(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *my_texture, enum effet type_effet, int position, int delta, int anim);
 void gestion_affichage_effet(SDL_Window *window, SDL_Renderer *renderer, enum effet type_effet, int position, int delta);

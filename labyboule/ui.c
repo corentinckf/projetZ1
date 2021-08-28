@@ -45,25 +45,30 @@ void affichage_texte(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     SDL_DestroyTexture(text_texture);                   // On n'a plus besoin de la texture avec le texte
 }
 
-void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int coll)
+void ecran_fin(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, int coll, int nb_boules)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
 
-    affichage_texte(window, renderer, font, "Game Over !", 1, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 4, 250, 250, 250, 255);
     //printf("coll %d ", coll);
     if (coll == 1)
     {
-        affichage_texte(window, renderer, font, "Une boule vous a rattrape.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
+        affichage_texte(window, renderer, font, "Game Over !", 1, 200, HAUTEUR_FENETRE / 4, 250, 250, 250, 255);
+        affichage_texte(window, renderer, font, "Une pokeball t'as capture.", 0.7, 100, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
     }
     else if (coll == -1)
     {
-        affichage_texte(window, renderer, font, "Une bombe a explose vers vous.", 1, LARGEUR_FENETRE / 2, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
+        affichage_texte(window, renderer, font, "Game Over !", 1, 200, HAUTEUR_FENETRE / 4, 250, 250, 250, 255);
+        affichage_texte(window, renderer, font, "Une bombe a explose vers vous.", 1, 100, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
     }
+    else
 
-    SDL_RenderPresent(renderer);
-    SDL_Delay(500);
+        affichage_texte(window, renderer, font, "Victoire !", 1, 200, HAUTEUR_FENETRE / 4, 250, 250, 250, 255);
+    affichage_texte(window, renderer, font, "Tu as fait exploser toutes les pokeballs.", 0.7, 10, 1 * HAUTEUR_FENETRE / 2, 250, 250, 250, 255);
+}
+SDL_RenderPresent(renderer);
+SDL_Delay(2000);
 }
 
 void ecran_debut(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font)
@@ -137,10 +142,10 @@ void gestion_affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
         SDL_Delay(TEMPS_FRAME_EFFET);
         for (int i = 0; i < NB_FRAME_EFFET; ++i)
         {
+            SDL_Delay(TEMPS_FRAME_EFFET);
             affichage_effet(window, renderer, my_texture, type_effet, position, delta, i);
             //affich
             SDL_RenderPresent(renderer);
-            SDL_Delay(TEMPS_FRAME_EFFET);
             //SDL_RenderClear(renderer);
         }
         //SDL_Delay(200);
@@ -199,7 +204,7 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     int hauteur_barre_vie = HAUTEUR_CASE - 3;
 
     SDL_Rect rect_vie_fond =
-        {(NB_COLONNE_LABY + 2.17) * LARGEUR_CASE, 3 * HAUTEUR_CASE-5,
+        {(NB_COLONNE_LABY + 2.17) * LARGEUR_CASE, 3 * HAUTEUR_CASE - 5,
          largeur_barre_vie, hauteur_barre_vie};
     int x_score = (NB_COLONNE_LABY)*LARGEUR_CASE + 18;
     SDL_Rect rect;
@@ -252,8 +257,8 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     char valeur_vie[5];
     sprintf(valeur_vie, "%d", perso->vie);
 
-    affichage_texte(window, renderer, font, valeur_vie, 0.3, rect_vie_fond.x + 5, 2 * HAUTEUR_CASE +10, 0, 0, 0, 255);
-    affichage_texte(window, renderer, font, "%", 0.3, rect_vie_fond.x + 35, 2 * HAUTEUR_CASE +12, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, valeur_vie, 0.3, rect_vie_fond.x + 5, 2 * HAUTEUR_CASE + 10, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "%", 0.3, rect_vie_fond.x + 35, 2 * HAUTEUR_CASE + 12, 0, 0, 0, 255);
 
     /***************** Objectif *****************/
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -289,13 +294,13 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
                        11 * HAUTEUR_CASE + 5);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    affichage_texte(window, renderer, font, "Bombes", 0.3, x_score+5, 11 * HAUTEUR_CASE , 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "Bombes", 0.3, x_score + 5, 11 * HAUTEUR_CASE, 0, 0, 0, 255);
     int nb_bombes_posees = 0;
     for (int k = 0; k < NB_BOMBES; ++k)
     {
         if (liste_bombes[k] != NULL)
         {
-            affichage_score_entite(window, renderer, bombe, x_score + nb_bombes_posees % 4 * 25, 10+ 12 * HAUTEUR_CASE + 25 * (nb_bombes_posees / 4));
+            affichage_score_entite(window, renderer, bombe, x_score + nb_bombes_posees % 4 * 25, 10 + 12 * HAUTEUR_CASE + 25 * (nb_bombes_posees / 4));
             ++nb_bombes_posees;
         }
     }

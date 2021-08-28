@@ -74,7 +74,7 @@ int main()
     /********* initialisation perso **************/
     entite_t *perso = NULL;
     float vitesse_perso = 1;
-    creer_entite(window, renderer,entite_perso, PERSO_POS, PERSO_POS, vitesse_perso, 0, 0, &perso, PATH_IMG_PERSO);
+    creer_entite(window, renderer, entite_perso, PERSO_POS, PERSO_POS, vitesse_perso, 0, 0, &perso, PATH_IMG_PERSO);
 
     //////////////////////********creation boules*********/////////////////////////////
     entite_t *liste_boules[NB_BOULES];
@@ -194,12 +194,12 @@ int main()
             anim += 1;
             anim_boule += 0.3;
 
-            affichage_ecran(window, renderer, font, delta_tps, anim, perso,  liste_boules, &nb_boules, liste_bombes, &nb_bombes,texture_mur, map);
+            affichage_ecran(window, renderer, font, delta_tps, anim, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes, texture_mur, map);
 
             //affichage_score(window,renderer,font);
 
             coll = collision(window, renderer, delta_tps, perso, liste_boules, &nb_boules, liste_bombes, &nb_bombes, map);
-            if (coll == 1 || coll == -1)
+            if (coll == 1 || coll == -1 || nb_boules == 0)
             {
                 program_on = SDL_FALSE;
             }
@@ -216,7 +216,7 @@ int main()
     liberer_entite(&perso);
     liberer_liste_boules(liste_boules);
     SDL_DestroyTexture(texture_mur);
-    ecran_fin(window, renderer, font, coll);
+    ecran_fin(window, renderer, font, coll, nb_boules);
 
     end_sdl(1, "fin normal", window, renderer);
     return 0;
