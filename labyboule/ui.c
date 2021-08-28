@@ -116,9 +116,9 @@ void affichage_effet(SDL_Window *window, SDL_Renderer *renderer,
     int j = position % NB_COLONNE_LABY;
 
     destination.y = i * HAUTEUR_CASE - 5;
-    destination.x = j * LARGEUR_CASE-4;
+    destination.x = j * LARGEUR_CASE - 4;
 
-    int zoom = ZOOM_BOMBE * 1.45;
+    int zoom = ZOOM_BOMBE * 1.6;
 
     destination.w = zoom;
     destination.h = zoom;
@@ -193,13 +193,13 @@ void affichage_ecran(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
 }
 
 void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
-                     entite_t *perso, entite_t *liste_boules[NB_BOULES], bombe_t*liste_bombes[NB_BOMBES])
+                     entite_t *perso, entite_t *liste_boules[NB_BOULES], bombe_t *liste_bombes[NB_BOMBES])
 {
     int largeur_barre_vie = LARGEUR_ECRAN_SCORE - 2.75 * LARGEUR_CASE;
     int hauteur_barre_vie = HAUTEUR_CASE - 3;
 
     SDL_Rect rect_vie_fond =
-        {(NB_COLONNE_LABY + 2.17) * LARGEUR_CASE, 2 * HAUTEUR_CASE,
+        {(NB_COLONNE_LABY + 2.17) * LARGEUR_CASE, 3 * HAUTEUR_CASE-5,
          largeur_barre_vie, hauteur_barre_vie};
     int x_score = (NB_COLONNE_LABY)*LARGEUR_CASE + 18;
     SDL_Rect rect;
@@ -207,14 +207,39 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     /********* Contour score *******************/
     for (int i = 0; i < 15; ++i)
     {
-        SDL_SetRenderDrawColor(renderer, 105 + 10 * i, 105 + 10 * i, 105 + 10 * i, 255);
         rect.x = LARGEUR_FENETRE + 1 + i, rect.y = 1 + i;
         rect.w = LARGEUR_ECRAN_SCORE - 2 - 2 * i, rect.h = HAUTEUR_FENETRE - 2 - 2 * i;
+
+        if (i != 14)
+            SDL_SetRenderDrawColor(renderer, 105 - 5 * i, 105 - 5 * i, 105 - 5 * i, 255);
+        else
+        {
+            SDL_SetRenderDrawColor(renderer, 105, 105, 105, 255);
+            SDL_RenderDrawRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 120, 120, 120, 255);
+        }
+
         SDL_RenderFillRect(renderer, &rect);
     }
 
+    /****************** Labyboule ******************/
+    affichage_texte(window, renderer, font, "Labyboule", 0.32, x_score - 2, 0 * HAUTEUR_CASE + 12, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer, x_score,
+                       2 * HAUTEUR_CASE + 8,
+                       x_score + LARGEUR_ECRAN_SCORE - LARGEUR_CASE - 8,
+                       2 * HAUTEUR_CASE + 8);
+    SDL_RenderDrawLine(renderer, x_score,
+                       2 * HAUTEUR_CASE + 9,
+                       x_score + LARGEUR_ECRAN_SCORE - LARGEUR_CASE - 8,
+                       2 * HAUTEUR_CASE + 9);
+    SDL_RenderDrawLine(renderer, x_score,
+                       2 * HAUTEUR_CASE + 10,
+                       x_score + LARGEUR_ECRAN_SCORE - LARGEUR_CASE - 8,
+                       2 * HAUTEUR_CASE + 10);
+
     /****************** Vie ******************/
-    affichage_texte(window, renderer, font, "vie", 0.4, x_score, 1 * HAUTEUR_CASE + 6, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "Vie", 0.35, x_score + 1, 2 * HAUTEUR_CASE + 7, 0, 0, 0, 255);
 
     SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
     rect_vie_fond.w = largeur_barre_vie * perso->vie / 100;
@@ -227,32 +252,50 @@ void affichage_score(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font,
     char valeur_vie[5];
     sprintf(valeur_vie, "%d", perso->vie);
 
-    affichage_texte(window, renderer, font, valeur_vie, 0.3, rect_vie_fond.x + 5, 2 * HAUTEUR_CASE - 14, 0, 0, 0, 255);
-    affichage_texte(window, renderer, font, "%", 0.3, rect_vie_fond.x + 35, 2 * HAUTEUR_CASE - 11, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, valeur_vie, 0.3, rect_vie_fond.x + 5, 2 * HAUTEUR_CASE +10, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "%", 0.3, rect_vie_fond.x + 35, 2 * HAUTEUR_CASE +12, 0, 0, 0, 255);
+
+    /***************** Objectif *****************/
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer, x_score,
+                       4 * HAUTEUR_CASE + 5,
+                       x_score + LARGEUR_ECRAN_SCORE - LARGEUR_CASE - 8,
+                       4 * HAUTEUR_CASE + 5);
+
+    affichage_texte(window, renderer, font, "Objectif", 0.38, x_score - 2, 3 * HAUTEUR_CASE + 28, 0, 0, 0, 255);
+
+    affichage_texte(window, renderer, font, "Exploser", 0.3, x_score + 5, 6 * HAUTEUR_CASE - 5, 230, 230, 230, 255);
+    affichage_texte(window, renderer, font, "toutes  les", 0.3, x_score, 7 * HAUTEUR_CASE, 230, 230, 230, 255);
 
     /***************** Boules *****************/
+    char nom_boules[] = "Pokeballs";
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    affichage_texte(window, renderer, font, "Boules", 0.3, x_score, 4 * HAUTEUR_CASE +15, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, nom_boules, 0.33, x_score, 8 * HAUTEUR_CASE + 5, 0, 0, 0, 255);
     int nb_boules_restantes = 0;
     for (int k = 0; k < NB_BOULES; ++k)
     {
         if (liste_boules[k] != NULL)
         {
-            affichage_score_entite(window, renderer, boule, x_score + nb_boules_restantes % 4 * 25, 6 * HAUTEUR_CASE + 25 * (nb_boules_restantes / 4));
+            affichage_score_entite(window, renderer, boule, x_score + 1 + nb_boules_restantes % 4 * 25, -5 + 10 * HAUTEUR_CASE + 25 * (nb_boules_restantes / 4));
             ++nb_boules_restantes;
         }
     }
 
-
-  /***************** Bombes *****************/
+    /***************** Bombes *****************/
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    affichage_texte(window, renderer, font, "Bombes posées", 0.3, x_score, 8 * HAUTEUR_CASE +15, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer, x_score,
+                       11 * HAUTEUR_CASE + 5,
+                       x_score + LARGEUR_ECRAN_SCORE - LARGEUR_CASE - 8,
+                       11 * HAUTEUR_CASE + 5);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    affichage_texte(window, renderer, font, "Bombes", 0.3, x_score+5, 11 * HAUTEUR_CASE , 0, 0, 0, 255);
     int nb_bombes_posees = 0;
     for (int k = 0; k < NB_BOMBES; ++k)
     {
         if (liste_bombes[k] != NULL)
         {
-            affichage_score_entite(window, renderer, bombe, x_score + nb_bombes_posees % 4 * 25, 10 * HAUTEUR_CASE + 25 * (nb_bombes_posees / 4));
+            affichage_score_entite(window, renderer, bombe, x_score + nb_bombes_posees % 4 * 25, 10+ 12 * HAUTEUR_CASE + 25 * (nb_bombes_posees / 4));
             ++nb_bombes_posees;
         }
     }
@@ -288,8 +331,8 @@ void affichage_score_entite(SDL_Window *window, SDL_Renderer *renderer,
         destination.w = zoom;
         destination.h = zoom;
 
-        state.x = (int)type*offset_x;
-         state.y = 0;
+        state.x = (int)type * offset_x;
+        state.y = 0;
         state.w = offset_x, state.h = offset_y;
 
         SDL_RenderCopy(renderer, my_texture, &state, &destination);

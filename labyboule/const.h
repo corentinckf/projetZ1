@@ -45,7 +45,7 @@
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 #define PERIODE 200
-#define TEMPS_FRAME_EFFET 250
+#define TEMPS_FRAME_EFFET 200
 
 #define ALEA_GEN 10
 #define GRAINE 10
